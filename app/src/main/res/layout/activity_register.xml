@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+
+    <ImageView
+        android:id="@+id/logo_login"
+        android:layout_width="171dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="@string/logo_lock_n_go"
+        app:layout_constraintBottom_toTopOf="@+id/email_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/email_login"
+        android:layout_width="297dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="36dp"
+        android:ems="10"
+        android:hint="@string/email_login"
+        android:textColorHint="#C7CECB"
+        android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/senha_login"
+        android:background="@drawable/border"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/senha_login"
+        android:layout_width="297dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:hint="@string/senha_login"
+        android:textColorHint="#C7CECB"
+        android:inputType="textPassword"
+        android:autofillHints="password"
+        app:layout_constraintBottom_toTopOf="@+id/esqueceu_senha"
+        android:background="@drawable/border"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/esqueceu_senha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/esqueceu_sua_senha"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="308dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="28dp"
+        android:text="@string/btn_login"
+        android:textSize="27sp"
+        app:layout_constraintBottom_toTopOf="@+id/registrar_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/registrar_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/register_login"
+        android:textColor="#7D8392"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/location_armarios_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/location_armarios_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="88dp"
+        android:gravity="center"
+        android:text="@string/onde_estao_armarios"
+        android:textColor="#7D8392"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

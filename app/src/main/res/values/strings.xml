@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">PI3-ES-2024-TIME-25</string>
+    <string name="logo_lock_n_go">Logo Lock\'N\'Go</string>
+    <string name="email_login">Email</string>
+    <string name="senha_login">Senha</string>
+    <string name="esqueceu_sua_senha">Esqueceu sua senha?</string>
+    <string name="btn_login">Login</string>
+    <string name="register_login">Não tem uma conta? Registre-se aqui.</string>
+    <string name="onde_estao_armarios">Onde estão os armários?</string>
 </resources>
