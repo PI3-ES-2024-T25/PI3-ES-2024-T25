@@ -16,46 +16,46 @@
         app:layout_constraintBottom_toTopOf="@+id/email_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintVertical_bias="0.842"
         app:srcCompat="@drawable/logo" />
 
+
     <EditText
         android:id="@+id/email_login"
-        android:layout_width="297dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="36dp"
+        android:layout_width="350sp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="40dp"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/border"
         android:ems="10"
         android:hint="@string/email_login"
-        android:textColorHint="#C7CECB"
         android:inputType="textEmailAddress"
-        android:autofillHints="emailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/senha_login"
-        android:background="@drawable/border"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/senha_login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/senha_login"
-        android:layout_width="297dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="24dp"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="20dp"
+        android:autofillHints="password"
+        android:background="@drawable/border"
         android:ems="10"
         android:hint="@string/senha_login"
-        android:textColorHint="#C7CECB"
         android:inputType="textPassword"
-        android:autofillHints="password"
-        app:layout_constraintBottom_toTopOf="@+id/esqueceu_senha"
-        android:background="@drawable/border"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/esqueceu_senha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/esqueceu_senha"
@@ -73,15 +73,19 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="308dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="28sp"
         android:text="@string/btn_login"
-        android:textSize="27sp"
+        android:textSize="20sp"
+        android:textColor="#7D8392"
         app:layout_constraintBottom_toTopOf="@+id/registrar_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/border"
+        />
+
 
     <TextView
         android:id="@+id/registrar_login"
@@ -102,15 +106,29 @@
         android:id="@+id/location_armarios_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="72dp"
         android:gravity="center"
         android:text="@string/onde_estao_armarios"
         android:textColor="#7D8392"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.94" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

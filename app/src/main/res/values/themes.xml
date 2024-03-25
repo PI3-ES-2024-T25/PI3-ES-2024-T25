@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PI3ES2024TIME25" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.PI3ES2024TIME25" parent="Base.Theme.PI3ES2024TIME25" />
