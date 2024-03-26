@@ -7,4 +7,14 @@
     <string name="btn_login">Entrar</string>
     <string name="register_login">Não tem uma conta? Registre-se aqui.</string>
     <string name="onde_estao_armarios">Onde estão os armários?</string>
+    <string name="nome_registro">Seu nome completo</string>
+    <string name="CPF_registro">Seu CPF</string>
+    <string name="dataNascimento_registro">Data de nascimento</string>
+    <string name="telefone_registro">Número de telefone</string>
+    <string name="continuar_registro">Continuar</string>
+    <string name="voltar_registro1">Voltar</string>
+    <string name="email_registro">Email</string>
+    <string name="senha_registro">Senha</string>
+    <string name="confirmaSenha_registro">Confirme sua senha</string>
+    <string name="registrar">Registrar</string>
 </resources>
