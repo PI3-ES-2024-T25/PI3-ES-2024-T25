@@ -17,4 +17,5 @@
     <string name="senha_registro">Senha</string>
     <string name="confirmaSenha_registro">Confirme sua senha</string>
     <string name="registrar">Registrar</string>
+    <string name="recuperar_senha">Recuperar</string>
 </resources>

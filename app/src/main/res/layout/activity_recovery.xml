@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Um e-mail será enviado para recuperar sua senha"
+            tools:layout_editor_absoluteX="51dp"
+            tools:layout_editor_absoluteY="324dp" />
+
+        <ImageView
+            android:id="@+id/logo_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32sp"
+            android:contentDescription="@string/logo_lock_n_go"
+            app:layout_constraintBottom_toTopOf="@+id/email_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_bias="0.842"
+            app:srcCompat="@drawable/logo" />
+
+
+        <EditText
+            android:id="@+id/email_login"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:autofillHints="emailAddress"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:hint="@string/email_login"
+            android:inputType="textEmailAddress"
+            android:paddingStart="20sp"
+            android:paddingEnd="20sp"
+            android:textColor="@color/white"
+            android:textColorHint="#C7CECB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="358dp" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:background="@drawable/border"
+            android:text="@string/recuperar_senha"
+            android:textColor="#7D8392"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="461dp" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.06" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.94" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
