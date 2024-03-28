@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 
 class Register1Activity : AppCompatActivity() {
+
     lateinit var voltar: AppCompatImageButton
     lateinit var nomeCompleto: AppCompatEditText
     lateinit var CPF: AppCompatEditText
