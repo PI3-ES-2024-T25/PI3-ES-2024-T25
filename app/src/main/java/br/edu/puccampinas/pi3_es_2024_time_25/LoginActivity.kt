@@ -23,17 +23,17 @@ class LoginActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
 
     // função comentada pq nao estava funcionando direito. arrumar
-//    public override fun onStart() {
-//        super.onStart()
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            // se o usuario ja estiver logado, redireciona ele pra dentro do app
-//            //ainda nao tem a pagina de dentro do app, entao ta indo pra main
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-//
-//        }
-//    }
+    public override fun onStart() {
+        super.onStart()
+       val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // se o usuario ja estiver logado, redireciona ele pra dentro do app
+            //ainda nao tem a pagina de dentro do app, entao ta indo pra main
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
