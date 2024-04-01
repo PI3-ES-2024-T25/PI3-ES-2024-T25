@@ -20,4 +20,7 @@
     <string name="recuperar_senha">Recuperar</string>
     <string name="texto_recovery">Um e-mail será enviado para recuperar sua senha</string>
     <string name="voltar_recovery">Voltar</string>
+    <string name="texto_modal_recovery">Um e-mail foi enviado para você. Verifique sua caixa de entrada!</string>
+    <string name="selo_concluido_recovery_modal">Selo de concluído com sucesso</string>
+    <string name="button_ok_modal">Ok</string>
 </resources>

@@ -97,7 +97,7 @@
         android:layout_width="350sp"
         android:layout_height="65sp"
         android:layout_marginBottom="56dp"
-        android:background="@drawable/border"
+        android:background="@drawable/primary_background_btn"
         android:text="@string/continuar_registro"
         android:textColor="#7D8392"
         android:textSize="20sp"

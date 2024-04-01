@@ -24,6 +24,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".Register1Activity"/>
         <activity android:name=".Register2Activity"/>
+        <activity android:name=".RecoveryActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

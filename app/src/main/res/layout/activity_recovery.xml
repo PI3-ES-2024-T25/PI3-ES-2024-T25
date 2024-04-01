@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -55,7 +54,7 @@
         android:layout_width="350sp"
         android:layout_height="65sp"
         android:layout_marginBottom="228dp"
-        android:background="@drawable/border"
+        android:background="@drawable/primary_background_btn"
         android:text="@string/recuperar_senha"
         android:textColor="#7D8392"
         android:textSize="20sp"
@@ -82,16 +81,13 @@
         android:id="@+id/voltar_recovery"
         android:layout_width="103sp"
         android:layout_height="59sp"
-        android:layout_marginBottom="116sp"
         android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/logo_recovery"
+        android:contentDescription="@string/voltar_recovery"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/botao_voltar"
-        android:contentDescription="@string/voltar_recovery" />
+        app:srcCompat="@drawable/botao_voltar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

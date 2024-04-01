@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var email: AppCompatEditText
     private lateinit var senha: AppCompatEditText
-    //private lateinit var esqueceuSenha -> funcionalidade ainda nao feita
+    private lateinit var esqueceuSenha: AppCompatTextView
     private lateinit var btn_login: AppCompatButton
     private lateinit var criarConta: AppCompatTextView
     //private lateinit var localArmarios -> funcionalidade ainda nao feita
@@ -42,10 +42,17 @@ class LoginActivity : AppCompatActivity() {
         senha = findViewById(R.id.senha_login)
         btn_login = findViewById(R.id.btn_login)
         criarConta = findViewById(R.id.registrar_login)
+        esqueceuSenha = findViewById(R.id.esqueceu_senha)
 
         criarConta.setOnClickListener{
             startActivity(Intent(this, Register1Activity::class.java))
         }
+
+        esqueceuSenha.setOnClickListener{
+            startActivity(Intent(this, RecoveryActivity::class.java))
+        }
+
+
 
         btn_login.setOnClickListener{
             auth.signInWithEmailAndPassword(email.text.toString(), senha.text.toString())
