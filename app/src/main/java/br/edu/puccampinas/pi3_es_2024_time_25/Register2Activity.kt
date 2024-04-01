@@ -15,12 +15,12 @@ import com.google.firebase.auth.auth
 
 class Register2Activity : AppCompatActivity() {
 
-    lateinit var auth: FirebaseAuth
-    lateinit var voltar: AppCompatImageButton
-    lateinit var email: AppCompatEditText
-    lateinit var senha: AppCompatEditText
-    lateinit var confirmaSenha: AppCompatEditText
-    lateinit var btn_registrar: AppCompatButton
+    private lateinit var auth: FirebaseAuth
+    private lateinit var voltar: AppCompatImageButton
+    private lateinit var email: AppCompatEditText
+    private lateinit var senha: AppCompatEditText
+    private lateinit var confirmaSenha: AppCompatEditText
+    private lateinit var btn_registrar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +43,18 @@ class Register2Activity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email.text.toString(), senha.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d("status", "função de criar conta com e-mail e senha executada com sucesso")
-                        Toast.makeText(
-                            baseContext,
-                            "Registro realizado com sucesso!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        auth.currentUser?.sendEmailVerification()
+                            ?.addOnSuccessListener {
+                                Toast.makeText(
+                                    baseContext,
+                                    "Registro realizado. Favor verificar seu e-mail!",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
                         startActivity(Intent(this, LoginActivity::class.java))
                         finish()
 
                     } else {
-                        Log.w("status", "função de criar conta com e-mail e senha falhou", task.exception)
                         Toast.makeText(
                             baseContext,
                             "Não foi possível realizar o registro.",

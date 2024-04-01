@@ -14,20 +14,18 @@ import com.google.firebase.auth.auth
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var email: AppCompatEditText
-    lateinit var senha: AppCompatEditText
-    //lateinit var esqueceuSenha
-    lateinit var btn_login: AppCompatButton
-    lateinit var criarConta: AppCompatTextView
-    //lateinit var localArmarios
-    lateinit var auth: FirebaseAuth
+    private lateinit var email: AppCompatEditText
+    private lateinit var senha: AppCompatEditText
+    //private lateinit var esqueceuSenha -> funcionalidade ainda nao feita
+    private lateinit var btn_login: AppCompatButton
+    private lateinit var criarConta: AppCompatTextView
+    //private lateinit var localArmarios -> funcionalidade ainda nao feita
+    private lateinit var auth: FirebaseAuth
 
-    // função comentada pq nao estava funcionando direito. arrumar
     public override fun onStart() {
         super.onStart()
        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            // se o usuario ja estiver logado, redireciona ele pra dentro do app
+        if (currentUser != null && currentUser.isEmailVerified()) {
             //ainda nao tem a pagina de dentro do app, entao ta indo pra main
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -53,16 +51,26 @@ class LoginActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email.text.toString(), senha.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext,
-                            "Login bem-sucedido!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-
-                    } else {
+                        val contaVerificada = auth.currentUser?.isEmailVerified()
+                        if(contaVerificada==true) {
+                            Toast.makeText(
+                                baseContext,
+                                "Login bem-sucedido!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                            //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                        else {
+                            Toast.makeText(
+                                baseContext,
+                                "Sua conta não foi verificada. Cheque seu e-mail.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+                    else {
 
                         Toast.makeText(
                             baseContext,
