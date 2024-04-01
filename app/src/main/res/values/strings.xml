@@ -18,4 +18,6 @@
     <string name="confirmaSenha_registro">Confirme sua senha</string>
     <string name="registrar">Registrar</string>
     <string name="recuperar_senha">Recuperar</string>
+    <string name="texto_recovery">Um e-mail será enviado para recuperar sua senha</string>
+    <string name="voltar_recovery">Voltar</string>
 </resources>
