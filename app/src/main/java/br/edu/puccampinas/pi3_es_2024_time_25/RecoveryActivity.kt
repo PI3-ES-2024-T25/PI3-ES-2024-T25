@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class RecoveryActivity: AppCompatActivity() {
@@ -35,18 +36,24 @@ class RecoveryActivity: AppCompatActivity() {
 
         btnRecuperar.setOnClickListener {
 
-            auth.sendPasswordResetEmail(email.text.toString())
+            if (email.text.toString().isNotEmpty()) {
+                auth.sendPasswordResetEmail(email.text.toString())
 
-                .addOnSuccessListener {
-                    abrirpopUp()
-                }
+                    .addOnSuccessListener {
+                        abrirpopUp()
+                    }
 
-                .addOnFailureListener {
-                    Toast.makeText(baseContext, "E-mail inválido.", Toast.LENGTH_SHORT).show()
+                    .addOnFailureListener {
+                        Snackbar.make(findViewById(R.id.RecoveryActivity), "E-mail inválido.", Snackbar.LENGTH_SHORT).show()
 
-                }
+                    }
 
+            } else {
+                Snackbar.make(findViewById(R.id.RecoveryActivity), "Digite seu e-mail.", Snackbar.LENGTH_SHORT).show()
+
+            }
         }
+
     }
 
     private fun abrirpopUp() {

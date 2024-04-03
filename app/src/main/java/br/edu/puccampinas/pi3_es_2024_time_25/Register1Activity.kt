@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
+import com.google.android.material.snackbar.Snackbar
 
 class Register1Activity : AppCompatActivity() {
 
@@ -33,9 +34,40 @@ class Register1Activity : AppCompatActivity() {
         }
 
         btnContinuar.setOnClickListener {
-            startActivity(Intent(this, Register2Activity::class.java))
+            if (preencheuCampos()) {
+                startActivity(Intent(this, Register2Activity::class.java))
+                finish()
+            }
+            else {
+                val msg = campoFaltando()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
+            }
         }
 
+    }
 
+    private fun preencheuCampos(): Boolean {
+        return (nomeCompleto.text.toString().isNotEmpty() && CPF.text.toString().isNotEmpty()
+                && dataNasc.text.toString().isNotEmpty() && telefone.text.toString().isNotEmpty())
+    }
+
+    private fun campoFaltando(): String {
+        val msg: String
+        if (nomeCompleto.text.toString().isEmpty()) {
+            msg = "Digite seu nome"
+            return msg
+        }
+        if (CPF.text.toString().isEmpty()) {
+            msg = "Digite seu CPF"
+            return msg
+        }
+        if(dataNasc.text.toString().isEmpty()) {
+            msg = "Digite sua data de nascimento"
+            return msg
+        }
+        else {
+            msg = "Digite seu telefone"
+            return msg
+        }
     }
 }

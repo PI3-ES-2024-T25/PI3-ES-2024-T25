@@ -2,12 +2,11 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -25,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
        val currentUser = auth.currentUser
-        if (currentUser != null && currentUser.isEmailVerified()) {
+        if (currentUser != null && currentUser.isEmailVerified) {
             //ainda nao tem a pagina de dentro do app, entao ta indo pra main
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -54,38 +53,51 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        btn_login.setOnClickListener{
-            auth.signInWithEmailAndPassword(email.text.toString(), senha.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val contaVerificada = auth.currentUser?.isEmailVerified()
-                        if(contaVerificada==true) {
-                            Toast.makeText(
-                                baseContext,
-                                "Login bem-sucedido!",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                            //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        }
-                        else {
-                            Toast.makeText(
-                                baseContext,
-                                "Sua conta não foi verificada. Cheque seu e-mail.",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                        }
-                    }
-                    else {
+        btn_login.setOnClickListener {
 
-                        Toast.makeText(
-                            baseContext,
-                            "E-mail ou senha incorreto(s).",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+            if (preencheuCampos()) {
+                auth.signInWithEmailAndPassword(email.text.toString(), senha.text.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val contaVerificada = auth.currentUser?.isEmailVerified
+                            if (contaVerificada == true) {
+
+                                Snackbar.make(findViewById(R.id.LoginActivity), "Entrando...", Snackbar.LENGTH_SHORT).show()
+
+                                //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
+                            } else {
+                                Snackbar.make(findViewById(R.id.LoginActivity), "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
+
+                            }
+                        } else {
+                            Snackbar.make(findViewById(R.id.LoginActivity), "E-mail ou senha inválidos.", Snackbar.LENGTH_SHORT).show()
+                        }
                     }
-                }
+            }
+
+            else {
+                val msg = campoFaltando()
+                Snackbar.make(findViewById(R.id.LoginActivity), msg, Snackbar.LENGTH_SHORT).show()
+
+            }
         }
     }
+
+    private fun preencheuCampos(): Boolean {
+        return (email.text.toString().isNotEmpty() && senha.text.toString().isNotEmpty())
+    }
+
+    private fun campoFaltando(): String {
+        var msg = "Digite sua senha"
+
+        if(email.text.toString().isEmpty()) {
+            msg = "Digite seu e-mail"
+        }
+        return msg
+    }
+
+
+
 }
