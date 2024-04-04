@@ -18,4 +18,10 @@
     <string name="confirmaSenha_registro">Confirme sua senha</string>
     <string name="registrar">Registrar</string>
     <string name="recuperar_senha">Recuperar</string>
+    <string name="adicionar_cartao">Adicionar cartão</string>
+    <string name="numero_cartao">Número</string>
+    <string name="nome_cartao">Nome (como está no cartão)</string>
+    <string name="venc_cartao">Vencimento (MM/AAA)</string>
+    <string name="cod_cartao">Código de segurança</string>
+    <string name="bandeira_cartao">Bandeira</string>
 </resources>
