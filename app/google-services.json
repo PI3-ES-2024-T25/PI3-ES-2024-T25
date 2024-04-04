@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "679749296424",
+    "project_id": "lockngo-bdeeb",
+    "storage_bucket": "lockngo-bdeeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679749296424:android:6f865dbeb3935bea74f01d",
+        "android_client_info": {
+          "package_name": "br.edu.puccampinas.pi3_es_2024_time_25"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeYsWk0r3XehqvHq3vY4BXEBsYYyNrUEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
