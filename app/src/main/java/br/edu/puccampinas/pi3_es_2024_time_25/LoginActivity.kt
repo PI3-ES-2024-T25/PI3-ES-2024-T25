@@ -2,6 +2,7 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -18,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var esqueceuSenha: AppCompatTextView
     private lateinit var btn_login: AppCompatButton
     private lateinit var criarConta: AppCompatTextView
-    //private lateinit var localArmarios -> funcionalidade ainda nao feita
+    private lateinit var localArmarios : TextView
     private lateinit var auth: FirebaseAuth
 
     public override fun onStart() {
@@ -42,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
         btn_login = findViewById(R.id.btn_login)
         criarConta = findViewById(R.id.registrar_login)
         esqueceuSenha = findViewById(R.id.esqueceu_senha)
+        localArmarios = findViewById(R.id.location_armarios_login)
 
         criarConta.setOnClickListener{
             startActivity(Intent(this, Register1Activity::class.java))
@@ -82,6 +84,10 @@ class LoginActivity : AppCompatActivity() {
                 Snackbar.make(findViewById(R.id.LoginActivity), msg, Snackbar.LENGTH_SHORT).show()
 
             }
+        }
+
+        localArmarios.setOnClickListener {
+            startActivity(Intent(this, MapsActivity::class.java))
         }
     }
 
