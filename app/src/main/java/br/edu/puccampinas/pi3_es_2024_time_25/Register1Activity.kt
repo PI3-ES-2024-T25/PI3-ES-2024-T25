@@ -8,14 +8,15 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 import com.google.android.material.snackbar.Snackbar
+import com.santalu.maskara.widget.MaskEditText
 
 class Register1Activity : AppCompatActivity() {
 
     lateinit var voltar: AppCompatImageButton
     lateinit var nomeCompleto: AppCompatEditText
-    lateinit var CPF: AppCompatEditText
-    lateinit var dataNasc: AppCompatEditText
-    lateinit var telefone: AppCompatEditText
+    lateinit var CPF: MaskEditText
+    lateinit var dataNasc: MaskEditText
+    lateinit var telefone: MaskEditText
     lateinit var btnContinuar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
