@@ -16,8 +16,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
     }
-}
+    }
 
 rootProject.name = "PI3-ES-2024-TIME-25"
 include(":app")

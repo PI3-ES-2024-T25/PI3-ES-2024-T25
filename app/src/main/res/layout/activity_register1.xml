@@ -28,6 +28,7 @@
         android:layout_marginBottom="20sp"
         android:background="@drawable/border"
         android:ems="10"
+        android:maxLength="35"
         android:hint="@string/nome_registro"
         android:inputType="textPersonName"
         android:paddingStart="20sp"
@@ -39,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <com.santalu.maskara.widget.MaskEditText
         android:id="@+id/CPF_registro"
         android:layout_width="350sp"
         android:layout_height="65sp"
@@ -47,6 +48,9 @@
         android:background="@drawable/border"
         android:ems="10"
         android:hint="@string/CPF_registro"
+        app:mask="___.___.___-__"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
         android:inputType="text"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
@@ -57,7 +61,7 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <com.santalu.maskara.widget.MaskEditText
         android:id="@+id/dataNascimento_registro"
         android:layout_width="350sp"
         android:layout_height="65sp"
@@ -65,6 +69,9 @@
         android:background="@drawable/border"
         android:ems="10"
         android:hint="@string/dataNascimento_registro"
+        app:mask="__/__/____"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
         android:inputType="date"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
@@ -75,7 +82,7 @@
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <com.santalu.maskara.widget.MaskEditText
         android:id="@+id/telefone_registro"
         android:layout_width="350sp"
         android:layout_height="65sp"
@@ -84,6 +91,9 @@
         android:ems="10"
         android:hint="@string/telefone_registro"
         android:inputType="phone"
+        app:mask="(__) _____-____"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
         android:textColor="@color/white"
