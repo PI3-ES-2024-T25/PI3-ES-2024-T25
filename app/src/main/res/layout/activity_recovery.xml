@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RecoveryActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:id="@+id/RecoveryActivity">
+    android:background="#000000">
 
     <TextView
         android:id="@+id/textoRecovery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/texto_recovery"
-        android:textSize="16sp"
+        android:textColor="#7D8392"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/email_recovery"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.652"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/logo_recovery" />
 
     <ImageView
         android:id="@+id/logo_recovery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="108dp"
         android:contentDescription="@string/logo_lock_n_go"
         app:layout_constraintBottom_toTopOf="@+id/textoRecovery"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.959"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/logo4x" />
 
     <EditText
         android:id="@+id/email_recovery"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/border"
         android:ems="10"
@@ -47,36 +49,37 @@
         android:textColorHint="#C7CECB"
         app:layout_constraintBottom_toTopOf="@+id/btn_recovery"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textoRecovery" />
 
     <Button
         android:id="@+id/btn_recovery"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/primary_background_btn"
         android:text="@string/recuperar_senha"
+        android:textAllCaps="false"
         android:textColor="#7D8392"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/email_recovery" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="15dp" />
+        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_end="20dp" />
 
     <ImageButton
         android:id="@+id/voltar_recovery"
