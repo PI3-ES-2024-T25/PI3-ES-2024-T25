@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="30sp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="25sp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/verify"
+        android:contentDescription="@string/selo_concluido_recovery_modal"/>
+
+    <TextView
+        android:id="@+id/texto_modal_recovery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto_modal_recovery"
+        android:textColor="#585D6D"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:fontFamily="@font/inter_bold"/>
+    
+    <Button
+        android:id="@+id/btn_ok_recovery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_ok_modal"
+        android:textColor="@color/white"
+        android:background="@drawable/secondary_background_btn"
+        />
+
+</LinearLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

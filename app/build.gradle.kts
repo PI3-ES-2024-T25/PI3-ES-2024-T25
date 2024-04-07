@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -9,8 +10,8 @@ android {
 
     defaultConfig {
         applicationId = "br.edu.puccampinas.pi3_es_2024_time_25"
-        minSdk = 32
-        targetSdk = 34
+        minSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -42,7 +43,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.github.santalu:maskara:1.0.0")
 }

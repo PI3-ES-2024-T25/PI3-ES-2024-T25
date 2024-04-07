@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="br.edu.puccampinas.pi3_es_2024_time_25" />
+                  <option name="mobileSdkAppId" value="1:679749296424:android:6f865dbeb3935bea74f01d" />
+                  <option name="projectId" value="lockngo-bdeeb" />
+                  <option name="projectNumber" value="679749296424" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

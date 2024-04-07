@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:id="@+id/Register1Activity">
+
+
+    <ImageView
+        android:id="@+id/logo_registro1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/logo_lock_n_go"
+        app:layout_constraintBottom_toTopOf="@+id/nome_registro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topGuideLine"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/nome_registro"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:maxLength="35"
+        android:hint="@string/nome_registro"
+        android:inputType="textPersonName"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:textColor="@color/white"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/CPF_registro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.santalu.maskara.widget.MaskEditText
+        android:id="@+id/CPF_registro"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:hint="@string/CPF_registro"
+        app:mask="___.___.___-__"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
+        android:inputType="text"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:textColor="@color/white"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/dataNascimento_registro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.santalu.maskara.widget.MaskEditText
+        android:id="@+id/dataNascimento_registro"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:hint="@string/dataNascimento_registro"
+        app:mask="__/__/____"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
+        android:inputType="date"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:textColor="@color/white"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/telefone_registro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.santalu.maskara.widget.MaskEditText
+        android:id="@+id/telefone_registro"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:hint="@string/telefone_registro"
+        android:inputType="phone"
+        app:mask="(__) _____-____"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:textColor="@color/white"
+        android:textColorHint="#C7CECB"
+        app:layout_constraintBottom_toTopOf="@+id/btn_registro_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_registro_1"
+        android:layout_width="350sp"
+        android:layout_height="65sp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/primary_background_btn"
+        android:text="@string/continuar_registro"
+        android:textColor="#7D8392"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <ImageButton
+        android:id="@+id/voltar_registro1"
+        android:layout_width="100sp"
+        android:layout_height="80sp"
+        android:background="@color/black"
+        android:contentDescription="@string/voltar_registro1"
+        app:layout_constraintBottom_toTopOf="@+id/topGuideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/botao_voltar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
