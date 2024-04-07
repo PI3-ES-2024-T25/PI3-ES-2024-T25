@@ -23,4 +23,5 @@
     <string name="texto_modal_recovery">Um e-mail foi enviado para você. Verifique sua caixa de entrada!</string>
     <string name="selo_concluido_recovery_modal">Selo de concluído com sucesso</string>
     <string name="button_ok_modal">Ok</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
