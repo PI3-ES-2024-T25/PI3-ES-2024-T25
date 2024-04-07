@@ -12,4 +12,33 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
+    <Button
+        android:id="@+id/btn_go_to_maps"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
+        android:text="Ir até lá"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        map:layout_constraintBottom_toBottomOf="@+id/map"
+        map:layout_constraintEnd_toStartOf="@+id/guideline4"
+        map:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        map:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        map:layout_constraintGuide_end="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
