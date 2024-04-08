@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -8,111 +9,121 @@
 
     <ImageView
         android:id="@+id/logo_registro2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="98dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/logo_lock_n_go"
         app:layout_constraintBottom_toTopOf="@+id/email_registro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/topGuideLine"
-        app:layout_constraintVertical_bias="0.782"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineR2"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toBottomOf="@+id/voltar_registro2"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/logo4x" />
 
     <EditText
         android:id="@+id/email_registro"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="20sp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/border"
         android:ems="10"
+        android:fontFamily="@font/inter_medium"
         android:hint="@string/email_registro"
         android:inputType="textEmailAddress"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
         android:textColor="@color/white"
         android:textColorHint="#C7CECB"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/senha_registro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineR2"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toBottomOf="@+id/logo_registro2" />
 
     <EditText
         android:id="@+id/senha_registro"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="20sp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/border"
         android:ems="10"
+        android:fontFamily="@font/inter_medium"
         android:hint="@string/senha_registro"
         android:inputType="textPassword"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
         android:textColor="@color/white"
         android:textColorHint="#C7CECB"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/confirmaSenha_registro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineR2"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toBottomOf="@+id/email_registro" />
 
     <EditText
         android:id="@+id/confirmaSenha_registro"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/border"
         android:ems="10"
+        android:fontFamily="@font/inter_medium"
         android:hint="@string/confirmaSenha_registro"
         android:inputType="textPassword"
         android:paddingStart="20sp"
         android:paddingEnd="20sp"
         android:textColor="@color/white"
         android:textColorHint="#C7CECB"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_registro_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineR2"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toBottomOf="@+id/senha_registro" />
 
     <Button
         android:id="@+id/btn_registro_2"
-        android:layout_width="350sp"
+        android:layout_width="0dp"
         android:layout_height="65sp"
-        android:layout_marginBottom="32dp"
         android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
         android:text="@string/registrar"
+        android:textAllCaps="false"
         android:textColor="#7D8392"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineR2"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toBottomOf="@+id/confirmaSenha_registro" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/topGuideLine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottomGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
-
-    <ImageButton
+    <Button
         android:id="@+id/voltar_registro2"
-        android:layout_width="103sp"
-        android:layout_height="59sp"
-        android:background="@color/black"
-        android:contentDescription="@string/voltar_registro1"
-        app:layout_constraintBottom_toTopOf="@+id/topGuideLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/botao_voltar" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+        android:fontFamily="@font/inter_medium"
+        android:text="Voltar"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#ECF3FF"
+        android:textSize="16sp"
+        app:flow_verticalAlign="center"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelineR2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuidelineR2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuidelineR2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

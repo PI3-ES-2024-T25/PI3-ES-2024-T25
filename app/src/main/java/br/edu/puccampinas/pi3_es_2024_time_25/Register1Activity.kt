@@ -3,6 +3,7 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -12,7 +13,7 @@ import com.santalu.maskara.widget.MaskEditText
 
 class Register1Activity : AppCompatActivity() {
 
-    lateinit var voltar: AppCompatImageButton
+    lateinit var voltar: Button
     lateinit var nomeCompleto: AppCompatEditText
     lateinit var CPF: MaskEditText
     lateinit var dataNasc: MaskEditText

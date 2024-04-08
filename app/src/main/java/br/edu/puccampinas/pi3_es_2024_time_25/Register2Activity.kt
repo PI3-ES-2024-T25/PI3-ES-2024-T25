@@ -3,6 +3,7 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -16,7 +17,7 @@ import com.google.firebase.auth.auth
 class Register2Activity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var voltar: AppCompatImageButton
+    private lateinit var voltar: Button
     private lateinit var email: AppCompatEditText
     private lateinit var senha: AppCompatEditText
     private lateinit var confirmaSenha: AppCompatEditText
