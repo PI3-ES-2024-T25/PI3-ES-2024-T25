@@ -9,6 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityMapsBinding
@@ -54,7 +57,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var db: FirebaseFirestore
-    private lateinit var btnGoToMaps: Button
+    private lateinit var btnGoToMaps: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -92,6 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.setOnMarkerClickListener { marker ->
             btnGoToMaps.visibility = View.VISIBLE
+
             btnGoToMaps.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
