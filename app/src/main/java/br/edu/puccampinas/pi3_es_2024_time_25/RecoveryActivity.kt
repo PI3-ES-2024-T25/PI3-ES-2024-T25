@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 class RecoveryActivity: AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var voltar: AppCompatImageButton
+    private lateinit var voltar: Button
     private lateinit var email: AppCompatEditText
     private lateinit var btnRecuperar: AppCompatButton
 
