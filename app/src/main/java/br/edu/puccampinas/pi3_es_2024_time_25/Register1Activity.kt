@@ -36,13 +36,13 @@ class Register1Activity : AppCompatActivity() {
         }
 
         btnContinuar.setOnClickListener {
-            if (preencheuCampos()) {
+            if (preencheuCampos() && camposValidos()) {
                 startActivity(Intent(this, Register2Activity::class.java))
                 finish()
-            }
-            else {
-                val msg = campoFaltando()
-                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
+            } else {
+                val msg = avisaUsuario()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -53,23 +53,30 @@ class Register1Activity : AppCompatActivity() {
                 && dataNasc.text.toString().isNotEmpty() && telefone.text.toString().isNotEmpty())
     }
 
-    private fun campoFaltando(): String {
-        val msg: String
-        if (nomeCompleto.text.toString().isEmpty()) {
-            msg = "Digite seu nome"
-            return msg
+
+    private fun camposValidos(): Boolean {
+        return (CPF.isDone && dataNasc.isDone && telefone.isDone)
+    }
+
+    private fun avisaUsuario(): String {
+        var msg = ""
+        if (!preencheuCampos()) {
+            msg = "Preencha todos os campos."
+        } else {
+            val listaCampos = listOf<MaskEditText>(CPF, dataNasc, telefone)
+            val listaMsg = listOf<String>(
+                "CPF inválido.",
+                "Data de nascimento inválida.",
+                "Telefone inválido."
+            )
+            for ((i, campo) in listaCampos.withIndex()) {
+                if (!campo.isDone) {
+                    msg = listaMsg[i]
+                    break
+
+                }
+            }
         }
-        if (CPF.text.toString().isEmpty()) {
-            msg = "Digite seu CPF"
-            return msg
-        }
-        if(dataNasc.text.toString().isEmpty()) {
-            msg = "Digite sua data de nascimento"
-            return msg
-        }
-        else {
-            msg = "Digite seu telefone"
-            return msg
-        }
+        return msg
     }
 }
