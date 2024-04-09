@@ -10,6 +10,9 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 import com.google.android.material.snackbar.Snackbar
 import com.santalu.maskara.widget.MaskEditText
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class Register1Activity : AppCompatActivity() {
 
@@ -33,50 +36,58 @@ class Register1Activity : AppCompatActivity() {
 
         voltar.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+
         }
 
         btnContinuar.setOnClickListener {
             if (preencheuCampos() && camposValidos()) {
-                startActivity(Intent(this, Register2Activity::class.java))
-                finish()
+                val dados = empacotaDados()
+                startActivity(Intent(this, Register2Activity::class.java)
+                    .putExtra("vetorDados", dados))
+
+
             } else {
                 val msg = avisaUsuario()
-                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
             }
         }
 
     }
+
 
     private fun preencheuCampos(): Boolean {
         return (nomeCompleto.text.toString().isNotEmpty() && CPF.text.toString().isNotEmpty()
                 && dataNasc.text.toString().isNotEmpty() && telefone.text.toString().isNotEmpty())
     }
 
+    private fun maiorIdade(): Boolean {
+        val dataAtual = LocalDate.now()
+        val nascimentoUserString = dataNasc.text.toString()
+        val formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val nascimentoUser = LocalDate.parse(nascimentoUserString, formatoData)
+
+        val idade = Period.between(nascimentoUser, dataAtual).years
+
+        return idade>=18
+    }
+
 
     private fun camposValidos(): Boolean {
-        return (CPF.isDone && dataNasc.isDone && telefone.isDone)
+        return (CPF.isDone && dataNasc.isDone && maiorIdade() && telefone.isDone)
     }
 
     private fun avisaUsuario(): String {
-        var msg = ""
-        if (!preencheuCampos()) {
-            msg = "Preencha todos os campos."
-        } else {
-            val listaCampos = listOf<MaskEditText>(CPF, dataNasc, telefone)
-            val listaMsg = listOf<String>(
-                "CPF inválido.",
-                "Data de nascimento inválida.",
-                "Telefone inválido."
-            )
-            for ((i, campo) in listaCampos.withIndex()) {
-                if (!campo.isDone) {
-                    msg = listaMsg[i]
-                    break
-
-                }
-            }
+        return when {
+            !preencheuCampos() -> "Preencha todos os campos."
+            !CPF.isDone -> "CPF inválido."
+            !dataNasc.isDone -> "Data de nascimento inválida."
+            !maiorIdade() -> "Você deve ter mais que 18 anos para criar uma conta."
+            else -> "Telefone inválido."
         }
-        return msg
     }
-}
+
+    private fun empacotaDados(): Array<String> {
+        return arrayOf(nomeCompleto.text.toString(), CPF.text.toString(), dataNasc.text.toString(), telefone.text.toString())
+    }
+    }
