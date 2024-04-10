@@ -7,7 +7,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatImageButton
 import com.google.android.material.snackbar.Snackbar
 import com.santalu.maskara.widget.MaskEditText
 import java.time.LocalDate
@@ -41,6 +40,9 @@ class Register1Activity : AppCompatActivity() {
         }
 
         btnContinuar.setOnClickListener {
+            Log.i("teste: ", maskLenght(dataNasc).toString())
+            Log.i("teste: ", maskLenght(CPF).toString())
+            Log.i("teste: ", maskLenght(telefone).toString())
             if (preencheuCampos() && camposValidos()) {
                 val dados = empacotaDados()
                 startActivity(Intent(this, Register2Activity::class.java)
@@ -85,6 +87,14 @@ class Register1Activity : AppCompatActivity() {
             !maiorIdade() -> "Você deve ter mais que 18 anos para criar uma conta."
             else -> "Telefone inválido."
         }
+    }
+
+    private fun maskLenght(field: MaskEditText): Int {
+        var realLenght = 0
+        for(char in field.text.toString()) {
+            if(char!= '_' && char!= '/' && char!= '(' && char != ')' && char!='.' && char!='-' && char!= ' ') realLenght++
+        }
+        return realLenght
     }
 
     private fun empacotaDados(): Array<String> {

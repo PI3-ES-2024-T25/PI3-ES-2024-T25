@@ -9,10 +9,13 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import java.lang.Exception
 
 class Register2Activity : AppCompatActivity() {
 
@@ -54,31 +57,31 @@ class Register2Activity : AppCompatActivity() {
 
 
         btn_registrar.setOnClickListener {
-            if (preencheuForm2() && confereSenha()) {
-
+            if (preencheuForm2() && confereSenha() && tamanhoSenha()) {
                     val account = criaUsuario(null)
                     auth.createUserWithEmailAndPassword(account.email, account.senha)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
-
                                 account.uid = task.result.user?.uid
                                 account.senha = ""
 
                                 db.collection("users").add(account)
                                     .addOnSuccessListener {
-                                        Log.i("testes: ", "mandou para o banco")
                                         auth.currentUser?.sendEmailVerification()
                                             ?.addOnSuccessListener {
                                                 Snackbar.make(findViewById(R.id.Register2Activity), "Registro realizado!Te enviamos um e-mail para verificar sua conta.", Snackbar.LENGTH_SHORT).show()
-                                                startActivity(Intent(this, LoginActivity::class.java))
-                                                finish()
+//                                                startActivity(Intent(this, LoginActivity::class.java))
+//                                                finish()
                                             }
+
                                     }
 
 
                             }
-                            else
-                            Log.e("testes", task.exception?.message.toString())
+                            else {
+                                val msg = trataExcecao(task.exception)
+                                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
+                            }
                         }
 
 
@@ -97,7 +100,7 @@ class Register2Activity : AppCompatActivity() {
     }
 
 
-    fun criaUsuario(uid: String?): Account {
+    private fun criaUsuario(uid: String?): Account {
         return Account(
             uid,
             nome,
@@ -120,6 +123,10 @@ class Register2Activity : AppCompatActivity() {
 
     }
 
+    private fun tamanhoSenha(): Boolean {
+        return senha.text.toString().length >= 8
+    }
+
     private fun confereSenha(): Boolean {
         return (senha.text.toString() == confirmaSenha.text.toString())
     }
@@ -127,8 +134,16 @@ class Register2Activity : AppCompatActivity() {
     private fun avisaUsuario(): String {
         return when {
             !preencheuForm2() -> "Preencha todos os campos."
-            !confereSenha() -> "As senhas digitadas não sao iguais"
-            else -> "Nao deu certo."
+            !confereSenha() -> "As senhas digitadas não são iguais"
+            else -> "A senha deve ter no mínimo 8 dígitos."
+        }
+    }
+
+    private fun trataExcecao(e: Exception?): String {
+        return when(e) {
+            is FirebaseAuthUserCollisionException -> "O e-mail inserido já foi registrado."
+            is FirebaseNetworkException -> return "Sem conexão com a Internet."
+            else -> return "Ocorreu um erro. Contate o suporte."
         }
     }
 }
