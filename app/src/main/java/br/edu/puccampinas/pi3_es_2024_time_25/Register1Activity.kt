@@ -8,19 +8,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.santalu.maskara.widget.MaskEditText
-import java.time.LocalDate
-import java.time.Period
-import java.time.format.DateTimeFormatter
 
 class Register1Activity : AppCompatActivity() {
 
-    lateinit var voltar: Button
-    lateinit var nomeCompleto: AppCompatEditText
-    lateinit var CPF: MaskEditText
-    lateinit var dataNasc: MaskEditText
-    lateinit var telefone: MaskEditText
-    lateinit var btnContinuar: AppCompatButton
+    private lateinit var voltar: Button
+    private lateinit var nomeCompleto: AppCompatEditText
+    private lateinit var CPF: MaskEditText
+    private lateinit var dataNasc: MaskEditText
+    private lateinit var telefone: MaskEditText
+    private lateinit var btnContinuar: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,64 +38,41 @@ class Register1Activity : AppCompatActivity() {
         }
 
         btnContinuar.setOnClickListener {
-            Log.i("teste: ", maskLenght(dataNasc).toString())
-            Log.i("teste: ", maskLenght(CPF).toString())
-            Log.i("teste: ", maskLenght(telefone).toString())
-            if (preencheuCampos() && camposValidos()) {
-                val dados = empacotaDados()
-                startActivity(Intent(this, Register2Activity::class.java)
-                    .putExtra("vetorDados", dados))
+            val acc = startUserInstance(null)
+            val packedAcc = packUserInstance(acc)
+            if (Account.Validator(acc).isFormOneValid()) {
+                startActivity(
+                    Intent(this, Register2Activity::class.java)
+                        .putExtra("packedUserInstance", packedAcc)
+                )
 
-
-            } else {
-                val msg = avisaUsuario()
-                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
             }
-        }
+            else {
+                val msg = Account.Validator(acc).warnUser()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT)
+                    .show()
+            }
 
-    }
-
-
-    private fun preencheuCampos(): Boolean {
-        return (nomeCompleto.text.toString().isNotEmpty() && CPF.text.toString().isNotEmpty()
-                && dataNasc.text.toString().isNotEmpty() && telefone.text.toString().isNotEmpty())
-    }
-
-    private fun maiorIdade(): Boolean {
-        val dataAtual = LocalDate.now()
-        val nascimentoUserString = dataNasc.text.toString()
-        val formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val nascimentoUser = LocalDate.parse(nascimentoUserString, formatoData)
-
-        val idade = Period.between(nascimentoUser, dataAtual).years
-
-        return idade>=18
-    }
-
-
-    private fun camposValidos(): Boolean {
-        return (CPF.isDone && dataNasc.isDone && maiorIdade() && telefone.isDone)
-    }
-
-    private fun avisaUsuario(): String {
-        return when {
-            !preencheuCampos() -> "Preencha todos os campos."
-            !CPF.isDone -> "CPF inválido."
-            !dataNasc.isDone -> "Data de nascimento inválida."
-            !maiorIdade() -> "Você deve ter mais que 18 anos para criar uma conta."
-            else -> "Telefone inválido."
         }
     }
 
-    private fun maskLenght(field: MaskEditText): Int {
-        var realLenght = 0
-        for(char in field.text.toString()) {
-            if(char!= '_' && char!= '/' && char!= '(' && char != ')' && char!='.' && char!='-' && char!= ' ') realLenght++
-        }
-        return realLenght
+    private fun startUserInstance(uid: String?): Account {
+
+        return Account(uid,
+            nomeCompleto.text.toString(),
+            CPF.text.toString(),
+            dataNasc.text.toString(),
+            telefone.text.toString(),
+            "",
+            "",)
+
     }
 
-    private fun empacotaDados(): Array<String> {
-        return arrayOf(nomeCompleto.text.toString(), CPF.text.toString(), dataNasc.text.toString(), telefone.text.toString())
+    private fun packUserInstance(acc: Account): String {
+        val gson = Gson()
+        return gson.toJson(acc)
     }
-    }
+}
+
+
+

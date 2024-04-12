@@ -1,6 +1,5 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import java.time.LocalDate
@@ -13,7 +12,7 @@ class Account(var uid: String?,
               val nascimento: String,
               val fone: String,
               val email: String,
-              var senha: String) : AppCompatActivity() {
+              var senha: String){
 
     class Validator(private val account: Account) {
 
@@ -75,11 +74,12 @@ class Account(var uid: String?,
 
         fun warnUser(): String {
             return when {
-                !isFormOneFilledOut() || !isFormTwoFilledOut() -> "Preencha todos os campos."
+                !isFormOneFilledOut()-> "Preencha todos os campos."
                 getRealLength(account.cpf) < 11 -> "CPF inválido."
                 getRealLength(account.nascimento) < 8 -> "Data de nascimento inválida."
                 getRealLength(account.fone) < 11 -> "Telefone inválido."
                 !hasLegalAge() -> "Você deve ter mais que 18 anos para criar uma conta."
+                !isFormTwoFilledOut() -> "Preencha todos os campos."
                 !areBothPasswordEqual() -> "As senhas não correspondem."
                 else -> "A senha deve ter no mínimo 8 dígitos."
             }
