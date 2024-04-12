@@ -2,6 +2,7 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -54,8 +55,9 @@ class Register2Activity : AppCompatActivity() {
         }
 
 
-
         btn_registrar.setOnClickListener {
+            val testeList = mutableListOf(senha.text.toString(), confirmaSenha.text.toString())
+            Log.i("teste vetor senhas: ", testeList[1])
             if (preencheuForm2() && confereSenha() && tamanhoSenha()) {
                     val account = criaUsuario(null)
                     auth.createUserWithEmailAndPassword(account.email, account.senha)
@@ -107,12 +109,12 @@ class Register2Activity : AppCompatActivity() {
             dNascimento,
             telefone,
             email.text.toString(),
-            confirmaSenha.text.toString()
+            senha.text.toString()
         )
-        val confirmacao = a.senha
-        a.senha = senha.text.toString()
 
-        return  a // NAO TA PRONTO
+        Account.Validator(a).getPasswordFields = mutableListOf(a.senha, confirmaSenha.text.toString())
+        Log.i("teste vetor senhas: ", confirmaSenha.text.toString())
+        return  a
     }
 
 
