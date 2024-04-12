@@ -2,7 +2,6 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -101,15 +100,19 @@ class Register2Activity : AppCompatActivity() {
 
 
     private fun criaUsuario(uid: String?): Account {
-        return Account(
+        val a = Account(
             uid,
             nome,
             cpf,
             dNascimento,
             telefone,
             email.text.toString(),
-            senha.text.toString()
+            confirmaSenha.text.toString()
         )
+        val confirmacao = a.senha
+        a.senha = senha.text.toString()
+
+        return  a // NAO TA PRONTO
     }
 
 

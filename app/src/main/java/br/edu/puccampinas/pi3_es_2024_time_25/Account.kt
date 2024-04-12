@@ -1,23 +1,23 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.santalu.maskara.widget.MaskEditText
-import java.lang.Exception
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 
-class Account( var uid: String?,
-            val nome: String,
-            val cpf: String,
-            val nascimento: String,
-            val fone: String,
-            val email: String,
-            var senha: String) : AppCompatActivity() {
+class Account(var uid: String?,
+              var nome: String,
+              val cpf: String,
+              val nascimento: String,
+              val fone: String,
+              val email: String,
+              var senha: String) : AppCompatActivity() {
 
     class Validator(val account: Account) {
+        
+        private fun isFormOneValid(): Boolean {
+            return(isFormOneFilledOut() && hasFormOneValidFields())
+        }
         private fun isFormOneFilledOut(): Boolean {
             return (account .nome.isNotEmpty() && account.cpf.isNotEmpty()
                     && account.nascimento.isNotEmpty() && account.fone.isNotEmpty())
@@ -61,6 +61,7 @@ class Account( var uid: String?,
 //        }
 //
 //
+        // TODO: CONTINUAR A PARTIR DAQUI 
 //        private fun isFormTwoFilledOut(): Boolean {
 //            return (account.email.isNotEmpty() && senha.text.toString()
 //                .isNotEmpty() && confirmaSenha.text.toString().isNotEmpty())
@@ -71,9 +72,11 @@ class Account( var uid: String?,
 //            return senha.text.toString().length >= 8
 //        }
 //
-//        private fun confereSenha(): Boolean {
-//            return (senha.text.toString() == confirmaSenha.text.toString())
-//        }
+
+
+        private fun confereSenha(confirmaSenha: String): Boolean {
+            return (account.senha == confirmaSenha)
+        }
 //    }
 //
 //    private fun avisaUsuario(): String {
