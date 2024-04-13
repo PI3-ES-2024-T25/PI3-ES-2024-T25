@@ -1,5 +1,6 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
+import android.util.Log
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import java.time.LocalDate
@@ -7,12 +8,14 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 
 class Account(var uid: String?,
-              var nome: String,
+              val nome: String,
               val cpf: String,
               val nascimento: String,
               val fone: String,
-              val email: String,
+              var email: String,
               var senha: String){
+
+            var confirmPassword = ""
 
     class Validator(private val account: Account) {
 
@@ -21,6 +24,8 @@ class Account(var uid: String?,
         }
 
         private fun isFormOneFilledOut(): Boolean {
+            Log.i("passagemDados: ", "nome: ${account.nome} || CPF: ${account.cpf} || Data nasc.: ${account.nascimento} || Telefone: ${account.fone}")
+            Log.i("passagemDados: ", "---------------------------")
             return (account.nome.isNotEmpty() && account.cpf.isNotEmpty()
                     && account.nascimento.isNotEmpty() && account.fone.isNotEmpty())
         }
@@ -56,14 +61,16 @@ class Account(var uid: String?,
         }
 
         private fun isFormTwoFilledOut(): Boolean {
-            return (account.email.isNotEmpty() && account.senha.isNotEmpty() && getPasswordFields[1] != "")
+
+            Log.i("passagemDados: ", "email: ${account.email} || senha: ${account.senha} || confirma: ${account.confirmPassword}")
+            Log.i("passagemDados: ", "---------------------------")
+            return (account.email.isNotEmpty() && account.senha.isNotEmpty() && account.confirmPassword != "")
 
         }
 
-        lateinit var getPasswordFields: MutableList<String>
 
         private fun areBothPasswordEqual(): Boolean {
-            return (getPasswordFields[0] == getPasswordFields[1])
+            return (account.senha == account.confirmPassword)
         }
 
 
@@ -74,21 +81,21 @@ class Account(var uid: String?,
 
         fun warnUser(): String {
             return when {
-                !isFormOneFilledOut()-> "Preencha todos os campos."
+                !isFormOneFilledOut()-> "Preencha todos os campos1."
                 getRealLength(account.cpf) < 11 -> "CPF inválido."
                 getRealLength(account.nascimento) < 8 -> "Data de nascimento inválida."
                 getRealLength(account.fone) < 11 -> "Telefone inválido."
                 !hasLegalAge() -> "Você deve ter mais que 18 anos para criar uma conta."
-                !isFormTwoFilledOut() -> "Preencha todos os campos."
-                !areBothPasswordEqual() -> "As senhas não correspondem."
-                else -> "A senha deve ter no mínimo 8 dígitos."
+                !isFormTwoFilledOut() -> "Preencha todos os campos2."
+                !isPassSizeValid() -> "A senha deve ter no mínimo 8 digitos"
+                else -> "As senhas não correspondem."
             }
         }
 
 
         fun exceptionHandler(e: Exception?): String {
             return when (e) {
-                is FirebaseAuthUserCollisionException -> "O e-mail inserido já foi registrado."
+                is FirebaseAuthUserCollisionException -> "O e-mail inserido já está registrado."
                 is FirebaseNetworkException -> return "Sem conexão com a Internet."
                 else -> return "Ocorreu um erro inesperado. Contate o suporte."
             }

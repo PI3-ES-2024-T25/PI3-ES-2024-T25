@@ -69,8 +69,7 @@ class Register1Activity : AppCompatActivity() {
     }
 
     private fun packUserInstance(acc: Account): String {
-        val gson = Gson()
-        return gson.toJson(acc)
+        return Gson().toJson(acc)
     }
 }
 
