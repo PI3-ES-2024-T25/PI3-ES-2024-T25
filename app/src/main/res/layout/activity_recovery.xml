@@ -95,6 +95,7 @@
         android:textColor="#ECF3FF"
         android:textSize="16sp"
         app:flow_verticalAlign="center"
+        android:paddingHorizontal="0dp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
