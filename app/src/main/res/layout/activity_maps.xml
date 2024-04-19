@@ -10,22 +10,24 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MapsActivity" />
+        tools:context=".MapsActivity"
+        tools:layout_editor_absoluteX="168dp"
+        tools:layout_editor_absoluteY="250dp"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/btn_go_to_maps"
-        android:contentDescription="Ir para o mapa"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/circular_button"
+        android:contentDescription="Ir para o mapa"
         android:scaleType="centerInside"
         android:src="@drawable/navigation_icon"
         android:tooltipText="Pressione para ir até lá"
-        android:visibility="invisible"
+        android:visibility="gone"
         map:layout_constraintBottom_toTopOf="@+id/button"
-        map:layout_constraintEnd_toStartOf="@+id/guideline4"
-        />
+        map:layout_constraintEnd_toStartOf="@+id/guideline4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -47,14 +49,55 @@
         android:layout_height="65dp"
         android:layout_marginBottom="8dp"
         android:allowClickWhenDisabled="false"
-        android:backgroundTint="@color/black"
+        android:background="@drawable/primary_background_btn"
+        android:backgroundTint="#ECF3FF"
         android:fontFamily="@font/inter_bold"
         android:text="Quero alugar um armário"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
         android:tooltipText="Pressione aqui para alugar"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toStartOf="@+id/guideline4"
         map:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <Button
+        android:id="@+id/btnGoToMaps2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/secondary_background_btn"
+        android:backgroundTint="#434854"
+        android:drawableEnd="@drawable/moved_location"
+        android:drawablePadding="4dp"
+        android:fontFamily="@font/inter_bold"
+        android:paddingHorizontal="20dp"
+        android:text="Ir até o armário"
+        android:textAllCaps="false"
+        android:textColor="#C7CEDB"
+        android:textSize="14sp"
+        map:layout_constraintBottom_toTopOf="@+id/button"
+        map:layout_constraintEnd_toStartOf="@+id/guideline4"
+        tools:visibility="gone" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/secondary_background_btn"
+        android:backgroundTint="#7C1E25"
+        android:drawableEnd="@drawable/logout"
+        android:drawablePadding="16dp"
+        android:fontFamily="@font/inter_bold"
+        android:paddingLeft="36dp"
+        android:paddingRight="12dp"
+        android:text="Sair"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        map:layout_constraintStart_toStartOf="@+id/guideline3"
+        map:layout_constraintTop_toTopOf="@+id/map" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

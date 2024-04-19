@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -63,12 +63,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var btnGoToMaps: ImageButton
+    private lateinit var btnRentLocker: Button
     private var locationPermissionGranted = false
     private var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userLocation: Location
-    private var isMapReady = false
-    private var isLoadedUnitLocation = false
+    private var isMapReady: Boolean = false
+    private var isLoadedUnitLocations: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     if (location != null) {
                         userLocation = location
-                        if (isMapReady && isLoadedUnitLocation) {
+                        if (isMapReady && isLoadedUnitLocations) {
                             centerMapOnUserLocation()
                         }
                     }
@@ -125,7 +126,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true
                     getUserLocation()
-                    // ...
                 }
                 println("LOCK Permission granted")
             }
@@ -154,16 +154,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isRotateGesturesEnabled = true
 
         mMap.setOnMarkerClickListener { marker ->
-            btnGoToMaps.visibility = View.VISIBLE
-
-            btnGoToMaps.setOnClickListener {
+            binding.btnGoToMaps2.visibility = View.VISIBLE
+            marker.showInfoWindow()
+            binding.btnGoToMaps2.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
-            marker.showInfoWindow()
             true
         }
         mMap.setOnMapClickListener {
-            btnGoToMaps.visibility = View.INVISIBLE
+            binding.btnGoToMaps2.visibility = View.GONE
         }
 
         mMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
@@ -217,7 +216,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     mMap.addMarker(marker)
                 }
                 centerMapOnUserLocation()
-                isLoadedUnitLocation = true
+                isLoadedUnitLocations = true
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents.", exception)
@@ -241,7 +240,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (userLocation != null) {
                 val userLatLng = LatLng(userLocation.latitude, userLocation.longitude)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16.0f))
-                mMap.uiSettings.isMyLocationButtonEnabled = true
+                mMap.uiSettings.isMyLocationButtonEnabled = false
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return
+                }
+                mMap.isMyLocationEnabled = true
             } else {
                 println("User location is null")
             }
