@@ -24,8 +24,6 @@ class Account(var uid: String?,
         }
 
         private fun isFormOneFilledOut(): Boolean {
-            Log.i("passagemDados: ", "nome: ${account.nome} || CPF: ${account.cpf} || Data nasc.: ${account.nascimento} || Telefone: ${account.fone}")
-            Log.i("passagemDados: ", "---------------------------")
             return (account.nome.isNotEmpty() && account.cpf.isNotEmpty()
                     && account.nascimento.isNotEmpty() && account.fone.isNotEmpty())
         }

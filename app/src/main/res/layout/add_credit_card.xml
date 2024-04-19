@@ -14,7 +14,7 @@
 
 
         <Button
-            android:id="@+id/voltar_registro1"
+            android:id="@+id/voltar_addCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
