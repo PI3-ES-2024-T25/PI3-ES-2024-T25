@@ -162,7 +162,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
         mMap.setOnMapClickListener {
-            binding.btnGoToMaps2.visibility = View.GONE
+            binding.btnGoToMaps2.visibility = View.INVISIBLE
         }
 
         mMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {

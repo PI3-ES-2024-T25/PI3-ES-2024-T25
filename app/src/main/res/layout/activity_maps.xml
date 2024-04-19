@@ -78,7 +78,7 @@
         android:textSize="14sp"
         map:layout_constraintBottom_toTopOf="@+id/button"
         map:layout_constraintEnd_toStartOf="@+id/guideline4"
-        tools:visibility="gone" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/button2"
