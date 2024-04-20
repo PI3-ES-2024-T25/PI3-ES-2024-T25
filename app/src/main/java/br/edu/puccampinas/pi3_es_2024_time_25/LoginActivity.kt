@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var criarConta: AppCompatTextView
     private lateinit var localArmarios : TextView
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityLoginBinding
 
     public override fun onStart() {
         super.onStart()
@@ -36,15 +38,15 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setupViewBinding()
 
         auth = Firebase.auth
-        email = findViewById(R.id.email_login)
-        senha = findViewById(R.id.senha_login)
-        btn_login = findViewById(R.id.btn_login)
-        criarConta = findViewById(R.id.registrar_login)
-        esqueceuSenha = findViewById(R.id.esqueceu_senha)
-        localArmarios = findViewById(R.id.location_armarios_login)
+        email = binding.emailLogin as AppCompatEditText
+        senha = binding.senhaLogin as AppCompatEditText
+        btn_login = binding.btnLogin as AppCompatButton
+        criarConta = binding.registrarLogin as AppCompatTextView
+        esqueceuSenha = binding.esqueceuSenha as AppCompatTextView
+        localArmarios = binding.locationArmariosLogin as AppCompatTextView
 
         criarConta.setOnClickListener{
             startActivity(Intent(this, Register1Activity::class.java))
@@ -65,24 +67,24 @@ class LoginActivity : AppCompatActivity() {
                             val contaVerificada = auth.currentUser?.isEmailVerified
                             if (contaVerificada == true) {
 
-                                Snackbar.make(findViewById(R.id.LoginActivity), "Entrando...", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT).show()
 
                                 //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                             } else {
-                                Snackbar.make(findViewById(R.id.LoginActivity), "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(binding.root, "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
 
                             }
                         } else {
-                            Snackbar.make(findViewById(R.id.LoginActivity), "E-mail ou senha inválidos.", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "E-mail ou senha inválidos.", Snackbar.LENGTH_SHORT).show()
                         }
                     }
             }
 
             else {
                 val msg = campoFaltando()
-                Snackbar.make(findViewById(R.id.LoginActivity), msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
 
             }
         }
@@ -105,6 +107,9 @@ class LoginActivity : AppCompatActivity() {
         return msg
     }
 
-
+    private fun setupViewBinding(){
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
 
 }
