@@ -2,8 +2,6 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -15,6 +13,10 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class Register2Activity : AppCompatActivity() {
 
@@ -64,20 +66,22 @@ class Register2Activity : AppCompatActivity() {
 
                                         auth.currentUser?.sendEmailVerification()
                                             ?.addOnSuccessListener {
+                                                    Snackbar.make(findViewById(R.id.Register2Activity),
+                                                        "Te enviamos um e-mail para verificar sua conta. Você será redirecionado para o login...",
+                                                        Snackbar.LENGTH_SHORT).show()
 
-                                                Snackbar.make(findViewById(R.id.Register2Activity),
-                                                    "Te enviamos um e-mail para verificar sua conta. Você será redirecionado para o login...",
-                                                    Snackbar.LENGTH_SHORT).show()
+                                                CoroutineScope(Dispatchers.Main).launch {
+                                                    delay(4000)
 
-                                                Handler(Looper.getMainLooper()).postDelayed({
-                                                    startActivity(Intent(this, LoginActivity::class.java))
+                                                    startActivity(Intent(this@Register2Activity, LoginActivity::class.java))
                                                     finish()
-                                                }, 5000)
+                                                }
+                                                }
                                             }
 
                                     }
 
-                            }
+
                             else {
                                 val msg = Account.Validator(acc).exceptionHandler(task.exception)
                                 Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
