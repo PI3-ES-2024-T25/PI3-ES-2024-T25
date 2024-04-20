@@ -53,7 +53,7 @@ class Register2Activity : AppCompatActivity() {
             sendConfirmPassToInstance(acc)
 
             if (Account.Validator(acc).isFormTwoValid()) {
-
+                    acc.confirmPassword = ""
                     auth.createUserWithEmailAndPassword(acc.email, acc.senha)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
