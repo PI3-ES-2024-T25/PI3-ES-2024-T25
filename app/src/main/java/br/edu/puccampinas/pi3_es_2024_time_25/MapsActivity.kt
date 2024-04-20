@@ -397,7 +397,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun checkRentalInProgress(): Boolean {
-        // Verifica se o usuário tem um aluguel em andamento
+        // Verifica se o usuário tem um aluguel em andamento, pop up com a mensagem
         Toast.makeText(applicationContext, "Aluguel em andamento", Toast.LENGTH_SHORT).show()
         return false
     }
