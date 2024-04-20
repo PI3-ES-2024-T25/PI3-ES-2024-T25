@@ -26,7 +26,7 @@
         android:src="@drawable/navigation_icon"
         android:tooltipText="Pressione para ir até lá"
         android:visibility="gone"
-        map:layout_constraintBottom_toTopOf="@+id/button"
+        map:layout_constraintBottom_toTopOf="@+id/btnRentLocker"
         map:layout_constraintEnd_toStartOf="@+id/guideline4" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -44,7 +44,7 @@
         map:layout_constraintGuide_end="20dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnRentLocker"
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:layout_marginBottom="8dp"
@@ -52,7 +52,7 @@
         android:background="@drawable/primary_background_btn"
         android:backgroundTint="#ECF3FF"
         android:fontFamily="@font/inter_bold"
-        android:text="Quero alugar um armário"
+        android:text="Selecione uma unidade"
         android:textAllCaps="false"
         android:textColor="#7D8392"
         android:textSize="16sp"
@@ -65,7 +65,7 @@
         android:id="@+id/btnGoToMaps2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/secondary_background_btn"
         android:backgroundTint="#434854"
         android:drawableEnd="@drawable/moved_location"
@@ -76,7 +76,7 @@
         android:textAllCaps="false"
         android:textColor="#C7CEDB"
         android:textSize="14sp"
-        map:layout_constraintBottom_toTopOf="@+id/button"
+        map:layout_constraintBottom_toTopOf="@+id/btnRentLocker"
         map:layout_constraintEnd_toStartOf="@+id/guideline4"
         tools:visibility="invisible" />
 

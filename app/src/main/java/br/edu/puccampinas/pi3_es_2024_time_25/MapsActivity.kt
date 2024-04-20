@@ -14,6 +14,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityMapsBinding
@@ -71,6 +73,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var isMapReady: Boolean = false
     private var isLoadedUnitLocations: Boolean = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,6 +90,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getUserLocation()
+        binding.btnGoToMaps2.visibility = View.INVISIBLE
+        changeRentBtnInfo()
     }
 
     private fun getUserLocation() {
@@ -159,10 +164,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.btnGoToMaps2.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
+            binding.btnRentLocker.text = "Alugar armário"
+            binding.btnRentLocker.setOnClickListener {
+                Toast.makeText(
+                    applicationContext,
+                    "Você pressionou Alugar armário",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             true
         }
         mMap.setOnMapClickListener {
             binding.btnGoToMaps2.visibility = View.INVISIBLE
+            changeRentBtnInfo()
         }
 
         mMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
@@ -266,4 +280,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             println("Error centering map on user location: $e")
         }
     }
+
+    private fun changeRentBtnInfo() {
+        binding.btnRentLocker.text = "Selecione um armário"
+
+        binding.btnRentLocker.setOnClickListener {
+            var builder = AlertDialog.Builder(this)
+            builder.setTitle("Título do Modal")
+            builder.setMessage("Este é um exemplo simples de um modal.")
+
+            builder.setPositiveButton("OK") { dialog, which ->
+                // Ação a ser executada quando o botão positivo é pressionado
+                Toast.makeText(applicationContext, "Você pressionou OK", Toast.LENGTH_SHORT).show()
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
+
 }
