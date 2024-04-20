@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -92,6 +93,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         getUserLocation()
         binding.btnGoToMaps2.visibility = View.INVISIBLE
         changeRentBtnInfo()
+        binding.btnSignout.setOnClickListener {
+            signOut()
+        }
     }
 
     private fun getUserLocation() {
@@ -121,7 +125,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             println("LOCK Error getting user location: $e")
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -296,6 +299,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val dialog = builder.create()
             dialog.show()
         }
+    }
+
+    private fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        // Redirecionar para a tela de login após o sign out
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
 }
