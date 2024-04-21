@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "br.edu.puccampinas.pi3_es_2024_time_25"
-        minSdk = 31
+        minSdk = 30
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
