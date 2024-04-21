@@ -5,93 +5,102 @@
     android:id="@+id/QRCodeGeneratorActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QRCodeGeneratorActivity"
-    android:background="#000000">
-
+    android:background="#000000"
+    tools:context=".QRCodeGeneratorActivity">
 
     <Button
         android:id="@+id/voltar_qr_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
         android:fontFamily="@font/inter_medium"
+        android:paddingHorizontal="0dp"
         android:text="Voltar"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="#ECF3FF"
         android:textSize="16sp"
         app:flow_verticalAlign="center"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="123dp"
-        android:layout_height="146dp"
-        android:layout_marginTop="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="108dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/logo4x" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/inter_bold"
         android:text="@string/apresentar_qr_code"
+        android:textAlignment="center"
         android:textColor="#C7CEDB"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/inter_bold"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/inter_medium"
         android:text="@string/nome_do_cliente"
         android:textColor="#C7CEDB"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/qr_code"
+        app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ImageView
         android:id="@+id/qr_code"
         android:layout_width="188dp"
         android:layout_height="196dp"
-        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.306"
         app:srcCompat="@drawable/baseline_qr_code_scanner_24" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftQrCodeGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightQrCodeGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
     <Button
-        android:id="@+id/test_btn"
-        android:layout_width="0dp"
-        android:layout_height="65sp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/primary_background_btn"
-        android:fontFamily="@font/inter_bold"
-        android:text="teste"
-        android:textAllCaps="false"
-        android:textColor="#7D8392"
-        android:textSize="16sp"
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:onClick="generateQRCodeOnClick"
+        android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qr_code"
-        android:onClick="generateQRCodeOnClick" />
+        app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
