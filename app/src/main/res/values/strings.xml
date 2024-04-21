@@ -24,6 +24,10 @@
     <string name="selo_concluido_recovery_modal">Selo de concluído com sucesso</string>
     <string name="button_ok_modal">Ok</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="edNumeroCartao">Número do cartão</string>
+    <string name="edCVV">Código de segurança (CVV)</string>
+    <string name="edVencimento">Data de nascimento (MM/AA)</string>
+    <string name="tvAddCartao">Adicione seu cartão de crétido</string>
     <string name="title_activity_qrcode_generator">QRCodeGeneratorActivity</string>
     <string name="apresentar_qr_code">Apresente o QR Code ao gerente</string>
     <string name="nome_do_gerente">(Nome do gerente)</string>

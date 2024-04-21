@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="43dp">
+
+
+        <Button
+            android:id="@+id/voltar_addCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+            android:fontFamily="@font/inter_medium"
+            android:text="Voltar"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#ECF3FF"
+            android:textSize="16sp"
+            app:flow_verticalAlign="center"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tituloAddCartao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:text="@string/tvAddCartao"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/etNumeroCartao"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.santalu.maskara.widget.MaskEditText
+            android:id="@+id/etNumeroCartao"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/border"
+            android:inputType="number"
+            android:hint="@string/edNumeroCartao"
+            android:ems="10"
+            android:paddingStart="20sp"
+            android:paddingEnd="20sp"
+            android:textColor="@color/white"
+            android:textColorHint="#C7CECB"
+            android:textSize="18sp"
+            app:mask="____ ____ ____ ____"
+            app:maskCharacter="_"
+            app:maskStyle="completable"
+            app:layout_constraintBottom_toTopOf="@+id/etNomeTitular"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintStart_toEndOf="@+id/guideline5" />
+
+        <EditText
+            android:id="@+id/etNomeTitular"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Nome do titular (como está no cartão)"
+            android:paddingStart="20sp"
+            android:paddingEnd="20sp"
+            android:textColor="@color/white"
+            android:textColorHint="#C7CECB"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/etVencimento"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toEndOf="@+id/guideline5" />
+
+        <com.santalu.maskara.widget.MaskEditText
+            android:id="@+id/etVencimento"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:inputType="date"
+            android:hint="@string/edVencimento"
+            android:paddingStart="20sp"
+            android:paddingEnd="20sp"
+            android:textColor="@color/white"
+            android:textColorHint="#C7CECB"
+            android:textSize="18sp"
+            app:mask="__/__"
+            app:maskCharacter="_"
+            app:maskStyle="completable"
+            app:layout_constraintBottom_toTopOf="@+id/etCVV"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toEndOf="@+id/guideline5" />
+
+        <EditText
+            android:id="@+id/etCVV"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:hint="@string/edCVV"
+            android:inputType="numberPassword"
+            android:paddingStart="20sp"
+            android:paddingEnd="20sp"
+            android:textColor="@color/white"
+            android:maxLength="3"
+            android:textColorHint="#C7CECB"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnAddCartao"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toEndOf="@+id/guideline5" />
+
+        <Button
+            android:id="@+id/btnAddCartao"
+            android:layout_width="350sp"
+            android:layout_height="65sp"
+            android:layout_marginBottom="68dp"
+            android:background="@drawable/primary_background_btn"
+            android:textColor="#7D8392"
+            android:textSize="20sp"
+            android:text="Adicionar Cartão"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toEndOf="@+id/guideline5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="22dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="386dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

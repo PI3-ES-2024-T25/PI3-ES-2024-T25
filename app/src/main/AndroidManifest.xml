@@ -42,6 +42,7 @@
         <activity android:name=".Register1Activity" />
         <activity android:name=".Register2Activity" />
         <activity android:name=".RecoveryActivity" />
+        <activity android:name=".AddCreditCardActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
