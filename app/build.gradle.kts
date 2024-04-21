@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "br.edu.puccampinas.pi3_es_2024_time_25"
-        minSdk = 31
+        minSdk = 30
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

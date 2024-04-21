@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
        val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isEmailVerified) {
             //ainda nao tem a pagina de dentro do app, entao ta indo pra main
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, MapsActivity::class.java))
             finish()
 
         }
@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
                                 Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT).show()
 
                                 //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
-                                startActivity(Intent(this, MainActivity::class.java))
+                                startActivity(Intent(this, MapsActivity::class.java))
                                 finish()
                             } else {
                                 Snackbar.make(binding.root, "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
