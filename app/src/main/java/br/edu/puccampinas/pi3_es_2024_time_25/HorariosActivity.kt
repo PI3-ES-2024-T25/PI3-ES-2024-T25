@@ -63,21 +63,21 @@ class HorariosActivity : AppCompatActivity() {
                         this,
                         R.color.white
                     )
-                ) // Cor quando selecionado
+                )
                 confirmarLocacao.isEnabled = true
                 confirmarLocacao.setBackgroundColor(
                     ContextCompat.getColor(
                         this,
                         R.color.green
                     )
-                ) // Cor quando habilitado
+                )
             }
         }
 
         confirmarLocacao.setOnClickListener {
             if (confirmarLocacao.isEnabled) {
                 buttons.forEach { btn ->
-                    if (btn.currentTextColor == ContextCompat.getColor(this, R.drawable.border)) {
+                    if (btn.currentTextColor == ContextCompat.getColor(this, R.color.green_dark)) {
                         btn.setBackgroundColor(
                             ContextCompat.getColor(
                                 this,
@@ -86,22 +86,22 @@ class HorariosActivity : AppCompatActivity() {
                         ) // Cor quando confirmado
                     }
                 }
-                confirmarLocacao.setBackgroundColor(ContextCompat.getColor(this, R.drawable.selected_button))
+                confirmarLocacao.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
             }
         }
 
 
         fun resetButtonColors() {
-            // Lista dos botões de tempo para resetar a cor.
+
             val timeButtons = listOf(btnTempo1, btnTempo2, btnTempo3, btnTempo4, btnTempo5)
 
-            // Resetar a cor de fundo para o drawable original nos botões de tempo.
+
             timeButtons.forEach { button ->
                 button.setBackgroundResource(R.color.white)
             }
 
-            // Resetar a cor de fundo do botão de confirmação para a cor definida no colors.xml
-            confirmarLocacao.setBackgroundColor(ContextCompat.getColor(this, R.drawable.border))
+
+            confirmarLocacao.setBackgroundColor(ContextCompat.getColor(this, R.color.green_dark))
             confirmarLocacao.isEnabled = false
         }
     }

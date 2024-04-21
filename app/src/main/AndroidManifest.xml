@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,26 +11,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PI3ES2024TIME25"
         tools:targetApi="31">
+
         <activity
             android:name=".HorariosActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" /> <!-- adicione em seu local.properties esta linha MAPS_API_KEY=AIzaSyBdfIS2S4FYy_eE4waQNGqisnSCT1aK_H4 -->
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Register1Activity" />
         <activity android:name=".Register2Activity" />
