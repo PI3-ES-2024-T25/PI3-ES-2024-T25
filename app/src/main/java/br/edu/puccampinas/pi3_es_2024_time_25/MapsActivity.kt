@@ -56,7 +56,8 @@ data class Unit(
     val name: String = "",
     val description: String = "",
     val lockers: List<String> = emptyList(),
-    val rentalOptions: List<RentalOption> = emptyList()
+    val rentalOptions: List<RentalOption> = emptyList(),
+    val lockersAvailable: List<String> = emptyList()
 )
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -172,6 +173,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.btnRentLocker.setOnClickListener {
                     // val intent = Intent(this, CreditCardActivity::class.java)
                     //startActivity(intent)
+                    val unit = this.markerUnitMap[marker]
+                    if (unit != null) {
+                        if (isUserCloseToUnit(unit)) {
+                            Toast.makeText(
+                                applicationContext, "Você  ${unit.id}", Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Você não está próximo ao armário ${unit.id}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             } else {
                 binding.btnRentLocker.text = "Quero alugar um armário"
@@ -396,8 +411,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
+    private fun checkUnitHasLockerAvailable(unit: Unit): Boolean {
+        var lockerAvailable = false
+        db.collection("rental_units").document(unit.id).get().addOnSuccessListener { document ->
+            if (document != null) {
+                val unit = document.toObject(Unit::class.java)
+                if (unit != null) {
+                    if (unit.lockersAvailable.isNotEmpty()) {
+                        lockerAvailable = true
+                    }
+                }
+            }
+        }
+        return lockerAvailable
+    }
+
     private fun checkRentalInProgress(): Boolean {
         // Verifica se o usuário tem um aluguel em andamento, pop up com a mensagem
+
         Toast.makeText(applicationContext, "Aluguel em andamento", Toast.LENGTH_SHORT).show()
         return false
     }
