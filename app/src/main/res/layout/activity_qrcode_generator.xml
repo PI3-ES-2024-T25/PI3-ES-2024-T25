@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/inter_medium"
-        android:text="@string/nome_do_cliente"
+        android:text="@string/nome_do_gerente"
         android:textColor="#C7CEDB"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/qr_code"
