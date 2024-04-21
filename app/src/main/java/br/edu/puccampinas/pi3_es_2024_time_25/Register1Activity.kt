@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister1Binding
 import com.google.android.material.snackbar.Snackbar
 import com.santalu.maskara.widget.MaskEditText
 
@@ -19,10 +20,11 @@ class Register1Activity : AppCompatActivity() {
     lateinit var dataNasc: MaskEditText
     lateinit var telefone: MaskEditText
     lateinit var btnContinuar: AppCompatButton
+    lateinit var binding: ActivityRegister1Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register1);
+        setupViewBinding()
 
         voltar = findViewById(R.id.voltar_registro1)
         nomeCompleto = findViewById(R.id.nome_registro)
@@ -71,5 +73,9 @@ class Register1Activity : AppCompatActivity() {
             msg = "Digite seu telefone"
             return msg
         }
+    }
+    private fun setupViewBinding(){
+        binding = ActivityRegister1Binding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

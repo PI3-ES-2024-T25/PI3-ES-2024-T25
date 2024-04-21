@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRecoveryBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
@@ -19,10 +20,11 @@ class RecoveryActivity: AppCompatActivity() {
     private lateinit var voltar: Button
     private lateinit var email: AppCompatEditText
     private lateinit var btnRecuperar: AppCompatButton
+    private lateinit var binding : ActivityRecoveryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recovery)
+        setupViewBinding()
 
         auth = FirebaseAuth.getInstance()
         voltar = findViewById(R.id.voltar_recovery)
@@ -68,6 +70,11 @@ class RecoveryActivity: AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
         popUp.show()
+    }
+
+    private fun setupViewBinding(){
+        binding = ActivityRecoveryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
 
