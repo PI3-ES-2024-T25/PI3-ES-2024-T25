@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.AppCompatTextView
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister2Binding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -27,10 +30,11 @@ class Register2Activity : AppCompatActivity() {
     private lateinit var senha: AppCompatEditText
     private lateinit var confirmaSenha: AppCompatEditText
     private lateinit var btn_registrar: AppCompatButton
+    private lateinit var binding: ActivityRegister2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register2)
+        setupViewBinding()
 
 
         voltar = findViewById(R.id.voltar_registro2)
@@ -116,6 +120,10 @@ class Register2Activity : AppCompatActivity() {
 
     }
 
+    private fun setupViewBinding(){
+        binding = ActivityRegister2Binding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
 
 
     private fun unpackUserInstance(accAsJson: String?): Account {

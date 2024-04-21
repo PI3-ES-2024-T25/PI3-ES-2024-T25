@@ -28,4 +28,7 @@
     <string name="edCVV">Código de segurança (CVV)</string>
     <string name="edVencimento">Data de nascimento (MM/AA)</string>
     <string name="tvAddCartao">Adicione seu cartão de crétido</string>
+    <string name="title_activity_qrcode_generator">QRCodeGeneratorActivity</string>
+    <string name="apresentar_qr_code">Apresente o QR Code ao gerente</string>
+    <string name="nome_do_gerente">(Nome do gerente)</string>
 </resources>
