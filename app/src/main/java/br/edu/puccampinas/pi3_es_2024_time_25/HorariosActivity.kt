@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
-
 
 class HorariosActivity : AppCompatActivity() {
 
@@ -29,12 +29,12 @@ class HorariosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_horarios)
 
         textoHorarios = findViewById(R.id.texto_horarios)
+        confirmarLocacao = findViewById(R.id.Confirmar_locacao)
         btnTempo1 = findViewById(R.id.btn_tempo_1)
         btnTempo2 = findViewById(R.id.btn_tempo_2)
         btnTempo3 = findViewById(R.id.btn_tempo_3)
         btnTempo4 = findViewById(R.id.btn_tempo_4)
         btnTempo5 = findViewById(R.id.btn_tempo_5)
-        confirmarLocacao = findViewById(R.id.Confirmar_locacao)
         voltarTempo = findViewById(R.id.voltar_tempo)
 
         voltarTempo.setOnClickListener {
@@ -75,40 +75,51 @@ class HorariosActivity : AppCompatActivity() {
                 val msg = "Por favor, selecione um horário de locação."
                 Snackbar.make(it, msg, Snackbar.LENGTH_SHORT).show()
             } else {
-
-                startActivity(Intent(this, Register2Activity::class.java))
-                finish()
+                val alertBuilder = AlertDialog.Builder(this)
+                alertBuilder.setTitle("Atenção!")
+                alertBuilder.setMessage("Será creditado do seu cartão o valor da locação. Deseja continuar?")
+                alertBuilder.setPositiveButton("Sim") { dialog, which ->
+                    verificarDisponibilidadeLocker()
+                }
+                alertBuilder.setNegativeButton("Não") { dialog, which ->
+                    dialog.dismiss()
+                }
+                alertBuilder.show()
             }
         }
+    }
 
+    private fun verificarDisponibilidadeLocker() {
 
-        fun verificarDisponibilidadeLocker() {
+        db.collection("rental_units")
+            .document("lockers")
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val lockerAvailable = document.getBoolean("lockerAvailable") ?: false
 
-            db.collection("rental_units")
-                .document("lockers")
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
+                    if (lockerAvailable) {
 
-                        val lockerAvailable = document.getBoolean("lockerAvailable") ?: false
+                        startActivity(Intent(this, Register2Activity::class.java))
+                        finish()
+                    } else {
 
-
-                        if (lockerAvailable) {
-                            textoHorarios.text = "Armário disponível!"
-                        } else {
-                            textoHorarios.text = "Nenhum armário disponível"
-                        }
+                        Snackbar.make(
+                            confirmarLocacao,
+                            "Armário não está disponivel",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                .addOnFailureListener { exception ->
+            }
+            .addOnFailureListener { exception ->
 
-                    Snackbar.make(
-                        confirmarLocacao,
-                        "Erro ao buscar disponibilidade do armário",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-        }
+                Snackbar.make(
+                    confirmarLocacao,
+                    "Erro ao buscar disponibilidade do armário.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
     }
 }
 
