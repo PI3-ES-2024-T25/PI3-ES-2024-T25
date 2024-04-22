@@ -8,23 +8,23 @@
 
     <TextView
         android:id="@+id/texto_horarios"
-        android:layout_width="301dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="640dp"
+        android:layout_width="311dp"
+        android:layout_height="73dp"
+        android:layout_marginBottom="796dp"
         android:fontFamily="@font/inter_bold"
         android:text="@string/texto_horarios"
-        android:textColor="#EFF0F3"
-        android:textSize="20sp"
+        android:textColor="#C7CEDB"
+        android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.645"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_tempo_1"
-        android:layout_width="296dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="544dp"
+        android:layout_width="346dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="636dp"
         android:background="@drawable/primary_background_btn"
         android:fontFamily="@font/inter_bold"
         android:text="@string/btn_tempo_1"
@@ -33,14 +33,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_tempo_2"
-        android:layout_width="296dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="444dp"
+        android:layout_width="346dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="532dp"
         android:background="@drawable/primary_background_btn"
         android:fontFamily="@font/inter_bold"
         android:text="@string/btn_tempo_2"
@@ -49,14 +48,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_tempo_3"
-        android:layout_width="296dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="344dp"
+        android:layout_width="346dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="428dp"
         android:background="@drawable/primary_background_btn"
         android:fontFamily="@font/inter_bold"
         android:text="@string/btn_tempo_3"
@@ -65,14 +63,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_tempo_4"
-        android:layout_width="296dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="244dp"
+        android:layout_width="346dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="324dp"
         android:background="@drawable/primary_background_btn"
         android:fontFamily="@font/inter_bold"
         android:text="@string/btn_tempo_4"
@@ -81,14 +78,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_tempo_5"
-        android:layout_width="296dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="144dp"
+        android:layout_width="346dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="220dp"
         android:background="@drawable/primary_background_btn"
         android:fontFamily="@font/inter_bold"
         android:text="@string/btn_tempo_5"
@@ -97,23 +93,22 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/Confirmar_locacao"
         android:layout_width="361dp"
         android:layout_height="74dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="25dp"
-        android:background="@color/green_dark"
+        android:background="@drawable/unselected_button"
         android:fontFamily="@font/inter_bold"
         android:text="@string/Confirmar_locacao"
         android:textAllCaps="false"
         android:textColor="#FBF9F9"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintHorizontal_bias="0.709"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_tempo_5" />
 
@@ -132,7 +127,7 @@
         android:textSize="16sp"
         app:flow_verticalAlign="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
