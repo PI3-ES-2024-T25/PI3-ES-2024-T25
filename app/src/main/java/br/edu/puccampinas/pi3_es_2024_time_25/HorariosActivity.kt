@@ -7,9 +7,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class HorariosActivity : AppCompatActivity() {
 
+    private val db = FirebaseFirestore.getInstance()
     private lateinit var textoHorarios: TextView
     private lateinit var btnTempo1: Button
     private lateinit var btnTempo2: Button
@@ -53,7 +56,7 @@ class HorariosActivity : AppCompatActivity() {
                     confirmarLocacao.setBackgroundResource(R.drawable.unselected_button)
                 } else {
 
-                    selectedButton?.setBackgroundResource(R.color.white)
+                    selectedButton?.setBackgroundResource(R.drawable.primary_background_btn)
                     selectedButton = button
 
 
@@ -77,6 +80,36 @@ class HorariosActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+
+        fun verificarDisponibilidadeLocker() {
+
+            db.collection("rental_units")
+                .document("lockers")
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+
+                        val lockerAvailable = document.getBoolean("lockerAvailable") ?: false
+
+
+                        if (lockerAvailable) {
+                            textoHorarios.text = "Armário disponível!"
+                        } else {
+                            textoHorarios.text = "Nenhum armário disponível"
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+
+                    Snackbar.make(
+                        confirmarLocacao,
+                        "Erro ao buscar disponibilidade do armário",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+        }
     }
 }
+
 
