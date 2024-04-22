@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,12 +15,12 @@ class HorariosActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var textoHorarios: TextView
-    private lateinit var btnTempo1: Button
-    private lateinit var btnTempo2: Button
-    private lateinit var btnTempo3: Button
-    private lateinit var btnTempo4: Button
-    private lateinit var btnTempo5: Button
-    private lateinit var confirmarLocacao: Button
+    private lateinit var btnTempo1: AppCompatButton
+    private lateinit var btnTempo2: AppCompatButton
+    private lateinit var btnTempo3: AppCompatButton
+    private lateinit var btnTempo4: AppCompatButton
+    private lateinit var btnTempo5: AppCompatButton
+    private lateinit var confirmarLocacao: AppCompatButton
     private lateinit var voltarTempo: Button
 
     private var selectedButton: Button? = null
@@ -79,6 +80,7 @@ class HorariosActivity : AppCompatActivity() {
                 alertBuilder.setTitle("Atenção!")
                 alertBuilder.setMessage("Será creditado do seu cartão o valor da locação. Deseja continuar?")
                 alertBuilder.setPositiveButton("Sim") { dialog, which ->
+                    startActivity(Intent(this, Register2Activity::class.java))
                     verificarDisponibilidadeLocker()
                 }
                 alertBuilder.setNegativeButton("Não") { dialog, which ->
