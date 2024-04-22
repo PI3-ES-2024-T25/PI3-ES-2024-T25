@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -15,15 +14,11 @@ class HorariosActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var textoHorarios: TextView
-    private lateinit var btnTempo1: AppCompatButton
-    private lateinit var btnTempo2: AppCompatButton
-    private lateinit var btnTempo3: AppCompatButton
-    private lateinit var btnTempo4: AppCompatButton
-    private lateinit var btnTempo5: AppCompatButton
     private lateinit var confirmarLocacao: AppCompatButton
     private lateinit var voltarTempo: Button
 
-    private var selectedButton: Button? = null
+    private var selectedButton: AppCompatButton? = null
+    private lateinit var buttonMap: Map<AppCompatButton, String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,40 +26,44 @@ class HorariosActivity : AppCompatActivity() {
 
         textoHorarios = findViewById(R.id.texto_horarios)
         confirmarLocacao = findViewById(R.id.Confirmar_locacao)
-        btnTempo1 = findViewById(R.id.btn_tempo_1)
-        btnTempo2 = findViewById(R.id.btn_tempo_2)
-        btnTempo3 = findViewById(R.id.btn_tempo_3)
-        btnTempo4 = findViewById(R.id.btn_tempo_4)
-        btnTempo5 = findViewById(R.id.btn_tempo_5)
         voltarTempo = findViewById(R.id.voltar_tempo)
 
         voltarTempo.setOnClickListener {
             startActivity(Intent(this, MapsActivity::class.java))
         }
 
-        val buttons = listOf(btnTempo1, btnTempo2, btnTempo3, btnTempo4, btnTempo5)
+        // Lista de horários disponíveis para locação
+        val horarios = listOf(
+            "30 minutos - R$ 30,00",
+            "1 hora - R$ 50,00",
+            "2 horas - R$ 100,00",
+            "4 horas - R$ 150,00",
+            "Até as 18 horas - R$ 300,00"
+        )
 
-        buttons.forEach { button ->
+        // Associa os horários aos botões
+        buttonMap = mapOf(
+            findViewById<AppCompatButton>(R.id.btn_tempo_1) to horarios[0],
+            findViewById<AppCompatButton>(R.id.btn_tempo_2) to horarios[1],
+            findViewById<AppCompatButton>(R.id.btn_tempo_3) to horarios[2],
+            findViewById<AppCompatButton>(R.id.btn_tempo_4) to horarios[3],
+            findViewById<AppCompatButton>(R.id.btn_tempo_5) to horarios[4]
+        )
+
+        buttonMap.forEach { (button, horario) ->
+            button.text = horario
             button.setOnClickListener {
                 if (selectedButton == button) {
-
                     button.setBackgroundResource(R.drawable.primary_background_btn)
                     selectedButton = null
                     textoHorarios.text = "Nenhum horário selecionado"
-
-
                     confirmarLocacao.isEnabled = false
                     confirmarLocacao.setBackgroundResource(R.drawable.unselected_button)
                 } else {
-
                     selectedButton?.setBackgroundResource(R.drawable.primary_background_btn)
                     selectedButton = button
-
-
                     button.setBackgroundResource(R.drawable.selected_button)
-                    textoHorarios.text = "Horário selecionado: ${button.text}"
-
-
+                    textoHorarios.text = "Horário selecionado: $horario"
                     confirmarLocacao.isEnabled = true
                     confirmarLocacao.setBackgroundResource(R.drawable.selected_button)
                 }
@@ -73,17 +72,16 @@ class HorariosActivity : AppCompatActivity() {
 
         confirmarLocacao.setOnClickListener {
             if (!confirmarLocacao.isEnabled) {
-                val msg = "Por favor, selecione um horário de locação."
-                Snackbar.make(it, msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(it, "Por favor, selecione um horário de locação.", Snackbar.LENGTH_SHORT).show()
             } else {
                 val alertBuilder = AlertDialog.Builder(this)
                 alertBuilder.setTitle("Atenção!")
                 alertBuilder.setMessage("Será creditado do seu cartão o valor da locação. Deseja continuar?")
-                alertBuilder.setPositiveButton("Sim") { dialog, which ->
+                alertBuilder.setPositiveButton("Sim") { _, _ ->
                     startActivity(Intent(this, Register2Activity::class.java))
                     verificarDisponibilidadeLocker()
                 }
-                alertBuilder.setNegativeButton("Não") { dialog, which ->
+                alertBuilder.setNegativeButton("Não") { dialog, _ ->
                     dialog.dismiss()
                 }
                 alertBuilder.show()
@@ -92,30 +90,23 @@ class HorariosActivity : AppCompatActivity() {
     }
 
     private fun verificarDisponibilidadeLocker() {
-
         db.collection("rental_units")
             .document("lockers")
             .get()
             .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val lockerAvailable = document.getBoolean("lockerAvailable") ?: false
-
-                    if (lockerAvailable) {
-
-                        startActivity(Intent(this, Register2Activity::class.java))
-                        finish()
-                    } else {
-
-                        Snackbar.make(
-                            confirmarLocacao,
-                            "Armário não está disponivel",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
+                val lockerAvailable = document.getBoolean("lockerAvailable") ?: false
+                if (lockerAvailable) {
+                    startActivity(Intent(this, Register2Activity::class.java))
+                    finish()
+                } else {
+                    Snackbar.make(
+                        confirmarLocacao,
+                        "Armário não está disponível.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
-            .addOnFailureListener { exception ->
-
+            .addOnFailureListener {
                 Snackbar.make(
                     confirmarLocacao,
                     "Erro ao buscar disponibilidade do armário.",
@@ -124,5 +115,6 @@ class HorariosActivity : AppCompatActivity() {
             }
     }
 }
+
 
 
