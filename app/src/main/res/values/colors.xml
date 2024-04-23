@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorWhenSelected">#FF4081</color> <!-- Change this to your desired color -->
     <color name="colorWhenNotSelected">#3F51B5</color>
+    <color name="darkGreen">#2B413C</color>
+    <color name="green">#338773</color>
+    <color name="gray">#C7CEDB</color>
 </resources>

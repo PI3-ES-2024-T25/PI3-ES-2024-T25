@@ -47,25 +47,25 @@
         android:fontFamily="@font/inter_medium"
         android:text="Horários disponívies para locação:"
         android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textColor="@color/gray"
+        android:textSize="35sp"
         app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/roLeftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/return_rental_options"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/btn_rental_options"
         android:layout_width="0dp"
         android:layout_height="67dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/primary_background_btn"
-        android:backgroundTint="#338773"
+        android:background="@drawable/unselected_btn"
         android:fontFamily="@font/inter_bold"
+        android:state_checked="true"
         android:text="Confirmar Locação"
         android:textAllCaps="false"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
         app:layout_constraintStart_toStartOf="@+id/roLeftGuideline" />
