@@ -1,11 +1,13 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.util.Log
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class Account(var uid: String?,
               val nome: String,
@@ -43,14 +45,22 @@ class Account(var uid: String?,
         }
 
         private fun hasLegalAge(): Boolean {
-            val dataAtual = LocalDate.now()
-            val nascimentoUserString = account.nascimento
-            val formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val nascimentoUser = LocalDate.parse(nascimentoUserString, formatoData)
+            try {
 
-            val idade = Period.between(nascimentoUser, dataAtual).years
+                val dataAtual = LocalDate.now()
+                val nascimentoUserString = account.nascimento
+                val formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                val nascimentoUser = LocalDate.parse(nascimentoUserString, formatoData)
 
-            return idade >= 18
+                val idade = Period.between(nascimentoUser, dataAtual).years
+
+                return idade >= 18
+            }
+
+            catch (e: DateTimeParseException) {
+                println("Date could not be converted: $e")
+                return false
+            }
         }
 
 
@@ -60,8 +70,6 @@ class Account(var uid: String?,
 
         private fun isFormTwoFilledOut(): Boolean {
 
-            Log.i("passagemDados: ", "email: ${account.email} || senha: ${account.senha} || confirma: ${account.confirmPassword}")
-            Log.i("passagemDados: ", "---------------------------")
             return (account.email.isNotEmpty() && account.senha.isNotEmpty() && account.confirmPassword != "")
 
         }

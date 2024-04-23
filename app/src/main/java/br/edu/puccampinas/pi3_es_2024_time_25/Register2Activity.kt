@@ -25,33 +25,24 @@ class Register2Activity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private lateinit var voltar: Button
-    private lateinit var email: AppCompatEditText
-    private lateinit var senha: AppCompatEditText
-    private lateinit var confirmaSenha: AppCompatEditText
-    private lateinit var btn_registrar: AppCompatButton
+    private lateinit var packedAcc: String
     private lateinit var binding: ActivityRegister2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setupViewBinding()
 
-
-        voltar = findViewById(R.id.voltar_registro2)
-        email = findViewById(R.id.email_registro)
-        senha = findViewById(R.id.senha_registro)
-        confirmaSenha = findViewById(R.id.confirmaSenha_registro)
-        btn_registrar = findViewById(R.id.btn_registro_2)
         auth = Firebase.auth
         db = Firebase.firestore
-        val packedAcc = intent.getStringExtra("packedUserInstance")
+        packedAcc = intent.getStringExtra("packedUserInstance").toString()
 
-        voltar.setOnClickListener {
+        binding.voltarRegistro2.setOnClickListener {
             startActivity(Intent(this, Register1Activity::class.java))
         }
 
 
-        btn_registrar.setOnClickListener {
+        binding.btnRegistro2.setOnClickListener {
 
             val acc = completeUserInstance(packedAcc)
             sendConfirmPassToInstance(acc)
@@ -108,15 +99,15 @@ class Register2Activity : AppCompatActivity() {
 
         val acc = unpackUserInstance(packedAccount)
 
-        acc.email = email.text.toString()
-        acc.senha = senha.text.toString()
+        acc.email = binding.emailRegistro.text.toString()
+        acc.senha = binding.senhaRegistro.text.toString()
 
         return acc
     }
 
     private fun sendConfirmPassToInstance(acc: Account) {
 
-        acc.confirmPassword = confirmaSenha.text.toString()
+        acc.confirmPassword = binding.confirmaSenhaRegistro.text.toString()
 
     }
 

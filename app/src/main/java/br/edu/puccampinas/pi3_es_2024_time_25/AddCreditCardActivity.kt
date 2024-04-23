@@ -1,6 +1,7 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.AddCreditCardBinding
 import com.google.android.material.snackbar.Snackbar
@@ -23,28 +24,30 @@ class AddCreditCardActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+
         binding.btnAddCartao.setOnClickListener {
-            val card = createCardInstance(null)
+            val card = createCardInstance()
             if (CreditCard.Validator(card).isFormValid()) {
-                db.collection("users").document(auth.currentUser!!.uid).collection("credit cards")
+                db.collection("users").document(auth.currentUser!!.getUid()).collection("credit_cards")
                     .add(card)
                     .addOnSuccessListener {
                         Snackbar.make(
-                            findViewById(R.id.Register2Activity),
+                            findViewById(R.id.AddCreditCardActivity),
                             "Cartão cadastrado com sucesso!",
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
                     .addOnFailureListener {
+                        Log.i("teste: ", "deu errado")
                         Snackbar.make(
-                            findViewById(R.id.Register2Activity),
+                            findViewById(R.id.AddCreditCardActivity),
                             "Erro inesperado. Contate o suporte.",
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
             } else {
                 val msg = CreditCard.Validator(card).warnUser()
-                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT)
+                Snackbar.make(findViewById(R.id.AddCreditCardActivity), msg, Snackbar.LENGTH_SHORT)
                     .show()
             }
         }
@@ -54,13 +57,12 @@ class AddCreditCardActivity : AppCompatActivity() {
         }
     }
 
-    private fun createCardInstance(uid: String?): CreditCard {
+    private fun createCardInstance(): CreditCard {
         return CreditCard(
-            uid,
-            binding.etNumeroCartao.text.toString().toInt(),
+            binding.etNumeroCartao.text.toString(),
             binding.etNomeTitular.text.toString(),
             binding.etVencimento.text.toString(),
-            binding.etCVV.text.toString().toInt()
+            binding.etCVV.text.toString()
         )
     }
 }
