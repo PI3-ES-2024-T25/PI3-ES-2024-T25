@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".RentalOptionsActivity">
+
+    <Button
+        android:id="@+id/return_rental_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+        android:fontFamily="@font/inter_medium"
+        android:paddingHorizontal="0dp"
+        android:text="Voltar"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#ECF3FF"
+        android:textSize="16sp"
+        app:flow_verticalAlign="center"
+        app:layout_constraintStart_toStartOf="@+id/roLeftGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/roLeftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/roRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
+    <TextView
+        android:id="@+id/label_rental_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/inter_medium"
+        android:text="Horários disponívies para locação:"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="@+id/roLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/return_rental_options"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/btn_rental_options"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/primary_background_btn"
+        android:backgroundTint="#338773"
+        android:fontFamily="@font/inter_bold"
+        android:text="Confirmar Locação"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/roLeftGuideline" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_rental_options"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_rental_options"
+        app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/roLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/label_rental_options" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

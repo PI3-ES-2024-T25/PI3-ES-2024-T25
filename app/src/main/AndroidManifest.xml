@@ -16,9 +16,13 @@
         android:theme="@style/Theme.PI3ES2024TIME25"
         tools:targetApi="31">
         <activity
+            android:name=".RentalOptionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".QRCodeGeneratorActivity"
             android:exported="true"
             android:label="@string/title_activity_qrcode_generator" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" /> <!-- adicione em seu local.properties esta linha MAPS_API_KEY=AIzaSyBdfIS2S4FYy_eE4waQNGqisnSCT1aK_H4 -->

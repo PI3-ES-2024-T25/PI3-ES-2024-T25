@@ -21,13 +21,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var esqueceuSenha: AppCompatTextView
     private lateinit var btn_login: AppCompatButton
     private lateinit var criarConta: AppCompatTextView
-    private lateinit var localArmarios : TextView
+    private lateinit var localArmarios: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding
 
     public override fun onStart() {
         super.onStart()
-       val currentUser = auth.currentUser
+        val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isEmailVerified) {
             //ainda nao tem a pagina de dentro do app, entao ta indo pra main
             startActivity(Intent(this, MapsActivity::class.java))
@@ -48,11 +48,11 @@ class LoginActivity : AppCompatActivity() {
         esqueceuSenha = binding.esqueceuSenha as AppCompatTextView
         localArmarios = binding.locationArmariosLogin as AppCompatTextView
 
-        criarConta.setOnClickListener{
+        criarConta.setOnClickListener {
             startActivity(Intent(this, Register1Activity::class.java))
         }
 
-        esqueceuSenha.setOnClickListener{
+        esqueceuSenha.setOnClickListener {
             startActivity(Intent(this, RecoveryActivity::class.java))
         }
 
@@ -67,22 +67,29 @@ class LoginActivity : AppCompatActivity() {
                             val contaVerificada = auth.currentUser?.isEmailVerified
                             if (contaVerificada == true) {
 
-                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT)
+                                    .show()
 
                                 //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
                                 startActivity(Intent(this, MapsActivity::class.java))
                                 finish()
                             } else {
-                                Snackbar.make(binding.root, "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(
+                                    binding.root,
+                                    "Sua conta não foi verificada. Cheque seu e-mail.",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
 
                             }
                         } else {
-                            Snackbar.make(binding.root, "E-mail ou senha inválidos.", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(
+                                binding.root,
+                                "E-mail ou senha inválidos.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
-            }
-
-            else {
+            } else {
                 val msg = campoFaltando()
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
 
@@ -90,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         localArmarios.setOnClickListener {
-            startActivity(Intent(this, MapsActivity::class.java))
+            startActivity(Intent(this, RentalOptionsActivity::class.java))
         }
     }
 
@@ -101,13 +108,13 @@ class LoginActivity : AppCompatActivity() {
     private fun campoFaltando(): String {
         var msg = "Digite sua senha"
 
-        if(email.text.toString().isEmpty()) {
+        if (email.text.toString().isEmpty()) {
             msg = "Digite seu e-mail"
         }
         return msg
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
