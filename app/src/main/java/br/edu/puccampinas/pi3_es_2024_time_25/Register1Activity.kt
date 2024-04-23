@@ -27,16 +27,14 @@ class Register1Activity : AppCompatActivity() {
             val acc = startUserInstance()
             val packedAcc = packUserInstance(acc)
             if (Account.Validator(acc).isFormOneValid()) {
-                startActivity(
-                    Intent(this, Register2Activity::class.java)
+                startActivity(Intent(this, Register2Activity::class.java)
                         .putExtra("packedUserInstance", packedAcc)
                 )
 
             }
             else {
                 val msg = Account.Validator(acc).warnUser()
-                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
             }
 
         }

@@ -87,12 +87,12 @@ class Account(
 
         fun warnUser(): String {
             return when {
-                !isFormOneFilledOut()-> "Preencha todos os campos1."
+                !isFormOneFilledOut()-> "Preencha todos os campos."
                 getRealLength(account.cpf) < 11 -> "CPF inválido."
                 getRealLength(account.nascimento) < 8 -> "Data de nascimento inválida."
                 getRealLength(account.fone) < 11 -> "Telefone inválido."
                 !hasLegalAge() -> "Você deve ter mais que 18 anos para criar uma conta."
-                !isFormTwoFilledOut() -> "Preencha todos os campos2."
+                !isFormTwoFilledOut() -> "Preencha todos os campos."
                 !isPassSizeValid() -> "A senha deve ter no mínimo 8 digitos"
                 else -> "As senhas não correspondem."
             }
