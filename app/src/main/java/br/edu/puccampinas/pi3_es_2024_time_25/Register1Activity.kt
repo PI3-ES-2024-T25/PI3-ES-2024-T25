@@ -24,7 +24,7 @@ class Register1Activity : AppCompatActivity() {
         }
 
         binding.btnRegistro1.setOnClickListener {
-            val acc = startUserInstance(null)
+            val acc = startUserInstance()
             val packedAcc = packUserInstance(acc)
             if (Account.Validator(acc).isFormOneValid()) {
                 startActivity(
@@ -42,9 +42,9 @@ class Register1Activity : AppCompatActivity() {
         }
     }
 
-    private fun startUserInstance(uid: String?): Account {
+    private fun startUserInstance(): Account {
 
-        return Account(uid,
+        return Account(
             binding.nomeRegistro.text.toString(),
             binding.CPFRegistro.text.toString(),
             binding.dataNascimentoRegistro.text.toString(),

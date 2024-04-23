@@ -53,10 +53,10 @@ class Register2Activity : AppCompatActivity() {
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
 
-                                acc.uid = task.result.user?.uid
+                                val docTag = task.result.user?.uid
                                 acc.senha = ""
 
-                                db.collection("users").add(acc)
+                                db.collection("users").document(docTag!!).set(acc)
                                     .addOnSuccessListener {
 
                                         auth.currentUser?.sendEmailVerification()

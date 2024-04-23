@@ -25,11 +25,11 @@ class AddCreditCardActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
 
+
         binding.btnAddCartao.setOnClickListener {
             val card = createCardInstance()
             if (CreditCard.Validator(card).isFormValid()) {
-                db.collection("users").document(auth.currentUser!!.getUid()).collection("credit_cards")
-                    .add(card)
+                db.collection("users").document(auth.uid.toString()).collection("creditCard").add(card)
                     .addOnSuccessListener {
                         Snackbar.make(
                             findViewById(R.id.AddCreditCardActivity),

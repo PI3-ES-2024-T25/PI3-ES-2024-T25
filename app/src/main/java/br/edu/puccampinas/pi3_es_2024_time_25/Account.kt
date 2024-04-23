@@ -9,7 +9,7 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class Account(var uid: String?,
+class Account(
               val nome: String,
               val cpf: String,
               val nascimento: String,
