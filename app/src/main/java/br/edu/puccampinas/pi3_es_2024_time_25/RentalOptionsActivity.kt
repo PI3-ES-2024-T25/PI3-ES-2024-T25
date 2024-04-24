@@ -19,8 +19,6 @@ data class Option(val id: String, val name: String, val description: String, val
 //Atividade para seleção de opções de locação
 class RentalOptionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRentalOptionsBinding
-    private lateinit var btnRentalOptions: AppCompatButton
-    private lateinit var returnRentalOptions: Button
 
     //Método chamado quando a atividade é criada
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +26,14 @@ class RentalOptionsActivity : AppCompatActivity() {
         binding = ActivityRentalOptionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        btnRentalOptions = binding.btnRentalOptions as AppCompatButton
 
-        returnRentalOptions = findViewById(R.id.return_rental_options)
-
-        returnRentalOptions.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java)) // Ação ao clicar no botão de retorno
+        binding.returnRentalOptions.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    LoginActivity::class.java
+                )
+            ) // Ação ao clicar no botão de retorno
         }
 
         // Inicializa o RecyclerView e passa o callback para atualizar a cor do botão de confirmação
@@ -41,7 +41,7 @@ class RentalOptionsActivity : AppCompatActivity() {
             updateConfirmButton(option) // Atualiza a cor ou fundo do botão de confirmação
         }
 
-        btnRentalOptions.setOnClickListener {
+        binding.btnRentalOptions.setOnClickListener {
             confirmLocation()
         }
 
@@ -50,17 +50,19 @@ class RentalOptionsActivity : AppCompatActivity() {
     //Inicializa o RecyclerView com a lista de opções
     private fun initRecyclerView(onOptionSelected: (Option) -> kotlin.Unit) {
         val options = createRandomOptions()
-        val adapter = RadioButtonAdapter(options, onOptionSelected) // Passa o callback para o adaptador
+        val adapter =
+            RadioButtonAdapter(options, onOptionSelected) // Passa o callback para o adaptador
         binding.rvRentalOptions.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(this)
-        binding.rvRentalOptions.addItemDecoration(MarginItemDecoration(16))
+        binding.rvRentalOptions.addItemDecoration(MarginItemDecoration(1))
         binding.rvRentalOptions.adapter = adapter
     }
 
     private fun updateConfirmButton(option: Option) {
         if (option != null) {
             // Altera o fundo do botão para um drawable diferente
-            btnRentalOptions.setBackgroundResource(R.drawable.selected_btn)
+            binding.btnRentalOptions.setBackgroundResource(R.drawable.selected_btn)
+            binding.btnRentalOptions.setTextColor(getColor(R.color.white))
         }
     }
 
@@ -72,17 +74,16 @@ class RentalOptionsActivity : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
             .setTitle("Atenção!")
             .setMessage("Será creditado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
-            .setPositiveButton("Sim") { dialog, which ->
+            .setPositiveButton("Sim") { _, _ ->
                 val intent = Intent(this, QRCodeGeneratorActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-            .setNegativeButton("Não") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }
             .create()
 
         alertDialog.show() // Mostra o diálogo estilizado
     }
-
 
 
     //Confirma a locação após verificar se um horário foi selecionado
@@ -93,7 +94,11 @@ class RentalOptionsActivity : AppCompatActivity() {
             showConfirmationDialog()
 
         } else {
-            Snackbar.make(binding.root, "Selecione um horário antes de confirmar.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                binding.root,
+                "Selecione um horário antes de confirmar.",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 

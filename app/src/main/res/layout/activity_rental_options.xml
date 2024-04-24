@@ -48,13 +48,13 @@
         android:text="Horários disponívies para locação:"
         android:textAlignment="center"
         android:textColor="@color/gray"
-        android:textSize="35sp"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/roLeftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/return_rental_options"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:textStyle="bold"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/btn_rental_options"
@@ -62,10 +62,12 @@
         android:layout_height="67dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/unselected_btn"
+        android:enabled="true"
         android:fontFamily="@font/inter_bold"
         android:state_checked="true"
         android:text="Confirmar Locação"
         android:textAllCaps="false"
+        android:textColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
         app:layout_constraintStart_toStartOf="@+id/roLeftGuideline" />
@@ -74,7 +76,7 @@
         android:id="@+id/rv_rental_options"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_rental_options"
         app:layout_constraintEnd_toStartOf="@+id/roRightGuideline"
