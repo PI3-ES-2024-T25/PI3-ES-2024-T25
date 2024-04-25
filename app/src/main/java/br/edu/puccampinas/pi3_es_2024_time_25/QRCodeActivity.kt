@@ -1,31 +1,29 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import android.content.Context
+
+
 
 class QRCodeActivity : AppCompatActivity() {
     private var db : FirebaseFirestore = Firebase.firestore
-    private var auth : FirebaseAuth = Firebase.auth
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         db = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
+
 
     }
 
 
-    fun storeQRCode(idMask : String){
+    fun storeQRCodeFirestore(idMask : String){
 
         val data = hashMapOf(
             "idMask" to idMask
@@ -38,7 +36,7 @@ class QRCodeActivity : AppCompatActivity() {
             .addOnFailureListener{ e -> println("Falha ao adicionar o código do QR Code : $e") }
     }
 
-    fun getAllQRCodeData() {
+    fun getAllQRCodeDataFirestore() {
         val qrCodesCollectionData = db.collection("qr_codes")
 
         qrCodesCollectionData.get()
@@ -59,7 +57,7 @@ class QRCodeActivity : AppCompatActivity() {
     }
 
 
-    fun getOneQRCode(idMask: String){
+    fun getOneQRCodeFirestore(idMask: String){
 
         val oneQRCodeData = db.collection("qr_codes").whereEqualTo("idMask", idMask)
             .get()
@@ -86,4 +84,25 @@ class QRCodeActivity : AppCompatActivity() {
                 println("Erro ao consultar documentos: $e")
             }
     }
+
+    fun storeQRCodeLocal(context: Context, idMask: String){
+        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("idMask", idMask)
+        editor.apply()
+    }
+
+    fun getQRCodeLocal(context: Context) : String? {
+        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("idMask", null)
+    }
+
+    fun deleteQRCodeLocal(context: Context){
+        val sharedPreferences = context.getSharedPreferences("MySharedPreferences",Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("idMask")
+        editor.apply()
+    }
+
+
 }
