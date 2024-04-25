@@ -3,7 +3,6 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -97,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         localArmarios.setOnClickListener {
-            startActivity(Intent(this, RentalOptionsActivity::class.java))
+            startActivity(Intent(this, MapsActivity::class.java))
         }
     }
 

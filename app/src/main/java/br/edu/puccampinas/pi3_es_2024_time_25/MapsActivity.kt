@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 
 
 data class Address(
@@ -45,7 +46,12 @@ data class Coordinates(
 )
 
 data class RentalOption(
-    val price: Int = 0, val time: Int = 0
+    val id: String = "", val price: Double = 0.0, val time: Int = 0
+)
+
+data class Manager(
+    val id: String = "",
+    val name: String = "",
 )
 
 data class Unit(
@@ -57,7 +63,8 @@ data class Unit(
     val description: String = "",
     val lockers: List<String> = emptyList(),
     val rentalOptions: List<RentalOption> = emptyList(),
-    val lockersAvailable: List<String> = emptyList()
+    val lockersAvailable: List<String> = emptyList(),
+    val manager: Manager = Manager()
 )
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -81,18 +88,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = FirebaseFirestore.getInstance()
+        try {
+            db = FirebaseFirestore.getInstance()
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+            val mapFragment =
+                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
 
-        checkUserLoggedIn()
+            checkUserLoggedIn()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        getUserLocation()
-        binding.btnGoToMaps2.visibility = View.INVISIBLE
-        binding.btnSignout.setOnClickListener {
-            signOut()
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            getUserLocation()
+            binding.btnGoToMaps2.visibility = View.INVISIBLE
+            binding.btnSignout.setOnClickListener {
+                signOut()
+            }
+        } catch (e: Exception) {
+            println("LOCK Error on create: $e")
         }
     }
 
@@ -150,49 +162,67 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.btnGoToMaps2.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
-            if (isUserLogged && haveUserCreditCard) {
-                binding.btnRentLocker.text = "Alugar armário"
-                binding.btnRentLocker.setOnClickListener {
-                    val unit = this.markerUnitMap[marker]
-                    if (unit != null) {
-                        if (isUserCloseToUnit(unit)) {
-                            Toast.makeText(
-                                applicationContext, "Você  ${unit.id}", Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "Você não está próximo ao armário",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            } else if (isUserLogged && !haveUserCreditCard) {
-                binding.btnRentLocker.text = "Adicionar cartão de crédito"
-                binding.btnRentLocker.setOnClickListener {
-                    val intent = Intent(this, AddCreditCardActivity::class.java)
-                    startActivity(intent)
-                }
-            } else {
-                binding.btnRentLocker.text = "Quero alugar um armário"
-                binding.btnRentLocker.setOnClickListener {
-                    var builder = AlertDialog.Builder(this)
-                    builder.setTitle("Para alugar um armário, é necessário fazer login")
-                    builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
+            val data = markerUnitMap[marker]
 
-                    builder.setPositiveButton("OK") { _, _ ->
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                    }
-                    val dialog = builder.create()
-                    dialog.show()
-                }
+            if (data != null) {
+                println("Unit: ${data}")
+                sendToRentLockerActivity(data)
             }
+            // setupButton(marker)
             true
         }
         mMap.setOnMapClickListener {
             binding.btnGoToMaps2.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun sendToRentLockerActivity(unit: Unit) {
+        val intent = Intent(this, RentalOptionsActivity::class.java)
+        val gson = Gson()
+        val unitJson = gson.toJson(unit)
+        intent.putExtra("unit", unitJson)
+        startActivity(intent)
+    }
+
+    private fun setupButton(marker: Marker) {
+        if (isUserLogged && haveUserCreditCard) {
+            binding.btnRentLocker.text = "Alugar armário"
+            binding.btnRentLocker.setOnClickListener {
+                val unit = this.markerUnitMap[marker]
+                if (unit != null) {
+                    if (isUserCloseToUnit(unit)) {
+                        Toast.makeText(
+                            applicationContext, "Você  ${unit.id}", Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "Você não está próximo ao armário",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        } else if (isUserLogged && !haveUserCreditCard) {
+            binding.btnRentLocker.text = "Adicionar cartão de crédito"
+            binding.btnRentLocker.setOnClickListener {
+                val intent = Intent(this, AddCreditCardActivity::class.java)
+                startActivity(intent)
+            }
+        } else {
+            binding.btnRentLocker.text = "Quero alugar um armário"
+            binding.btnRentLocker.setOnClickListener {
+                var builder = AlertDialog.Builder(this)
+                builder.setTitle("Para alugar um armário, é necessário fazer login")
+                builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
+
+                builder.setPositiveButton("OK") { _, _ ->
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
         }
     }
 
@@ -333,7 +363,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 println("get failed with $exception")
             }.addOnCompleteListener {
                 if (!haveUserCreditCard) {
-                    setBtnToAddCreditCard()
+//                    setBtnToAddCreditCard()
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Adicione uma forma de pagamento")
                     builder.setMessage("Para alugar um armário, é necessário adicionar um cartão de crédito.")

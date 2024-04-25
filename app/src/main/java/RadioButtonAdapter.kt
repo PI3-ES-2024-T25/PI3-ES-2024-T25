@@ -5,21 +5,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
+import java.util.Locale
 import kotlin.Unit
+import java.time.Duration
+import java.util.Date
 
 //Adaptador para um RecyclerView que exibe uma lista de opções com RadioButtons
 class RadioButtonAdapter(
-    private val options: List<Option>,
-    private val onOptionSelected: (Option) -> Unit // Callback para notificar a seleção
+    private val options: List<RentalOption>,
+    private val onOptionSelected: (RentalOption) -> Unit // Callback para notificar a seleção
 ) : RecyclerView.Adapter<RadioButtonAdapter.ViewHolder>() {
 
     // Armazena a opção selecionada atualmente
-    var selectedOption: Option? = null
+    var selectedOption: RentalOption? = null
 
 
-     //Classe ViewHolder para manter referências aos elementos da interface
+    //Classe ViewHolder para manter referências aos elementos da interface
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val radioButton: RadioButton = view.findViewById(R.id.radioButton) // Referência ao RadioButton no layout
+        val radioButton: RadioButton =
+            view.findViewById(R.id.radioButton) // Referência ao RadioButton no layout
 
 
         //Inicializa o ViewHolder e configura o OnClickListener para o RadioButton
@@ -33,22 +38,38 @@ class RadioButtonAdapter(
     }
 
 
-      //Cria um novo ViewHolder para o RecyclerView.
+    //Cria um novo ViewHolder para o RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.rb_adapter, parent, false) // Infla o layout
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.rb_adapter, parent, false) // Infla o layout
         return ViewHolder(view)
     }
 
+    private fun formatMinutesToText(minutes: Int): String {
+        val hours = minutes / 60
+        val remainingMinutes = minutes % 60
 
-     //Liga os dados do modelo ao ViewHolder para a posição especificada
+        return when {
+            hours == 1 && remainingMinutes > 0 -> "$hours hora e $remainingMinutes minutos"
+            hours == 1 -> "$hours hora"
+            hours > 0 && remainingMinutes > 0 -> "$hours horas e $remainingMinutes minutos"
+            hours > 0 -> "$hours horas"
+            else -> "$remainingMinutes minutos"
+        }
+    }
+
+    //Liga os dados do modelo ao ViewHolder para a posição especificada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val option = options[position] // Obtém a opção para a posição especificada
-        holder.radioButton.text = option.name // Define o texto do RadioButton
-        holder.radioButton.isChecked = option == selectedOption // Marca o RadioButton se for a opção selecionada
+        val format = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+        holder.radioButton.text =
+            "${formatMinutesToText(option.time)} - ${format.format(option.price)}" // Define o texto do RadioButton
+        holder.radioButton.isChecked =
+            option == selectedOption // Marca o RadioButton se for a opção selecionada
     }
 
 
-      //Retorna o número total de itens no RecyclerView
+    //Retorna o número total de itens no RecyclerView
     override fun getItemCount() = options.size
 }
 

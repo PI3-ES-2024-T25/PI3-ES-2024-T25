@@ -58,7 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/inter_medium"
-        android:text="@string/nome_do_gerente"
         android:textColor="#C7CEDB"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/qr_code"
@@ -90,17 +89,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="20dp" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:onClick="generateQRCodeOnClick"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
