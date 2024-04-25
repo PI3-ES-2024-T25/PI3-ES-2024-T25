@@ -15,6 +15,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import br.edu.puccampinas.pi3_es_2024_time_25.QRCodeActivity
 
 
 class QRCodeGeneratorActivity : AppCompatActivity() {
@@ -23,6 +24,8 @@ class QRCodeGeneratorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_qrcode_generator)
+
+        val qrCodeActivity = QRCodeActivity()
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.QRCodeGeneratorActivity)) { v, insets ->

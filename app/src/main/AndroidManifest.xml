@@ -19,7 +19,7 @@
             android:name=".QRCodeGeneratorActivity"
             android:exported="true"
             android:label="@string/title_activity_qrcode_generator"
-            android:theme="@style/Theme.PI3ES2024TIME25" >
+            android:theme="@style/Theme.PI3ES2024TIME25">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,12 +37,11 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
-
         <activity android:name=".MainActivity" />
         <activity android:name=".Register1Activity" />
         <activity android:name=".Register2Activity" />
         <activity android:name=".RecoveryActivity" />
-        <activity android:name=".AddCreditCardActivity"/>
+        <activity android:name=".AddCreditCardActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

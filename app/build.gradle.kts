@@ -68,4 +68,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation ("com.google.zxing:core:3.5.3")
     implementation ("androidx.compose.runtime:runtime:1.5.1")
-    }
+    implementation(libs.play.services.location)
+}
