@@ -69,12 +69,21 @@ data class Unit(
     val manager: Manager = Manager()
 )
 
+data class RentData(
+    val unit: Unit = Unit(),
+)
+
+data class LastRent(
+    val rentId: String = "", val rentData: RentData = RentData(), val verified: Boolean = false
+)
+
+data class UserLastRent(val lastRent: LastRent = LastRent())
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var db: FirebaseFirestore
-    private var locationPermissionGranted = false
     private var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userLocation: Location
@@ -97,6 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             mapFragment.getMapAsync(this)
 
+            setButtonSelectUnitToRent()
             checkUserLoggedIn()
 
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -175,20 +185,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.btnGoToMaps2.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
-            val data = markerUnitMap[marker]
-
-            if (data != null) {
-                println("Unit: ${data}")
-                sendToRentLockerActivity(data)
-            }
-            // setupButton(marker)
+            setupButton(marker)
             true
         }
         mMap.setOnMapClickListener {
             binding.btnGoToMaps2.visibility = View.INVISIBLE
+            setButtonSelectUnitToRent()
         }
     }
-
 
     private fun sendToRentLockerActivity(unit: Unit) {
         val intent = Intent(this, RentalOptionsActivity::class.java)
@@ -232,9 +236,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val unit = this.markerUnitMap[marker]
                 if (unit != null) {
                     if (isUserCloseToUnit(unit)) {
-                        Toast.makeText(
-                            applicationContext, "Você  ${unit.id}", Toast.LENGTH_SHORT
-                        ).show()
+                        if (checkUnitHasLockerAvailable(unit)) {
+                            sendToRentLockerActivity(unit)
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Não há armários disponíveis",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             applicationContext,
@@ -282,6 +292,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isScrollGesturesEnabled = true
         mMap.uiSettings.isRotateGesturesEnabled = true
         mMap.uiSettings.isMyLocationButtonEnabled = false
+        mMap.uiSettings.isCompassEnabled = false
     }
 
     private fun setupInfoWindowAdapter() {
@@ -403,18 +414,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         finish()
     }
 
-    data class QrCodeData(val rentId: String, val managerName: String)
-
-    data class RentData(
-        val unit: Unit = Unit(),
-    )
-
-    data class LastRent(
-        val rentId: String = "", val rentData: RentData = RentData(), val verified: Boolean = false
-    )
-
-    data class UserLastRent(val lastRent: LastRent = LastRent())
-
     private fun checkUserHasRentalInRunning() {
         // Verifica se o usuário tem uma locação em andamento
         val user = FirebaseAuth.getInstance().currentUser
@@ -442,10 +441,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val docRef = db.collection("users").document(user.uid).collection("creditCard")
             docRef.get().addOnSuccessListener { result ->
                 if (result != null) {
-                    println("DocumentSnapshot data credit card: ${result.size()}")
                     haveUserCreditCard = result.size() > 0
-                } else {
-                    println("No such document")
                 }
             }.addOnFailureListener { exception ->
                 println("get failed with $exception")
@@ -530,25 +526,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return lockerAvailable
     }
 
-}
+    private fun setButtonSelectUnitToRent() {
+        binding.btnRentLocker.text = "Selecione um armário"
+        binding.btnRentLocker.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Selecione um armário")
+            builder.setMessage("Para alugar um armário, selecione um armário no mapa.")
 
-/*
-        * Passos para a implementação:
-        * Obter unidades e adicionar marcadores no mapa
-        * Verificar permissões de localização
-        * Obter localização do usuário
-        * Centralizar o mapa na localização do usuário
-        * Verificar se usuario esta logado
-        *  se sim:
-        *       Verificar se usuario tem locação em andamento então redicionar para tela de qrcode
-        *       Verificar se usuario tem cartão de crédito cadastrado se não mostrar botão para adicionar cartão
-        *       Setar o botão para alugar armário
-        *  se não:
-        *       Mostrar botão para login
-        *
-        * Ao pressionar um marcador:
-        *   Exibir botão de rotas para o marcador
-        *
-        *
-        *
-        * */
+            builder.setPositiveButton("OK") { _, _ ->
+                // Ação a ser executada quando o botão positivo é pressionado
+                Toast.makeText(applicationContext, "Você pressionou OK", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
+
+}
