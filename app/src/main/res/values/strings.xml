@@ -40,4 +40,5 @@
     <string name="dialog_message_login_required">Faça login ou crie uma conta para alugar um armário.</string>
     <string name="dialog_button_ok">OK</string>
     <string name="select_locker">Selecione um armário</string>
+    <string name="option_text_format">%s - %s</string>
 </resources>

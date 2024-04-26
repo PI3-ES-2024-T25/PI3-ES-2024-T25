@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.Unit
-import java.time.Duration
-import java.util.Date
 
 //Adaptador para um RecyclerView que exibe uma lista de opções com RadioButtons
 class RadioButtonAdapter(
