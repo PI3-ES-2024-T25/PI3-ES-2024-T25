@@ -6,6 +6,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 
@@ -22,7 +24,6 @@ class QRCodeActivity : AppCompatActivity() {
 
     }
 
-
     fun storeQRCodeFirestore(idMask : String){
 
         val data = hashMapOf(
@@ -32,7 +33,7 @@ class QRCodeActivity : AppCompatActivity() {
 
         db.collection("qr_codes")
             .add(data)
-            .addOnSuccessListener { documentReference -> println("Código do QR Code armazenado com sucesso") }
+            .addOnSuccessListener { println("Código do QR Code armazenado com sucesso") }
             .addOnFailureListener{ e -> println("Falha ao adicionar o código do QR Code : $e") }
     }
 
@@ -85,24 +86,28 @@ class QRCodeActivity : AppCompatActivity() {
             }
     }
 
-    fun storeQRCodeLocal(context: Context, idMask: String){
-        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("idMask", idMask)
-        editor.apply()
+    suspend fun storeQRCodeLocal(context: Context, idMask: String){
+        withContext(Dispatchers.IO){
+            val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("idMask", idMask)
+            editor.apply()
+            }
+        }
+
+    suspend fun getQRCodeLocal(context: Context) : String? {
+        return withContext(Dispatchers.IO){
+            val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+            sharedPreferences.getString("idMask", null)
+        }
     }
 
-    fun getQRCodeLocal(context: Context) : String? {
-        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("idMask", null)
+    suspend fun deleteQRCodeLocal(context: Context){
+        withContext(Dispatchers.IO){
+            val sharedPreferences = context.getSharedPreferences("MySharedPreferences",Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.remove("idMask")
+            editor.apply()
+        }
     }
-
-    fun deleteQRCodeLocal(context: Context){
-        val sharedPreferences = context.getSharedPreferences("MySharedPreferences",Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove("idMask")
-        editor.apply()
-    }
-
-
 }
