@@ -95,7 +95,7 @@
         android:paddingRight="12dp"
         android:text="Sair"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         map:layout_constraintStart_toStartOf="@+id/guideline3"
         map:layout_constraintTop_toTopOf="@+id/map" />

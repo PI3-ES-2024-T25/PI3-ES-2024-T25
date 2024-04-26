@@ -28,11 +28,11 @@ class RecoveryActivity: AppCompatActivity() {
 
         binding.btnRecovery.setOnClickListener {
 
-            if (binding.emailRecovery.text.toString().isNotEmpty()) {
-                auth.sendPasswordResetEmail(binding.emailRecovery.text.toString())
+            if (binding.emailRecovery.text.toString().isNotEmpty()) { // se o campo de email nao estiver vazio
+                auth.sendPasswordResetEmail(binding.emailRecovery.text.toString()) // enviar email de recuperaçao de senha
 
                     .addOnSuccessListener {
-                        showPopUp()
+                        showPopUp() // caso seja executado com sucesso, abrir o popUp informando ao usuário que ele receberá um email
                     }
 
                     .addOnFailureListener {
@@ -40,7 +40,7 @@ class RecoveryActivity: AppCompatActivity() {
 
                     }
 
-            } else {
+            } else { // caso o campo de email esteja vazio
                 Snackbar.make(findViewById(R.id.RecoveryActivity), "Digite seu e-mail.", Snackbar.LENGTH_SHORT).show()
 
             }
@@ -48,7 +48,7 @@ class RecoveryActivity: AppCompatActivity() {
 
     }
 
-    private fun showPopUp() {
+    private fun showPopUp() { // funçao que cria e exibe um popup
         val popUp = Dialog(this)
         popUp.requestWindowFeature(Window.FEATURE_NO_TITLE)
         popUp.setContentView(R.layout.modal_recovery)
@@ -62,7 +62,7 @@ class RecoveryActivity: AppCompatActivity() {
         popUp.show()
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding(){ // inicia o viewbinding
         binding = ActivityRecoveryBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
