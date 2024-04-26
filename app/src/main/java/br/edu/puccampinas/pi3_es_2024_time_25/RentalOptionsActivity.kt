@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.Date
 
 //Atividade para seleção de opções de locação
@@ -56,9 +57,20 @@ class RentalOptionsActivity : AppCompatActivity() {
         val unitJson = intent.getStringExtra("unit")
         val gson = Gson()
         unit = gson.fromJson(unitJson, Unit::class.java)
-        options = unit.rentalOptions // Obtém as opções de locação da unidade
+        // Obtém as opções de locação da unidade e filtra as opções disponíveis
+        options = if (isBetween7and8AM()) {
+            unit.rentalOptions
+        } else {
+            unit.rentalOptions.filter { it.id != "18" }
+        }
     }
 
+    private fun isBetween7and8AM(): Boolean {
+        val now = LocalTime.now()
+        val start = LocalTime.of(7, 0)
+        val end = LocalTime.of(8, 0)
+        return now.isAfter(start) && now.isBefore(end)
+    }
 
     //Inicializa o RecyclerView com a lista de opções
     private fun initRecyclerView(onOptionSelected: (RentalOption) -> kotlin.Unit) {
@@ -79,7 +91,6 @@ class RentalOptionsActivity : AppCompatActivity() {
             binding.btnRentalOptions.setTextColor(getColor(R.color.white))
         }
     }
-
 
     data class RentInfo(
         val unit: Unit,
