@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -98,7 +100,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             checkUserLoggedIn()
 
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            getUserLocation()
             binding.btnGoToMaps2.visibility = View.INVISIBLE
             binding.btnSignout.setOnClickListener {
                 signOut()
@@ -108,31 +109,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getUserLocation() {
-
-        try {
-            if (ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                locationPermissionGranted = true
-                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    if (location != null) {
-                        userLocation = location
-                        if (isMapReady && isLoadedUnitLocations) {
-                            centerMapOnUserLocation()
-                        }
-                    }
-                }
-            } else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-                )
-            }
-        } catch (e: Exception) {
-            println("LOCK Error getting user location: $e")
+    override fun onResume() {
+        super.onResume()
+        if (isUserLogged) {
+            checkUserHasRentalInRunning()
+            checkUserCreditCard()
         }
     }
 
@@ -142,10 +123,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         when (requestCode) {
             PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionGranted = true
-                    getUserLocation()
+                    if (ActivityCompat.checkSelfPermission(
+                            this, Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            this, Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
+                    mMap.isMyLocationEnabled = true
+                    centerMapOnUserLocation()
+                } else {
+                    // A permissão foi negada. Mostre uma explicação para o usuário e solicite novamente a permissão.
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                            this, Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                    ) {
+                        // A permissão foi negada permanentemente. Direcione o usuário para as configurações do aplicativo.
+                        startActivity(
+                            Intent(
+                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.parse("package:$packageName")
+                            )
+                        )
+                    } else {
+                        // A permissão foi negada. Mostre uma explicação para o usuário e solicite novamente a permissão.
+                        AlertDialog.Builder(this).setTitle("Permissão de localização necessária")
+                            .setMessage("Esta aplicação requer a permissão de localização para mostrar a sua localização no mapa.")
+                            .setPositiveButton("OK") { _, _ ->
+                                ActivityCompat.requestPermissions(
+                                    this,
+                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                                )
+                            }.show()
+                    }
                 }
-                println("LOCK Permission granted")
             }
 
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -176,11 +189,39 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
     private fun sendToRentLockerActivity(unit: Unit) {
         val intent = Intent(this, RentalOptionsActivity::class.java)
         val gson = Gson()
         val unitJson = gson.toJson(unit)
         intent.putExtra("unit", unitJson)
+        startActivity(intent)
+    }
+
+    private fun showRentInRunningDialog(userLastRent: UserLastRent) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Você possui uma locação em andamento")
+        builder.setMessage("Você deve efetivar ou cancelar o aluguel atual antes de alugar outro armário.")
+
+        builder.setPositiveButton("Efetivar") { _, _ ->
+            // Ação a ser executada quando o botão positivo é pressionado
+            println("Efetivar ${userLastRent.lastRent.rentData.unit.manager.name}")
+            sendToQRCodeGeneratorActivity(
+                QRCodeGeneratorActivity.QrCodeData(
+                    userLastRent.lastRent.rentId, userLastRent.lastRent.rentData.unit.manager.name
+                )
+            )
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun sendToQRCodeGeneratorActivity(rentData: QRCodeGeneratorActivity.QrCodeData) {
+        val intent = Intent(this, QRCodeGeneratorActivity::class.java)
+        val gson = Gson()
+        val rentDataJson = gson.toJson(rentData)
+        intent.putExtra("rentData", rentDataJson)
         startActivity(intent)
     }
 
@@ -240,6 +281,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isZoomGesturesEnabled = true
         mMap.uiSettings.isScrollGesturesEnabled = true
         mMap.uiSettings.isRotateGesturesEnabled = true
+        mMap.uiSettings.isMyLocationButtonEnabled = false
     }
 
     private fun setupInfoWindowAdapter() {
@@ -282,6 +324,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getUnits() {
         try {
             markerUnitMap = mutableMapOf()
+            val builder = LatLngBounds.builder()
             db.collection("rental_units").get().addOnSuccessListener { result ->
                 result.forEach { documentSnapshot ->
                     var unit = documentSnapshot.toObject(Unit::class.java)
@@ -294,12 +337,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     ).title(unit.name).snippet(unit.description)
                     val marker = mMap.addMarker(markerOptions)
                     if (marker != null) {
+                        builder.include(marker.position)
                         markerUnitMap[marker] = unit
                     }
                 }
-                centerMapOnUserLocation()
                 isLoadedUnitLocations = true
 
+                if (isMapReady && isLoadedUnitLocations) {
+                    val bounds = builder.build()
+                    val padding = 100
+                    val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                    mMap.moveCamera(cameraUpdate)
+                }
+
+                getUserLocation()
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents.", exception)
             }
@@ -316,29 +367,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(mapIntent)
     }
 
-    private fun centerMapOnUserLocation() {
-        println("Centering map on user location $userLocation")
-        try {
-            val userLatLng = LatLng(userLocation.latitude, userLocation.longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16.0f))
-            mMap.uiSettings.isMyLocationButtonEnabled = false
-            if (ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-                )
-                return
-            }
+    private fun getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            )
+        } else {
             mMap.isMyLocationEnabled = true
-        } catch (e: Exception) {
-            println("Error centering map on user location: $e")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                // Got last known location. In some rare situations this can be null.
+                if (location != null) {
+                    userLocation = location
+                    centerMapOnUserLocation()
+                }
+            }
         }
+    }
+
+    private fun centerMapOnUserLocation() {
+        val userLatLng = LatLng(userLocation.latitude, userLocation.longitude)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16.0f))
     }
 
     private fun signOut() {
@@ -348,14 +403,47 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         finish()
     }
 
+    data class QrCodeData(val rentId: String, val managerName: String)
+
+    data class RentData(
+        val unit: Unit = Unit(),
+    )
+
+    data class LastRent(
+        val rentId: String = "", val rentData: RentData = RentData(), val verified: Boolean = false
+    )
+
+    data class UserLastRent(val lastRent: LastRent = LastRent())
+
+    private fun checkUserHasRentalInRunning() {
+        // Verifica se o usuário tem uma locação em andamento
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            db.collection("users").document(user.uid).get().addOnSuccessListener { document ->
+
+                if (document != null) {
+                    if (document.contains("lastRent")) {
+                        val userlastRent = document.toObject(UserLastRent::class.java)
+                        if (userlastRent != null && !userlastRent.lastRent.verified) {
+                            showRentInRunningDialog(userlastRent)
+                        }
+                    }
+                }
+                println("DocumentSnapshot data: ${document.data}")
+
+            }
+        }
+    }
+
     private fun checkUserCreditCard() {
         // Verifica se o usuário tem um cartão de crédito cadastrado
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            val docRef = db.collection("users").document(user.uid)
-            docRef.get().addOnSuccessListener { document ->
-                if (document != null) {
-                    haveUserCreditCard = document.contains("creditCard")
+            val docRef = db.collection("users").document(user.uid).collection("creditCard")
+            docRef.get().addOnSuccessListener { result ->
+                if (result != null) {
+                    println("DocumentSnapshot data credit card: ${result.size()}")
+                    haveUserCreditCard = result.size() > 0
                 } else {
                     println("No such document")
                 }
@@ -363,7 +451,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 println("get failed with $exception")
             }.addOnCompleteListener {
                 if (!haveUserCreditCard) {
-//                    setBtnToAddCreditCard()
+                    setBtnToAddCreditCard()
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Adicione uma forma de pagamento")
                     builder.setMessage("Para alugar um armário, é necessário adicionar um cartão de crédito.")
@@ -378,8 +466,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
-        // Se não tiver, exibe um modal para que ele cadastre
-        // Se tiver, segue com o aluguel do armário
     }
 
     private fun checkUserLoggedIn() {
@@ -389,6 +475,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (isUserLogged) {
             checkUserCreditCard()
         } else {
+            binding.btnSignout.visibility = View.INVISIBLE
             setBtnToLogin()
         }
     }
@@ -439,13 +526,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+
         return lockerAvailable
     }
 
-    private fun checkRentalInProgress(): Boolean {
-        // Verifica se o usuário tem um aluguel em andamento, pop up com a mensagem
-
-        Toast.makeText(applicationContext, "Aluguel em andamento", Toast.LENGTH_SHORT).show()
-        return false
-    }
 }
+
+/*
+        * Passos para a implementação:
+        * Obter unidades e adicionar marcadores no mapa
+        * Verificar permissões de localização
+        * Obter localização do usuário
+        * Centralizar o mapa na localização do usuário
+        * Verificar se usuario esta logado
+        *  se sim:
+        *       Verificar se usuario tem locação em andamento então redicionar para tela de qrcode
+        *       Verificar se usuario tem cartão de crédito cadastrado se não mostrar botão para adicionar cartão
+        *       Setar o botão para alugar armário
+        *  se não:
+        *       Mostrar botão para login
+        *
+        * Ao pressionar um marcador:
+        *   Exibir botão de rotas para o marcador
+        *
+        *
+        *
+        * */

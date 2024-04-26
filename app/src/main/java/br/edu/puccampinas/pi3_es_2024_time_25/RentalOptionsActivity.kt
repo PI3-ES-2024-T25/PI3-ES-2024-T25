@@ -49,9 +49,9 @@ class RentalOptionsActivity : AppCompatActivity() {
 
         // Confirma a locação após verificar se um horário foi selecionado
         confirmLocation()
-
     }
 
+    // Recebe os dados vindo da intent
     private fun getUnitFromIntent() {
         val unitJson = intent.getStringExtra("unit")
         val gson = Gson()
@@ -70,6 +70,7 @@ class RentalOptionsActivity : AppCompatActivity() {
         binding.rvRentalOptions.adapter = adapter
     }
 
+    //Atualiza a cor ou fundo do botão de confirmação
     private fun updateConfirmButton(option: RentalOption) {
         if (option != null) {
             // Altera o fundo do botão para um drawable diferente

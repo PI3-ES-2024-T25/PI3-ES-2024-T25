@@ -34,6 +34,10 @@ class QRCodeGeneratorActivity : AppCompatActivity() {
             println("rentData: $rentData")
             generateQRCode(rentData.rentId)
             binding.textView2.text = "(${rentData.managerName})"
+
+        }
+        binding.voltarQrCode.setOnClickListener {
+            finish()
         }
     }
 
