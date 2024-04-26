@@ -5,20 +5,23 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRentalOptionsBinding
 import com.google.android.material.snackbar.Snackbar
-
-data class Option(val id: String, val name: String, val description: String, val price: Double)
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.Date
 
 //Atividade para seleção de opções de locação
 class RentalOptionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRentalOptionsBinding
+    private lateinit var options: List<RentalOption> // Lista de opções de locação
+    private lateinit var bd: FirebaseFirestore
+    private lateinit var unit: Unit
 
     //Método chamado quando a atividade é criada
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,30 +29,39 @@ class RentalOptionsActivity : AppCompatActivity() {
         binding = ActivityRentalOptionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        bd = FirebaseFirestore.getInstance()
+        // Ação ao clicar no botão de retorno
         binding.returnRentalOptions.setOnClickListener {
             startActivity(
                 Intent(
-                    this,
-                    LoginActivity::class.java
+                    this, LoginActivity::class.java
                 )
             ) // Ação ao clicar no botão de retorno
         }
+
+        // pegando informações passadas pela intent
+        getUnitFromIntent()
 
         // Inicializa o RecyclerView e passa o callback para atualizar a cor do botão de confirmação
         initRecyclerView { option ->
             updateConfirmButton(option) // Atualiza a cor ou fundo do botão de confirmação
         }
 
-        binding.btnRentalOptions.setOnClickListener {
-            confirmLocation()
-        }
-
+        // Confirma a locação após verificar se um horário foi selecionado
+        confirmLocation()
     }
 
+    // Recebe os dados vindo da intent
+    private fun getUnitFromIntent() {
+        val unitJson = intent.getStringExtra("unit")
+        val gson = Gson()
+        unit = gson.fromJson(unitJson, Unit::class.java)
+        options = unit.rentalOptions // Obtém as opções de locação da unidade
+    }
+
+
     //Inicializa o RecyclerView com a lista de opções
-    private fun initRecyclerView(onOptionSelected: (Option) -> kotlin.Unit) {
-        val options = createRandomOptions()
+    private fun initRecyclerView(onOptionSelected: (RentalOption) -> kotlin.Unit) {
         val adapter =
             RadioButtonAdapter(options, onOptionSelected) // Passa o callback para o adaptador
         binding.rvRentalOptions.layoutManager =
@@ -58,67 +70,89 @@ class RentalOptionsActivity : AppCompatActivity() {
         binding.rvRentalOptions.adapter = adapter
     }
 
-    private fun updateConfirmButton(option: Option) {
+    //Atualiza a cor ou fundo do botão de confirmação
+    private fun updateConfirmButton(option: RentalOption) {
         if (option != null) {
             // Altera o fundo do botão para um drawable diferente
+            println("option: $option")
             binding.btnRentalOptions.setBackgroundResource(R.drawable.selected_btn)
             binding.btnRentalOptions.setTextColor(getColor(R.color.white))
         }
     }
 
 
-    // Função para exibir um aviso após confirmar a locação
-    @SuppressLint("ResourceType")
-    private fun showConfirmationDialog() {
-        // Usa o tema personalizado ao criar o AlertDialog
-        val alertDialog = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
-            .setTitle("Atenção!")
-            .setMessage("Será creditado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
-            .setPositiveButton("Sim") { _, _ ->
-                val intent = Intent(this, QRCodeGeneratorActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }
-            .create()
+    data class RentInfo(
+        val unit: Unit,
+        val rentalOption: RentalOption,
+        val uid: String,
+        val startDate: String,
+    )
 
-        alertDialog.show() // Mostra o diálogo estilizado
-    }
+    private fun rentLocker(rentInfo: RentInfo) {
+        bd.collection("rents").add(rentInfo).addOnSuccessListener { document ->
+            val rentId = document.id
+            val intent = Intent(this, QRCodeGeneratorActivity::class.java)
 
+            data class QrCodeData(val rentId: String, val managerName: String)
 
-    //Confirma a locação após verificar se um horário foi selecionado
-    private fun confirmLocation() {
-        val selectedOption = (binding.rvRentalOptions.adapter as RadioButtonAdapter).selectedOption
-        if (selectedOption != null) {
-            // Mostra o aviso de confirmação com opções "Sim" ou "Não"
-            showConfirmationDialog()
-
-        } else {
+            val qrCodeData = QrCodeData(rentId, unit.manager.name)
+            val gson = Gson()
+            intent.putExtra("rentData", gson.toJson(qrCodeData))
+            startActivity(intent)
+            finish()
+        }.addOnFailureListener {
             Snackbar.make(
                 binding.root,
-                "Selecione um horário antes de confirmar.",
+                "Erro ao realizar locação. Tente novamente.",
                 Snackbar.LENGTH_SHORT
             ).show()
         }
     }
 
+    // Função para exibir um aviso após confirmar a locação
+    @SuppressLint("ResourceType")
+    private fun showConfirmationDialog() {
+        // Usa o tema personalizado ao criar o AlertDialog
+        val alertDialog =
+            AlertDialog.Builder(this, R.style.CustomAlertDialogTheme).setTitle("Atenção!")
+                .setMessage("Será creditado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
+                .setPositiveButton("Sim") { _, _ ->
+                    val selectedOption =
+                        (binding.rvRentalOptions.adapter as RadioButtonAdapter).selectedOption
+                    val rentInfo = RentInfo(
+                        unit,
+                        selectedOption!!,
+                        FirebaseAuth.getInstance().currentUser!!.uid,
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                    )
+                    rentLocker(rentInfo)
+                }.setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }.create()
 
-    //Cria uma lista de opções de locação
-    private fun createRandomOptions(): List<Option> {
-        return listOf(
-            Option("1", "30 minutos - R$ 30,00", "Description 1", 10.0),
-            Option("2", "1 hora - R$ 50,00", "Description 2", 20.0),
-            Option("3", "2 horas - R$ 100,00", "Description 3", 30.0),
-            Option("4", "4 horas - R$ 150,00", "Description 4", 40.0),
-            Option("5", "Até as 18 horas - R$ 300,00", "Description 5", 50.0),
-        )
+        alertDialog.show() // Mostra o diálogo estilizado
+    }
+
+    //Confirma a locação após verificar se um horário foi selecionado
+    private fun confirmLocation() {
+        binding.btnRentalOptions.setOnClickListener {
+
+            val selectedOption =
+                (binding.rvRentalOptions.adapter as RadioButtonAdapter).selectedOption
+            if (selectedOption != null) {
+                // Mostra o aviso de confirmação com opções "Sim" ou "Não"
+                showConfirmationDialog()
+
+            } else {
+                Snackbar.make(
+                    binding.root, "Selecione um horário antes de confirmar.", Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     //Classe para adicionar decoração ao RecyclerView para espaçamento entre itens
     class MarginItemDecoration(private val spaceHeight: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
-            outRect: Rect, view: View,
-            parent: RecyclerView, state: RecyclerView.State
+            outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
         ) {
             with(outRect) {
                 top = spaceHeight
