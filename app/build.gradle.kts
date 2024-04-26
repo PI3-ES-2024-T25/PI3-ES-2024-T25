@@ -69,5 +69,4 @@ dependencies {
     implementation ("com.google.zxing:core:3.5.3")
     implementation ("androidx.compose.runtime:runtime:1.5.1")
     implementation(libs.play.services.location)
-    testImplementation("junit:junit:4.12")
 }

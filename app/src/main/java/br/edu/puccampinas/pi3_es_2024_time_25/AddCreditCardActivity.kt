@@ -2,7 +2,9 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister1Binding
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.AddCreditCardBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase

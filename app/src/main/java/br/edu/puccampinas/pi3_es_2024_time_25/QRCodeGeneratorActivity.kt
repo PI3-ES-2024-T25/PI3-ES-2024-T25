@@ -17,6 +17,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import br.edu.puccampinas.pi3_es_2024_time_25.QRCodeActivity
 
 
 class QRCodeGeneratorActivity : AppCompatActivity() {
@@ -28,11 +29,6 @@ class QRCodeGeneratorActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.QRCodeGeneratorActivity)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         val gsonData = intent.getStringExtra("rentData")
         val rentData = Gson().fromJson(gsonData, QrCodeData::class.java)
         if (rentData != null) {
