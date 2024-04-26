@@ -15,8 +15,8 @@ class Register1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setupViewBinding()
-        
-        binding.voltarRegistro1.setOnClickListener {
+
+        binding.btnVoltarRegistro1.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
 
@@ -26,14 +26,15 @@ class Register1Activity : AppCompatActivity() {
             val acc = startUserInstance()
             val packedAcc = packUserInstance(acc)
             if (Account.Validator(acc).isFormOneValid()) {
-                startActivity(Intent(this, Register2Activity::class.java)
+                startActivity(
+                    Intent(this, Register2Activity::class.java)
                         .putExtra("packedUserInstance", packedAcc)
                 )
 
-            }
-            else {
+            } else {
                 val msg = Account.Validator(acc).warnUser()
-                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT)
+                    .show()
             }
 
         }
@@ -47,11 +48,12 @@ class Register1Activity : AppCompatActivity() {
             binding.dataNascimentoRegistro.text.toString(),
             binding.telefoneRegistro.text.toString(),
             "",
-            "",)
+            "",
+        )
 
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding() {
         binding = ActivityRegister1Binding.inflate(layoutInflater)
         setContentView(binding.root)
     }
