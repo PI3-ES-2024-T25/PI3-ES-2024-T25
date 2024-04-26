@@ -17,9 +17,6 @@ import com.google.firebase.auth.FirebaseAuth
 class RecoveryActivity: AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var voltar: Button
-    private lateinit var email: AppCompatEditText
-    private lateinit var btnRecuperar: AppCompatButton
     private lateinit var binding : ActivityRecoveryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,22 +24,19 @@ class RecoveryActivity: AppCompatActivity() {
         setupViewBinding()
 
         auth = FirebaseAuth.getInstance()
-        voltar = findViewById(R.id.voltar_recovery)
-        email = findViewById(R.id.email_recovery)
-        btnRecuperar = findViewById(R.id.btn_recovery)
 
-        voltar.setOnClickListener {
+        binding.voltarRecovery.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        btnRecuperar.setOnClickListener {
+        binding.btnRecovery.setOnClickListener {
 
-            if (email.text.toString().isNotEmpty()) {
-                auth.sendPasswordResetEmail(email.text.toString())
+            if (binding.emailRecovery.text.toString().isNotEmpty()) {
+                auth.sendPasswordResetEmail(binding.emailRecovery.text.toString())
 
                     .addOnSuccessListener {
-                        abrirpopUp()
+                        showPopUp()
                     }
 
                     .addOnFailureListener {
@@ -58,7 +52,7 @@ class RecoveryActivity: AppCompatActivity() {
 
     }
 
-    private fun abrirpopUp() {
+    private fun showPopUp() {
         val popUp = Dialog(this)
         popUp.requestWindowFeature(Window.FEATURE_NO_TITLE)
         popUp.setContentView(R.layout.modal_recovery)

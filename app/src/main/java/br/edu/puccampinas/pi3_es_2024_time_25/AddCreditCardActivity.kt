@@ -1,7 +1,10 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister1Binding
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.AddCreditCardBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
@@ -9,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AddCreditCardActivity : AppCompatActivity() {
     private lateinit var binding: AddCreditCardBinding
@@ -17,35 +24,35 @@ class AddCreditCardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = AddCreditCardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        setupViewBinding()
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+
+
         binding.btnAddCartao.setOnClickListener {
-            val card = createCardInstance(null)
+            val card = createCardInstance()
             if (CreditCard.Validator(card).isFormValid()) {
-                db.collection("users").document(auth.currentUser!!.uid).collection("credit cards")
-                    .add(card)
+                db.collection("users").document(auth.uid.toString()).collection("creditCard").add(card)
                     .addOnSuccessListener {
-                        Snackbar.make(
-                            findViewById(R.id.Register2Activity),
-                            "Cartão cadastrado com sucesso!",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        Snackbar.make(findViewById(R.id.AddCreditCardActivity), "Cartão cadastrado com sucesso! Você será redirecionado...", Snackbar.LENGTH_SHORT).show()
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(4000)
+                            startActivity(Intent(this@AddCreditCardActivity, MapsActivity::class.java))
+                            finish()
+                        }
                     }
+
                     .addOnFailureListener {
-                        Snackbar.make(
-                            findViewById(R.id.Register2Activity),
-                            "Erro inesperado. Contate o suporte.",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        Snackbar.make(findViewById(R.id.AddCreditCardActivity), "Erro inesperado. Contate o suporte.", Snackbar.LENGTH_SHORT).show()
                     }
-            } else {
+            }
+            else {
                 val msg = CreditCard.Validator(card).warnUser()
-                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(findViewById(R.id.AddCreditCardActivity), msg, Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -54,13 +61,17 @@ class AddCreditCardActivity : AppCompatActivity() {
         }
     }
 
-    private fun createCardInstance(uid: String?): CreditCard {
+    private fun createCardInstance(): CreditCard {
         return CreditCard(
-            uid,
-            binding.etNumeroCartao.text.toString().toInt(),
+            binding.etNumeroCartao.text.toString(),
             binding.etNomeTitular.text.toString(),
             binding.etVencimento.text.toString(),
-            binding.etCVV.text.toString().toInt()
+            binding.etCVV.text.toString()
         )
+    }
+
+    private fun setupViewBinding(){
+        binding = AddCreditCardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

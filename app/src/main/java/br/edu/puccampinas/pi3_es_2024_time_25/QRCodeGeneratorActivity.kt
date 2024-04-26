@@ -17,6 +17,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import br.edu.puccampinas.pi3_es_2024_time_25.QRCodeActivity
 
 
 class QRCodeGeneratorActivity : AppCompatActivity() {
@@ -34,6 +35,7 @@ class QRCodeGeneratorActivity : AppCompatActivity() {
             println("rentData: $rentData")
             generateQRCode(rentData.rentId)
             binding.textView2.text = "(${rentData.managerName})"
+        val qrCodeActivity = QRCodeActivity()
 
         }
         binding.voltarQrCode.setOnClickListener {

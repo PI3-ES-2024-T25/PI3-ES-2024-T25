@@ -31,4 +31,5 @@
     <string name="title_activity_qrcode_generator">QRCodeGeneratorActivity</string>
     <string name="apresentar_qr_code">Apresente o QR Code ao gerente</string>
     <string name="nome_do_gerente">(Nome do gerente)</string>
+    <string name="vencimento_do_cart_o">Vencimento do cartão</string>
 </resources>
