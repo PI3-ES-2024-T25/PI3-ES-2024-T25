@@ -15,14 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class LoginActivity : AppCompatActivity() {
-
-
+  
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding
 
     public override fun onStart() {
         super.onStart()
-       val currentUser = auth.currentUser
+        val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isEmailVerified) {
             startActivity(Intent(this, MapsActivity::class.java))
             finish()
@@ -56,27 +55,35 @@ class LoginActivity : AppCompatActivity() {
                             val contaVerificada = auth.currentUser?.isEmailVerified
                             if (contaVerificada == true) {
 
-                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT)
+                                    .show()
 
                                 startActivity(Intent(this, MapsActivity::class.java))
                                 finish()
                             } else {
-                                Snackbar.make(binding.root, "Sua conta não foi verificada. Cheque seu e-mail.", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(
+                                    binding.root,
+                                    "Sua conta não foi verificada. Cheque seu e-mail.",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
 
                             }
                         } else {
-                            Snackbar.make(binding.root, "E-mail ou senha inválidos.", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(
+                                binding.root,
+                                "E-mail ou senha inválidos.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
             }
-
             else {
                 val msg = warnUser()
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
 
             }
         }
-
+        
         binding.locationArmariosLogin.setOnClickListener {
             startActivity(Intent(this, MapsActivity::class.java))
         }
@@ -95,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
         return msg
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

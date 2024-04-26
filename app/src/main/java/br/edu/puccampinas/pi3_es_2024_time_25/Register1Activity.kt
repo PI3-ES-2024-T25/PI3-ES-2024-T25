@@ -15,8 +15,7 @@ class Register1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setupViewBinding()
-
-
+        
         binding.voltarRegistro1.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
