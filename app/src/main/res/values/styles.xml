@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema para estilizar AlertDialogs -->
+    <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+
+        <item name="android:windowBackground">@drawable/rounded_alert_background</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+
+
+        <!-- Cor do texto para o título -->
+        <item name="android:textColorPrimary">@color/black</item>
+
+        <!-- Estilo para o título -->
+        <item name="android:textStyle">bold</item>
+
+
+        <!-- Estilo para os botões do diálogo -->
+        <item name="buttonStyle">@color/black</item>
+    </style>
+
+    <!-- Estilo para botões personalizados -->
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/border</item>
+
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>
