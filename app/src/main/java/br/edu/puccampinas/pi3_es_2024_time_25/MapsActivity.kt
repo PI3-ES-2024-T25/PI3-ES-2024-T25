@@ -163,7 +163,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         )
                     } else {
                         // A permissão foi negada. Mostre uma explicação para o usuário e solicite novamente a permissão.
-                        AlertDialog.Builder(this).setTitle("Permissão de localização necessária")
+                        AlertDialog.Builder(this, R.style.CustomAlertDialogTheme).setTitle("Permissão de localização necessária")
                             .setMessage("Esta aplicação requer a permissão de localização para mostrar a sua localização no mapa.")
                             .setPositiveButton("OK") { _, _ ->
                                 ActivityCompat.requestPermissions(
@@ -208,7 +208,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showRentInRunningDialog(userLastRent: UserLastRent) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
         builder.setTitle("Você possui uma locação em andamento")
         builder.setMessage("Você deve efetivar ou cancelar o aluguel atual antes de alugar outro armário.")
 
@@ -272,7 +272,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             binding.btnRentLocker.text = getString(R.string.button_login_to_rent)
             binding.btnRentLocker.setOnClickListener {
-                val builder = AlertDialog.Builder(this)
+                val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogTheme)
                 builder.setTitle("Para alugar um armário, é necessário fazer login")
                 builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
 
@@ -466,7 +466,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }.addOnCompleteListener {
                 if (!haveUserCreditCard) {
                     setBtnToAddCreditCard()
-                    val builder = AlertDialog.Builder(this)
+                    val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
                     builder.setTitle("Adicione uma forma de pagamento")
                     builder.setMessage("Para alugar um armário, é necessário adicionar um cartão de crédito.")
 
@@ -506,7 +506,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.btnRentLocker.text = getString(R.string.button_login_to_rent)
         binding.btnRentLocker.setOnClickListener {
 
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
             builder.setTitle("Para alugar um armário, é necessário fazer login")
             builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
 
@@ -555,7 +555,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setButtonSelectUnitToRent() {
         binding.btnRentLocker.text = getString(R.string.select_locker)
         binding.btnRentLocker.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
             builder.setTitle("Selecione um armário")
             builder.setMessage("Para alugar um armário, selecione um armário no mapa.")
 
