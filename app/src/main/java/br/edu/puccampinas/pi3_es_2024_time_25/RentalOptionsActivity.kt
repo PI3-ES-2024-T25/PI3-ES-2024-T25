@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Date
 
 //Atividade para seleção de opções de locação
@@ -114,6 +114,9 @@ class RentalOptionsActivity : AppCompatActivity() {
     @SuppressLint("ResourceType")
     private fun showConfirmationDialog() {
         // Usa o tema personalizado ao criar o AlertDialog
+        val dateFormat = DateFormat.getDateTimeInstance()
+        val currentDate = dateFormat.format(Date())
+
         val alertDialog =
             AlertDialog.Builder(this, R.style.CustomAlertDialogTheme).setTitle("Atenção!")
                 .setMessage("Será creditado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
@@ -124,7 +127,7 @@ class RentalOptionsActivity : AppCompatActivity() {
                         unit,
                         selectedOption!!,
                         FirebaseAuth.getInstance().currentUser!!.uid,
-                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                        currentDate
                     )
                     rentLocker(rentInfo)
                 }.setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }.create()
