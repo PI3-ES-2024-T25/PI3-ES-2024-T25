@@ -25,28 +25,38 @@ class AddCreditCardActivity : AppCompatActivity() {
 
         binding.btnAddCartao.setOnClickListener {
             val card = createCardInstance(null)
-            if(CreditCard.Validator(card).isFormValid()) {
-                db.collection("users").document(auth.currentUser!!.uid).collection("credit cards").add(card)
+            if (CreditCard.Validator(card).isFormValid()) {
+                db.collection("users").document(auth.currentUser!!.uid).collection("credit cards")
+                    .add(card)
                     .addOnSuccessListener {
-                        Snackbar.make(findViewById(R.id.Register2Activity), "Cartão cadastrado com sucesso!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            findViewById(R.id.Register2Activity),
+                            "Cartão cadastrado com sucesso!",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                     .addOnFailureListener {
-                        Snackbar.make(findViewById(R.id.Register2Activity), "Erro inesperado. Contate o suporte.", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            findViewById(R.id.Register2Activity),
+                            "Erro inesperado. Contate o suporte.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
-            }
-            else {
+            } else {
                 val msg = CreditCard.Validator(card).warnUser()
-                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT)
+                    .show()
             }
         }
 
         binding.voltarAddCard.setOnClickListener {
-            // voltar para a tela anterior
+            finish()
         }
     }
 
     private fun createCardInstance(uid: String?): CreditCard {
-        return CreditCard(uid,
+        return CreditCard(
+            uid,
             binding.etNumeroCartao.text.toString().toInt(),
             binding.etNomeTitular.text.toString(),
             binding.etVencimento.text.toString(),

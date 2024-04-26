@@ -171,22 +171,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             } else if (isUserLogged && !haveUserCreditCard) {
                 binding.btnRentLocker.text = "Adicionar cartão de crédito"
                 binding.btnRentLocker.setOnClickListener {
-                    // val intent = Intent(this, CreditCardActivity::class.java)
-                    //startActivity(intent)
-                    val unit = this.markerUnitMap[marker]
-                    if (unit != null) {
-                        if (isUserCloseToUnit(unit)) {
-                            Toast.makeText(
-                                applicationContext, "Você  ${unit.id}", Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "Você não está próximo ao armário ${unit.id}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    val intent = Intent(this, AddCreditCardActivity::class.java)
+                    startActivity(intent)
                 }
             } else {
                 binding.btnRentLocker.text = "Quero alugar um armário"
@@ -380,7 +366,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setBtnToAddCreditCard() {
         binding.btnRentLocker.text = "Adicionar cartão de crédito"
         binding.btnRentLocker.setOnClickListener {
-            // val intent = Intent(this, CreditCardActivity::class.java)
+            val intent = Intent(this, AddCreditCardActivity::class.java)
             startActivity(intent)
         }
     }
