@@ -23,15 +23,15 @@ class Register1Activity : AppCompatActivity() {
         }
 
         binding.btnRegistro1.setOnClickListener {
-            val acc = startUserInstance()
-            val packedAcc = packUserInstance(acc)
-            if (Account.Validator(acc).isFormOneValid()) {
+            val acc = startUserInstance() // inicia uma instancia de conta
+            val packedAcc = packUserInstance(acc) // transforma essa instancia em json para envia-la à outra activity de registro, onde será completa
+            if (Account.Validator(acc).isFormOneValid()) { // chama o validador de formulario
                 startActivity(Intent(this, Register2Activity::class.java)
-                        .putExtra("packedUserInstance", packedAcc)
+                        .putExtra("packedUserInstance", packedAcc) // caso seja valido, trocar de activity e enviar o json
                 )
 
             }
-            else {
+            else { // caso nao seja valido, exibir a respectiva msg
                 val msg = Account.Validator(acc).warnUser()
                 Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
             }
@@ -39,7 +39,7 @@ class Register1Activity : AppCompatActivity() {
         }
     }
 
-    private fun startUserInstance(): Account {
+    private fun startUserInstance(): Account { // inicia a instancia do usuario com os campos presentes na tela desta activity
 
         return Account(
             binding.nomeRegistro.text.toString(),
@@ -51,12 +51,12 @@ class Register1Activity : AppCompatActivity() {
 
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding(){ // inicia o viewbinding
         binding = ActivityRegister1Binding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
-    private fun packUserInstance(acc: Account): String {
+    private fun packUserInstance(acc: Account): String { // transforma a instancia iniciada em json
         return Gson().toJson(acc)
     }
 }

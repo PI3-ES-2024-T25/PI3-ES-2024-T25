@@ -31,35 +31,35 @@ class AddCreditCardActivity : AppCompatActivity() {
 
 
         binding.btnAddCartao.setOnClickListener {
-            val card = createCardInstance()
-            if (CreditCard.Validator(card).isFormValid()) {
-                db.collection("users").document(auth.uid.toString()).collection("creditCard").add(card)
+            val card = createCardInstance() // cria uma instancia de cartao de credito
+            if (CreditCard.Validator(card).isFormValid()) { // chama as funções de validaçao do formulario
+                db.collection("users").document(auth.uid.toString()).collection("creditCard").add(card) // adiciona o cartao de credito numa coleçao dentro do documento do usuario
                     .addOnSuccessListener {
                         Snackbar.make(findViewById(R.id.AddCreditCardActivity), "Cartão cadastrado com sucesso! Você será redirecionado...", Snackbar.LENGTH_SHORT).show()
 
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(4000)
+                        CoroutineScope(Dispatchers.Main).launch { // coroutine utilizada para o delay nao travar a main thread
+                            delay(4000) // delay entre a exibiçao da snackbar e a troca de tela
                             startActivity(Intent(this@AddCreditCardActivity, MapsActivity::class.java))
                             finish()
                         }
                     }
 
-                    .addOnFailureListener {
+                    .addOnFailureListener {// msg de falha caso de errado
                         Snackbar.make(findViewById(R.id.AddCreditCardActivity), "Erro inesperado. Contate o suporte.", Snackbar.LENGTH_SHORT).show()
                     }
             }
             else {
-                val msg = CreditCard.Validator(card).warnUser()
+                val msg = CreditCard.Validator(card).warnUser() // caso nao passe dos validadores de formulario, chamar a funçao que encontra a msg correta
                 Snackbar.make(findViewById(R.id.AddCreditCardActivity), msg, Snackbar.LENGTH_SHORT).show()
             }
         }
 
-        binding.voltarAddCard.setOnClickListener {
+        binding.voltarAddCard.setOnClickListener {// botao de voltar
             finish()
         }
     }
 
-    private fun createCardInstance(): CreditCard {
+    private fun createCardInstance(): CreditCard { // funçao que instancia um cartao de credito
         return CreditCard(
             binding.etNumeroCartao.text.toString(),
             binding.etNomeTitular.text.toString(),
@@ -68,7 +68,7 @@ class AddCreditCardActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupViewBinding(){
+    private fun setupViewBinding(){ // setando o viewBinding
         binding = AddCreditCardBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

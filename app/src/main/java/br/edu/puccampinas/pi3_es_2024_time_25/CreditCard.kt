@@ -6,23 +6,23 @@ class CreditCard(
                 var cardExpiration: String,
                 var cvv: String) {
 
-    class Validator(private val card: CreditCard) {
+    class Validator(private val card: CreditCard) { // clase de validador que sera usada com uma instancia (cartao de credito)
 
-        fun isFormValid(): Boolean {
+        fun isFormValid(): Boolean {// testa se o formulario é valido
             return(isFormFilledOut() && areFieldsValid())
         }
 
-        fun isFormFilledOut(): Boolean {
+        fun isFormFilledOut(): Boolean { // testa se todos os campos foram preenchidos
             return (card.titular.isNotEmpty() && card.cardNumber.toString().isNotEmpty() &&
                     card.cardExpiration.isNotEmpty() && card.cvv.toString().isNotEmpty())
         }
 
-        fun areFieldsValid(): Boolean {
+        fun areFieldsValid(): Boolean { // testa se os campos foram preenchidos corretamente
             return(getRealLength(card.cardNumber.toString()) == 16 && getRealLength(card.cardExpiration) == 4 &&
                     getRealLength(card.cvv.toString()) == 3)
         }
 
-        private fun getRealLength(field: String): Int {
+        private fun getRealLength(field: String): Int { // funçao que descobre a lenght de uma string sem o caracter de mask
             var realLength = 0
             for (char in field) {
                 if (char !in listOf('_', '/', '(', ')', '.', '-', ' ')) realLength++
@@ -30,7 +30,7 @@ class CreditCard(
             return realLength
         }
 
-       fun warnUser(): String {
+       fun warnUser(): String { // funçao que exibe a respectiva msg ao usuario
             return when {
                 !isFormFilledOut() -> "Preencha todos os campos."
                 getRealLength(card.cardNumber.toString()) < 16 -> "Número do cartão inválido."

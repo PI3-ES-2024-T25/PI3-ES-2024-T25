@@ -16,6 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
+        // no onStart, verifica se o usuario está logado e caso sim, o redireciona para dentro do app
         val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isEmailVerified) {
             startActivity(Intent(this, MapsActivity::class.java))
@@ -43,12 +44,12 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
 
-            if (isFormFilledOut()) {
-                auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.senhaLogin.text.toString())
+            if (isFormFilledOut()) { // valida se os campos de login estao preenchidos
+                auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.senhaLogin.text.toString()) // realizar o login
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val contaVerificada = auth.currentUser?.isEmailVerified
-                            if (contaVerificada == true) {
+                            if (contaVerificada == true) { // caso a conta do usuario seja verificada, prosseguir
 
                                 Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT)
                                     .show()
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                                 ).show()
 
                             }
-                        } else {
+                        } else { // se o login nao for realizado com os campos preenchidos, informar que os campos sao invalidos
                             Snackbar.make(
                                 binding.root,
                                 "E-mail ou senha inválidos.",
@@ -72,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
             }
-            else {
+            else { // caso nao passe dos validadores, exibir a msg correta ao usuario
                 val msg = warnUser()
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
 
@@ -83,11 +84,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun isFormFilledOut(): Boolean {
+    private fun isFormFilledOut(): Boolean { // verifica se o formulario esta preenchido
         return (binding.emailLogin.text.toString().isNotEmpty() && binding.senhaLogin.text.toString().isNotEmpty())
     }
 
-    private fun warnUser(): String {
+    private fun warnUser(): String { // encontra a msg correta para o usuario em caso de erro
         var msg = "Digite sua senha"
 
         if(binding.emailLogin.text.toString().isEmpty()) {
@@ -96,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
         return msg
     }
 
-    private fun setupViewBinding() {
+    private fun setupViewBinding() { // inicia o viewBinding
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

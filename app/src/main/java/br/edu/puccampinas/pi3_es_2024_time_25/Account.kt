@@ -19,24 +19,24 @@ class Account(
 
             var confirmPassword = ""
 
-    class Validator(private val account: Account) {
+    class Validator(private val account: Account) { // classe de validador. irá ser utilizada com uma instancia (conta)
 
-        fun isFormOneValid(): Boolean {
+        fun isFormOneValid(): Boolean { // testa se o formulario está preenchido e se os campos foram preenchidos corretamente
             return (isFormOneFilledOut() && hasFormOneValidFields())
         }
 
-        private fun isFormOneFilledOut(): Boolean {
+        private fun isFormOneFilledOut(): Boolean { // testa se todos os campos foram preenchidos
             return (account.nome.isNotEmpty() && account.cpf.isNotEmpty()
                     && account.nascimento.isNotEmpty() && account.fone.isNotEmpty())
         }
 
-        private fun hasFormOneValidFields(): Boolean {
+        private fun hasFormOneValidFields(): Boolean { // testa se os campos foram preenchidos corretamente
             return (getRealLength(account.cpf) == 11 && getRealLength(account.nascimento) == 8 && hasLegalAge() && getRealLength(
                 account.fone
             ) == 11)
         }
 
-        private fun getRealLength(field: String): Int {
+        private fun getRealLength(field: String): Int { //calcula a qtde de caracteres da string sem o caracter de mask
             var realLength = 0
             for (char in field) {
                 if (char !in listOf('_', '/', '(', ')', '.', '-', ' ')) realLength++
@@ -44,7 +44,7 @@ class Account(
             return realLength
         }
 
-        private fun hasLegalAge(): Boolean {
+        private fun hasLegalAge(): Boolean { // verifica se o usuário é maior de idade ou nao
             try {
 
                 val dataAtual = LocalDate.now()
@@ -64,28 +64,28 @@ class Account(
         }
 
 
-        fun isFormTwoValid(): Boolean {
+        fun isFormTwoValid(): Boolean { // testa se o formulario esta prenchido, se o tamanho da senha é válido e se a senha de confirmação é igual a senha digitada
             return (isFormTwoFilledOut() && areBothPasswordEqual() && isPassSizeValid())
         }
 
-        private fun isFormTwoFilledOut(): Boolean {
+        private fun isFormTwoFilledOut(): Boolean { // testa se o formulario foi totalmente preenchido
 
             return (account.email.isNotEmpty() && account.senha.isNotEmpty() && account.confirmPassword != "")
 
         }
 
 
-        private fun areBothPasswordEqual(): Boolean {
+        private fun areBothPasswordEqual(): Boolean { // testa se as duas senhas digitadas sao iguais
             return (account.senha == account.confirmPassword)
         }
 
 
-        private fun isPassSizeValid(): Boolean {
+        private fun isPassSizeValid(): Boolean { // testa se a senha tem no minimo 8 caracteres
             return account.senha.length >= 8
         }
 
 
-        fun warnUser(): String {
+        fun warnUser(): String { // retorna uma msg amigavel para o usuario de acordo com cada condiçao
             return when {
                 !isFormOneFilledOut()-> "Preencha todos os campos."
                 getRealLength(account.cpf) < 11 -> "CPF inválido."
@@ -99,7 +99,7 @@ class Account(
         }
 
 
-        fun exceptionHandler(e: Exception?): String {
+        fun exceptionHandler(e: Exception?): String { // retorna uma msg amigavel para o usuario de acordo com cada exceção
             return when (e) {
                 is FirebaseAuthUserCollisionException -> "O e-mail inserido já está registrado."
                 is FirebaseNetworkException -> return "Sem conexão com a Internet."
