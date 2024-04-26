@@ -2,13 +2,8 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatTextView
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister2Binding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -25,98 +20,114 @@ class Register2Activity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private lateinit var voltar: Button
-    private lateinit var email: AppCompatEditText
-    private lateinit var senha: AppCompatEditText
-    private lateinit var confirmaSenha: AppCompatEditText
-    private lateinit var btn_registrar: AppCompatButton
+    private lateinit var packedAcc: String
     private lateinit var binding: ActivityRegister2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupViewBinding()
 
+        setupViewBinding() //inicializando viewBinding
 
-        voltar = findViewById(R.id.voltar_registro2)
-        email = findViewById(R.id.email_registro)
-        senha = findViewById(R.id.senha_registro)
-        confirmaSenha = findViewById(R.id.confirmaSenha_registro)
-        btn_registrar = findViewById(R.id.btn_registro_2)
-        auth = Firebase.auth
-        db = Firebase.firestore
-        val packedAcc = intent.getStringExtra("packedUserInstance")
+        auth = Firebase.auth // instanciando o Firebase Authenticator
+        db = Firebase.firestore // instanciando o Firebase Firestore
+        packedAcc = intent.getStringExtra("packedUserInstance").toString() // Recebendo a instância de Account da Activity de Registro 1
 
-        voltar.setOnClickListener {
+        binding.voltarRegistro2.setOnClickListener {
             startActivity(Intent(this, Register1Activity::class.java))
         }
 
 
-        btn_registrar.setOnClickListener {
+        binding.btnRegistro2.setOnClickListener {
+            val acc = completeUserInstance(packedAcc) // instancia uma Account
+            sendConfirmPassToInstance(acc) // envia o valor da senha de confirmação para dentro da instância
+            println("Email ${acc.email} || Senha ${acc.senha} || Confirmaçao ${acc.confirmPassword}")
+            if (Account.Validator(acc).isFormTwoValid()) { // chama as funções de validação
 
-            val acc = completeUserInstance(packedAcc)
-            sendConfirmPassToInstance(acc)
-
-            if (Account.Validator(acc).isFormTwoValid()) {
-                    acc.confirmPassword = ""
-                    auth.createUserWithEmailAndPassword(acc.email, acc.senha)
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-
-                                acc.uid = task.result.user?.uid
-                                acc.senha = ""
-
-                                db.collection("users").add(acc)
-                                    .addOnSuccessListener {
-
-                                        auth.currentUser?.sendEmailVerification()
-                                            ?.addOnSuccessListener {
-                                                    Snackbar.make(findViewById(R.id.Register2Activity),
-                                                        "Te enviamos um e-mail para verificar sua conta. Você será redirecionado para o login...",
-                                                        Snackbar.LENGTH_SHORT).show()
-
-                                                CoroutineScope(Dispatchers.Main).launch {
-                                                    delay(4000)
-
-                                                    startActivity(Intent(this@Register2Activity, LoginActivity::class.java))
-                                                    finish()
-                                                }
-                                                }
-                                            }
-
-                                    }
-
-
-                            else {
-                                val msg = Account.Validator(acc).exceptionHandler(task.exception)
-                                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
-                            }
-                        }
-
+                createAccount(acc) // chama a função que inicia e finaliza (caso não ocorra nenhum erro) os procedimentos de criação da conta
 
             }
-        else {
-                val msg = Account.Validator(acc).warnUser()
-                Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
+
+            else { // caso não tenha passado pelos validadores
+
+            val msg = Account.Validator(acc).warnUser() // variável recebe uma mensagem para mostrar ao usuário através de uma função
+            Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show() // exibe a mensagem ao usuário
             }
-        }
+    }
 
 
     }
 
+    private fun createAccount(acc: Account) { // função que inicia o fluxo de criação da conta do usuário
+
+        auth.createUserWithEmailAndPassword(acc.email, acc.senha) // função do Firebase para criar conta
+            .addOnCompleteListener(this) { task -> // adicionando um listener que nos informará o status após a conclusão do processo
+                if (task.isSuccessful) { // se a criação da conta for bem sucedida
+                    acc.senha = "" // atualiza os campos de senha para não irem ao banco
+                    acc.confirmPassword = "" // atualiza os campos de senha para não irem ao banco
+                    sendEmail(acc) // inicia a função de enviar e-mail de confirmação ao usuário
+                    println("Conta criada para o e-mail ${acc.email}")
+                }
+                else { // caso a conta não seja criada
+                    println("Erro ao criar conta: ${task.exception}")
+                    val msg = Account.Validator(acc).exceptionHandler(task.exception) // recebe mensagem vindo da função que trata exceções
+                    Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show() // exibe a msg ao usuário
+                }
+
+            }
+    }
+
+
+    private fun sendEmail(acc: Account) {
+        auth.currentUser!!.sendEmailVerification()
+            .addOnCompleteListener(this) { task ->
+                if(task.isSuccessful) {
+                    saveUserData(acc)
+                    println("E-mail de confimação enviado para ${acc.email}")
+                }
+                else {
+                    println("Erro ao enviar e-mail de confirmação: ${task.exception}")
+                    val msg = Account.Validator(acc).exceptionHandler(task.exception)
+                    Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
+    private fun saveUserData(acc: Account) {
+        db.collection("users").document(auth.currentUser!!.uid).set(acc)
+            .addOnCompleteListener(this) { task ->
+                if(task.isSuccessful) {
+                    println("Dados de ${acc.nome} salvos.")
+                    Snackbar.make(findViewById(R.id.Register2Activity), "Te enviamos um e-mail para verificar sua conta. Você será redirecionado para o login...", Snackbar.LENGTH_SHORT).show()
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(4000)
+                        startActivity(Intent(this@Register2Activity, LoginActivity::class.java))
+                        finish()
+                    }
+                }
+                else {
+                    println("Erro ao salvar os dados no Firestore: ${task.exception} ")
+                    val msg = Account.Validator(acc).exceptionHandler(task.exception)
+                    Snackbar.make(findViewById(R.id.Register2Activity), msg, Snackbar.LENGTH_SHORT).show()
+
+                }
+            }
+    }
 
     private fun completeUserInstance(packedAccount: String?): Account {
 
         val acc = unpackUserInstance(packedAccount)
 
-        acc.email = email.text.toString()
-        acc.senha = senha.text.toString()
+        acc.email = binding.emailRegistro.text.toString()
+        acc.senha = binding.senhaRegistro.text.toString()
 
         return acc
     }
 
     private fun sendConfirmPassToInstance(acc: Account) {
 
-        acc.confirmPassword = confirmaSenha.text.toString()
+        acc.confirmPassword = binding.confirmaSenhaRegistro.text.toString()
 
     }
 

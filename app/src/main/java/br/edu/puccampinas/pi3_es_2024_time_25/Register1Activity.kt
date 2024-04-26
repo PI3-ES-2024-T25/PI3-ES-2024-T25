@@ -2,80 +2,61 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatImageButton
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityRegister1Binding
 import com.google.android.material.snackbar.Snackbar
-import com.santalu.maskara.widget.MaskEditText
+import com.google.gson.Gson
 
 class Register1Activity : AppCompatActivity() {
 
-    lateinit var voltar: Button
-    lateinit var nomeCompleto: AppCompatEditText
-    lateinit var CPF: MaskEditText
-    lateinit var dataNasc: MaskEditText
-    lateinit var telefone: MaskEditText
-    lateinit var btnContinuar: AppCompatButton
-    lateinit var binding: ActivityRegister1Binding
+    private lateinit var binding: ActivityRegister1Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setupViewBinding()
-
-        voltar = findViewById(R.id.voltar_registro1)
-        nomeCompleto = findViewById(R.id.nome_registro)
-        CPF = findViewById(R.id.CPF_registro)
-        dataNasc = findViewById(R.id.dataNascimento_registro)
-        telefone = findViewById(R.id.telefone_registro)
-        btnContinuar = findViewById(R.id.btn_registro_1)
-
-        voltar.setOnClickListener {
+        
+        binding.voltarRegistro1.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+
         }
 
-        btnContinuar.setOnClickListener {
-            if (preencheuCampos()) {
-                startActivity(Intent(this, Register2Activity::class.java))
-                finish()
+        binding.btnRegistro1.setOnClickListener {
+            val acc = startUserInstance()
+            val packedAcc = packUserInstance(acc)
+            if (Account.Validator(acc).isFormOneValid()) {
+                startActivity(Intent(this, Register2Activity::class.java)
+                        .putExtra("packedUserInstance", packedAcc)
+                )
+
             }
             else {
-                val msg = campoFaltando()
+                val msg = Account.Validator(acc).warnUser()
                 Snackbar.make(findViewById(R.id.Register1Activity), msg, Snackbar.LENGTH_SHORT).show()
             }
+
         }
+    }
+
+    private fun startUserInstance(): Account {
+
+        return Account(
+            binding.nomeRegistro.text.toString(),
+            binding.CPFRegistro.text.toString(),
+            binding.dataNascimentoRegistro.text.toString(),
+            binding.telefoneRegistro.text.toString(),
+            "",
+            "",)
 
     }
 
-    private fun preencheuCampos(): Boolean {
-        return (nomeCompleto.text.toString().isNotEmpty() && CPF.text.toString().isNotEmpty()
-                && dataNasc.text.toString().isNotEmpty() && telefone.text.toString().isNotEmpty())
-    }
-
-    private fun campoFaltando(): String {
-        val msg: String
-        if (nomeCompleto.text.toString().isEmpty()) {
-            msg = "Digite seu nome"
-            return msg
-        }
-        if (CPF.text.toString().isEmpty()) {
-            msg = "Digite seu CPF"
-            return msg
-        }
-        if(dataNasc.text.toString().isEmpty()) {
-            msg = "Digite sua data de nascimento"
-            return msg
-        }
-        else {
-            msg = "Digite seu telefone"
-            return msg
-        }
-    }
     private fun setupViewBinding(){
         binding = ActivityRegister1Binding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    private fun packUserInstance(acc: Account): String {
+        return Gson().toJson(acc)
     }
 }
