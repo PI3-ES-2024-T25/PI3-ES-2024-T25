@@ -89,7 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var db: FirebaseFirestore
-    private var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0
+    private var permissionsRequestAccessFineLocation = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userLocation: Location
     private var isMapReady: Boolean = false
@@ -136,7 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+            permissionsRequestAccessFineLocation -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(
                             this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -169,7 +169,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 ActivityCompat.requestPermissions(
                                     this,
                                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                                    permissionsRequestAccessFineLocation
                                 )
                             }.show()
                     }
@@ -235,7 +235,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupButton(marker: Marker) {
         if (isUserLogged && haveUserCreditCard) {
-            binding.btnRentLocker.text = "Alugar armário"
+            binding.btnRentLocker.text = getString(R.string.button_rent_locker)
             binding.btnRentLocker.setOnClickListener {
                 val unit = this.markerUnitMap[marker]
                 if (unit != null) {
@@ -264,15 +264,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         } else if (isUserLogged && !haveUserCreditCard) {
-            binding.btnRentLocker.text = "Adicionar cartão de crédito"
+            binding.btnRentLocker.text = getString(R.string.button_add_credit_card)
             binding.btnRentLocker.setOnClickListener {
                 val intent = Intent(this, AddCreditCardActivity::class.java)
                 startActivity(intent)
             }
         } else {
-            binding.btnRentLocker.text = "Quero alugar um armário"
+            binding.btnRentLocker.text = getString(R.string.button_login_to_rent)
             binding.btnRentLocker.setOnClickListener {
-                var builder = AlertDialog.Builder(this)
+                val builder = AlertDialog.Builder(this)
                 builder.setTitle("Para alugar um armário, é necessário fazer login")
                 builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
 
@@ -401,7 +401,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                permissionsRequestAccessFineLocation
             )
         } else {
             mMap.isMyLocationEnabled = true
@@ -495,7 +495,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setBtnToAddCreditCard() {
-        binding.btnRentLocker.text = "Adicionar cartão de crédito"
+        binding.btnRentLocker.text = getString(R.string.button_add_credit_card)
         binding.btnRentLocker.setOnClickListener {
             val intent = Intent(this, AddCreditCardActivity::class.java)
             startActivity(intent)
@@ -503,7 +503,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setBtnToLogin() {
-        binding.btnRentLocker.text = "Quero alugar um armário"
+        binding.btnRentLocker.text = getString(R.string.button_login_to_rent)
         binding.btnRentLocker.setOnClickListener {
 
             val builder = AlertDialog.Builder(this)
@@ -528,17 +528,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    suspend fun checkUnitHasLockerAvailable(unit: Unit): Boolean {
+    private suspend fun checkUnitHasLockerAvailable(unit: Unit): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 val document = db.collection("rental_units").document(unit.id).get().await()
                 if (document != null) {
                     println("LOCK DocumentSnapshot data: ${document.data}")
-                    val unit = document.toObject(Unit::class.java)
-                    println("LOCK unit: $unit")
-                    if (unit != null) {
-                        println("LOCK unit.lockersAvailable: ${unit.lockersAvailable.size}")
-                        unit.lockersAvailable.isNotEmpty()
+                    val unitObject = document.toObject(Unit::class.java)
+                    println("LOCK unit: $unitObject")
+                    if (unitObject != null) {
+                        println("LOCK unitObject.lockersAvailable: ${unitObject.lockersAvailable.size}")
+                        unitObject.lockersAvailable.isNotEmpty()
                     } else {
                         false
                     }
@@ -553,7 +553,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setButtonSelectUnitToRent() {
-        binding.btnRentLocker.text = "Selecione um armário"
+        binding.btnRentLocker.text = getString(R.string.select_locker)
         binding.btnRentLocker.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Selecione um armário")

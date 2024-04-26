@@ -13,8 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var botaoSair: AppCompatButton
-    lateinit var auth: FirebaseAuth
+    private lateinit var botaoSair: AppCompatButton
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

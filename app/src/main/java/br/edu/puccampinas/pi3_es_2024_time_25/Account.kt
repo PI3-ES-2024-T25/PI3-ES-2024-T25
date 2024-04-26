@@ -1,7 +1,5 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
-import android.util.Log
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import java.time.LocalDate

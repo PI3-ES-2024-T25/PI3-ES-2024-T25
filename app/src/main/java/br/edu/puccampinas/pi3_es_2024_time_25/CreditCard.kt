@@ -12,14 +12,14 @@ class CreditCard(
             return(isFormFilledOut() && areFieldsValid())
         }
 
-        fun isFormFilledOut(): Boolean { // testa se todos os campos foram preenchidos
-            return (card.titular.isNotEmpty() && card.cardNumber.toString().isNotEmpty() &&
-                    card.cardExpiration.isNotEmpty() && card.cvv.toString().isNotEmpty())
+        private fun isFormFilledOut(): Boolean { // testa se todos os campos foram preenchidos
+            return (card.titular.isNotEmpty() && card.cardNumber.isNotEmpty() &&
+                    card.cardExpiration.isNotEmpty() && card.cvv.isNotEmpty())
         }
 
-        fun areFieldsValid(): Boolean { // testa se os campos foram preenchidos corretamente
-            return(getRealLength(card.cardNumber.toString()) == 16 && getRealLength(card.cardExpiration) == 4 &&
-                    getRealLength(card.cvv.toString()) == 3)
+        private fun areFieldsValid(): Boolean { // testa se os campos foram preenchidos corretamente
+            return(getRealLength(card.cardNumber) == 16 && getRealLength(card.cardExpiration) == 4 &&
+                    getRealLength(card.cvv) == 3)
         }
 
         private fun getRealLength(field: String): Int { // funçao que descobre a lenght de uma string sem o caracter de mask
@@ -33,7 +33,7 @@ class CreditCard(
        fun warnUser(): String { // funçao que exibe a respectiva msg ao usuario
             return when {
                 !isFormFilledOut() -> "Preencha todos os campos."
-                getRealLength(card.cardNumber.toString()) < 16 -> "Número do cartão inválido."
+                getRealLength(card.cardNumber) < 16 -> "Número do cartão inválido."
                 getRealLength(card.cardExpiration) < 4 -> "Data de expiração inválida."
                 else -> "Código de verificação inválido."
             }
