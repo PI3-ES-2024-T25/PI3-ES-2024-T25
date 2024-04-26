@@ -21,7 +21,7 @@ class RentalOptionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRentalOptionsBinding
     private lateinit var options: List<RentalOption> // Lista de opções de locação
     private lateinit var bd: FirebaseFirestore
-    private lateinit var unit: Unit
+    private lateinit var unit: Unit //Objeto que representa uma unidade de locação
 
     //Método chamado quando a atividade é criada
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +80,7 @@ class RentalOptionsActivity : AppCompatActivity() {
         }
     }
 
-
+    //Classe interna para armazenar informações de locação
     data class RentInfo(
         val unit: Unit,
         val rentalOption: RentalOption,
@@ -88,7 +88,8 @@ class RentalOptionsActivity : AppCompatActivity() {
         val startDate: String,
     )
 
-    private fun rentLocker(rentInfo: RentInfo) {
+    //Método para alugar um armário
+    private fun rentLocker(rentInfo: RentInfo) { //Adiciona um documento ao banco de dados rents
         bd.collection("rents").add(rentInfo).addOnSuccessListener { document ->
             val rentId = document.id
             val intent = Intent(this, QRCodeGeneratorActivity::class.java)
@@ -100,7 +101,7 @@ class RentalOptionsActivity : AppCompatActivity() {
             intent.putExtra("rentData", gson.toJson(qrCodeData))
             startActivity(intent)
             finish()
-        }.addOnFailureListener {
+        }.addOnFailureListener { //Se falhar, exibe uma mensagem de erro
             Snackbar.make(
                 binding.root,
                 "Erro ao realizar locação. Tente novamente.",

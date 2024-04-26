@@ -45,6 +45,7 @@ class RadioButtonAdapter(
         return ViewHolder(view)
     }
 
+    //Converte um número de minutos para um texto que representa uma quantidade de tempo em horas e minutos
     private fun formatMinutesToText(minutes: Int): String {
         val hours = minutes / 60
         val remainingMinutes = minutes % 60
