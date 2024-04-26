@@ -15,13 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class LoginActivity : AppCompatActivity() {
-
-    private lateinit var email: AppCompatEditText
-    private lateinit var senha: AppCompatEditText
-    private lateinit var esqueceuSenha: AppCompatTextView
-    private lateinit var btn_login: AppCompatButton
-    private lateinit var criarConta: AppCompatTextView
-    private lateinit var localArmarios: TextView
+  
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding
 
@@ -29,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isEmailVerified) {
-            //ainda nao tem a pagina de dentro do app, entao ta indo pra main
             startActivity(Intent(this, MapsActivity::class.java))
             finish()
 
@@ -38,30 +31,25 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setupViewBinding()
 
         auth = Firebase.auth
-        email = binding.emailLogin as AppCompatEditText
-        senha = binding.senhaLogin as AppCompatEditText
-        btn_login = binding.btnLogin as AppCompatButton
-        criarConta = binding.registrarLogin as AppCompatTextView
-        esqueceuSenha = binding.esqueceuSenha as AppCompatTextView
-        localArmarios = binding.locationArmariosLogin as AppCompatTextView
 
-        criarConta.setOnClickListener {
+        binding.registrarLogin.setOnClickListener{
             startActivity(Intent(this, Register1Activity::class.java))
         }
 
-        esqueceuSenha.setOnClickListener {
+        binding.esqueceuSenha.setOnClickListener{
             startActivity(Intent(this, RecoveryActivity::class.java))
         }
 
 
 
-        btn_login.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
 
-            if (preencheuCampos()) {
-                auth.signInWithEmailAndPassword(email.text.toString(), senha.text.toString())
+            if (isFormFilledOut()) {
+                auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.senhaLogin.text.toString())
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val contaVerificada = auth.currentUser?.isEmailVerified
@@ -70,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
                                 Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT)
                                     .show()
 
-                                //ainda nao tem a pagina de dentro do app, entao o login ta indo pra main
                                 startActivity(Intent(this, MapsActivity::class.java))
                                 finish()
                             } else {
@@ -89,26 +76,27 @@ class LoginActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
-            } else {
-                val msg = campoFaltando()
+            }
+            else {
+                val msg = warnUser()
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
 
             }
         }
-
-        localArmarios.setOnClickListener {
-            startActivity(Intent(this, RentalOptionsActivity::class.java))
+        
+        binding.locationArmariosLogin.setOnClickListener {
+            startActivity(Intent(this, MapsActivity::class.java))
         }
     }
 
-    private fun preencheuCampos(): Boolean {
-        return (email.text.toString().isNotEmpty() && senha.text.toString().isNotEmpty())
+    private fun isFormFilledOut(): Boolean {
+        return (binding.emailLogin.text.toString().isNotEmpty() && binding.senhaLogin.text.toString().isNotEmpty())
     }
 
-    private fun campoFaltando(): String {
+    private fun warnUser(): String {
         var msg = "Digite sua senha"
 
-        if (email.text.toString().isEmpty()) {
+        if(binding.emailLogin.text.toString().isEmpty()) {
             msg = "Digite seu e-mail"
         }
         return msg
