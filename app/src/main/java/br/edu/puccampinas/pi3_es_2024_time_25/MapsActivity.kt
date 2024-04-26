@@ -32,6 +32,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 data class Address(
@@ -235,14 +240,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val unit = this.markerUnitMap[marker]
                 if (unit != null) {
                     if (isUserCloseToUnit(unit)) {
-                        if (checkUnitHasLockerAvailable(unit)) {
-                            sendToRentLockerActivity(unit)
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "Não há armários disponíveis",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        GlobalScope.launch {
+                            val hasLockerAvailable = checkUnitHasLockerAvailable(unit)
+
+                            println("LOCK hasLockerAvailable: $hasLockerAvailable")
+                            if (hasLockerAvailable) {
+                                sendToRentLockerActivity(unit)
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Não há armários disponíveis",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     } else {
                         Toast.makeText(
@@ -518,20 +528,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    private fun checkUnitHasLockerAvailable(unit: Unit): Boolean {
-        var lockerAvailable = false
-        db.collection("rental_units").document(unit.id).get().addOnSuccessListener { document ->
-            if (document != null) {
-                val unit = document.toObject(Unit::class.java)
-                if (unit != null) {
-                    if (unit.lockersAvailable.isNotEmpty()) {
-                        lockerAvailable = true
+    suspend fun checkUnitHasLockerAvailable(unit: Unit): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val document = db.collection("rental_units").document(unit.id).get().await()
+                if (document != null) {
+                    println("LOCK DocumentSnapshot data: ${document.data}")
+                    val unit = document.toObject(Unit::class.java)
+                    println("LOCK unit: $unit")
+                    if (unit != null) {
+                        println("LOCK unit.lockersAvailable: ${unit.lockersAvailable.size}")
+                        unit.lockersAvailable.isNotEmpty()
+                    } else {
+                        false
                     }
+                } else {
+                    false
                 }
+            } catch (e: Exception) {
+                println("LOCK Error checking locker availability: $e")
+                false
             }
         }
-
-        return lockerAvailable
     }
 
     private fun setButtonSelectUnitToRent() {
@@ -543,8 +561,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             builder.setPositiveButton("OK") { _, _ ->
                 // Ação a ser executada quando o botão positivo é pressionado
-                Toast.makeText(applicationContext, "Você pressionou OK", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(applicationContext, "Você pressionou OK", Toast.LENGTH_SHORT).show()
             }
             val dialog = builder.create()
             dialog.show()
