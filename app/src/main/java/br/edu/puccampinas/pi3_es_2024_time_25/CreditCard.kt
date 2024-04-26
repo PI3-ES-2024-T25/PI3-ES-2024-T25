@@ -1,11 +1,10 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 class CreditCard(
-                var cid: String?,
-                var cardNumber: Int,
+                var cardNumber: String,
                 var titular: String,
                 var cardExpiration: String,
-                var cvv: Int) {
+                var cvv: String) {
 
     class Validator(private val card: CreditCard) {
 
