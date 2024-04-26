@@ -209,7 +209,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         builder.setPositiveButton("Efetivar") { _, _ ->
             // Ação a ser executada quando o botão positivo é pressionado
-            println("Efetivar ${userLastRent.lastRent.rentData.unit.manager.name}")
             sendToQRCodeGeneratorActivity(
                 QRCodeGeneratorActivity.QrCodeData(
                     userLastRent.lastRent.rentId, userLastRent.lastRent.rentData.unit.manager.name
@@ -378,7 +377,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(mapIntent)
     }
 
+    // função para pegar a localização do usuário
     private fun getUserLocation() {
+        // checar se a permissão de localização foi concedida
+        // se não foi, solicitar a permissão
+        // se foi, habilitar a localização no mapa
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -393,7 +396,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
+                // chamar a função para centralizar o mapa com a posição do usuário
                 if (location != null) {
                     userLocation = location
                     centerMapOnUserLocation()
@@ -402,7 +405,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    // função para centralizar o mapa com a posição do usuário
     private fun centerMapOnUserLocation() {
+        if (!::userLocation.isInitialized) {
+            return
+        }
         val userLatLng = LatLng(userLocation.latitude, userLocation.longitude)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16.0f))
     }
@@ -414,6 +421,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         finish()
     }
 
+    // verifica se o usuario possui uma locação em andamento
     private fun checkUserHasRentalInRunning() {
         // Verifica se o usuário tem uma locação em andamento
         val user = FirebaseAuth.getInstance().currentUser
