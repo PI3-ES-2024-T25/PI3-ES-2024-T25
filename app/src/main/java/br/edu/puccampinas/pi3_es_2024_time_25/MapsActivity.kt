@@ -562,7 +562,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.btnRentLocker.setOnClickListener {
             val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
             builder.setTitle("Selecione um armário")
-            builder.setMessage("Para alugar um armário, selecione um armário no mapa.")
+            builder.setMessage("Para alugar um armário, selecione um armário no mapa. São os marcadores em vermelho!")
             val dialog = builder.create()
             dialog.show()
         }
@@ -573,7 +573,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val startTime = LocalTime.of(7, 0)
         val endTime = LocalTime.of(18, 0)
         val conditionResult = now.isBefore(endTime) && now.isAfter(startTime)
+        // TODO("Remover esse toast colocar um aviso melhor!")
         if (conditionResult) {
+            Toast.makeText(
+                applicationContext, "Dentro do horário de funcionamento", Toast.LENGTH_SHORT
+            ).show()
+        } else {
             Toast.makeText(
                 applicationContext, "Fora do horário de funcionamento", Toast.LENGTH_SHORT
             ).show()
