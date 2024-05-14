@@ -37,6 +37,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.time.LocalTime
 
 
 data class Address(
@@ -163,7 +164,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         )
                     } else {
                         // A permissão foi negada. Mostre uma explicação para o usuário e solicite novamente a permissão.
-                        AlertDialog.Builder(this, R.style.CustomAlertDialogTheme).setTitle("Permissão de localização necessária")
+                        AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
+                            .setTitle("Permissão de localização necessária")
                             .setMessage("Esta aplicação requer a permissão de localização para mostrar a sua localização no mapa.")
                             .setPositiveButton("OK") { _, _ ->
                                 ActivityCompat.requestPermissions(
@@ -190,7 +192,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.btnGoToMaps2.setOnClickListener {
                 openGoogleMaps(marker.position)
             }
-            setupButton(marker)
+            if (isInOpeningHours()) {
+                setupButton(marker)
+            }
             true
         }
         mMap.setOnMapClickListener {
@@ -234,6 +238,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setupButton(marker: Marker) {
+
         if (isUserLogged && haveUserCreditCard) {
             binding.btnRentLocker.text = getString(R.string.button_rent_locker)
             binding.btnRentLocker.setOnClickListener {
@@ -272,7 +277,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             binding.btnRentLocker.text = getString(R.string.button_login_to_rent)
             binding.btnRentLocker.setOnClickListener {
-                val builder = AlertDialog.Builder(this,R.style.CustomAlertDialogTheme)
+                val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
                 builder.setTitle("Para alugar um armário, é necessário fazer login")
                 builder.setMessage("Faça login ou crie uma conta para alugar um armário.")
 
@@ -558,14 +563,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
             builder.setTitle("Selecione um armário")
             builder.setMessage("Para alugar um armário, selecione um armário no mapa.")
-
-            builder.setPositiveButton("OK") { _, _ ->
-                // Ação a ser executada quando o botão positivo é pressionado
-                Toast.makeText(applicationContext, "Você pressionou OK", Toast.LENGTH_SHORT).show()
-            }
             val dialog = builder.create()
             dialog.show()
         }
+    }
+
+    private fun isInOpeningHours(): Boolean {
+        val now = LocalTime.now()
+        val startTime = LocalTime.of(7, 0)
+        val endTime = LocalTime.of(18, 0)
+        val conditionResult = now.isBefore(endTime) && now.isAfter(startTime)
+        if (conditionResult) {
+            Toast.makeText(
+                applicationContext, "Fora do horário de funcionamento", Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        return conditionResult
     }
 
 }

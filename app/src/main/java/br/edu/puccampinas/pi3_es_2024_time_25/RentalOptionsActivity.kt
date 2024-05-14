@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.text.DateFormat
+import java.time.LocalTime
 import java.util.Date
 
 //Atividade para seleção de opções de locação
@@ -56,9 +57,25 @@ class RentalOptionsActivity : AppCompatActivity() {
         val unitJson = intent.getStringExtra("unit")
         val gson = Gson()
         unit = gson.fromJson(unitJson, Unit::class.java)
-        options = unit.rentalOptions // Obtém as opções de locação da unidade
+        // Obtém as opções de locação da unidade e filtra as opções disponíveis
+        options = validateOptions(unit.rentalOptions)
+
     }
 
+    private fun validateOptions(options: List<RentalOption>): List<RentalOption> {
+        return options.filter {
+            isTimeOptionValid(it.time)
+        }
+    }
+
+    //Verifica se a opção de tempo é válida
+    private fun isTimeOptionValid(minutes: Int): Boolean {
+        val now = LocalTime.now()// Obtém o horário atual
+        val startTime = LocalTime.of(7, 0) // Define o horário de início
+        val endTime = LocalTime.of(18, 0) // Define o horário de término
+        val newTime = now.plusMinutes(minutes.toLong()) // Adiciona os minutos à hora atual
+        return newTime.isBefore(endTime) && newTime.isAfter(startTime) // Verifica se o horário é válido
+    }
 
     //Inicializa o RecyclerView com a lista de opções
     private fun initRecyclerView(onOptionSelected: (RentalOption) -> kotlin.Unit) {
@@ -103,9 +120,7 @@ class RentalOptionsActivity : AppCompatActivity() {
             finish()
         }.addOnFailureListener { //Se falhar, exibe uma mensagem de erro
             Snackbar.make(
-                binding.root,
-                "Erro ao realizar locação. Tente novamente.",
-                Snackbar.LENGTH_SHORT
+                binding.root, "Erro ao realizar locação. Tente novamente.", Snackbar.LENGTH_SHORT
             ).show()
         }
     }
