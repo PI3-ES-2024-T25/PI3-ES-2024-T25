@@ -4,24 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityLoginBinding
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class LoginActivity : AppCompatActivity() {
   
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var binding: ActivityLoginBinding
 
     public override fun onStart() {
         super.onStart()
-        // no onStart, verifica se o usuario está logado e caso sim, o redireciona para dentro do app
-        val currentUser = auth.currentUser
-        if (currentUser != null && currentUser.isEmailVerified) {
-            startActivity(Intent(this, MapsActivity::class.java))
-            finish()
-
+        if (auth.currentUser!=null) {
+            goToAccount()
         }
     }
 
@@ -31,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setupViewBinding()
 
         auth = Firebase.auth
+        db = Firebase.firestore
 
         binding.registrarLogin.setOnClickListener{
             startActivity(Intent(this, Register1Activity::class.java))
@@ -48,23 +50,11 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.senhaLogin.text.toString()) // realizar o login
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            val contaVerificada = auth.currentUser?.isEmailVerified
-                            if (contaVerificada == true) { // caso a conta do usuario seja verificada, prosseguir
 
-                                Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT)
-                                    .show()
+                            goToAccount()
 
-                                startActivity(Intent(this, MapsActivity::class.java))
-                                finish()
-                            } else {
-                                Snackbar.make(
-                                    binding.root,
-                                    "Sua conta não foi verificada. Cheque seu e-mail.",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
-
-                            }
-                        } else { // se o login nao for realizado com os campos preenchidos, informar que os campos sao invalidos
+                        }
+                        else { // se o login nao for realizado com os campos preenchidos, informar que os campos sao invalidos
                             Snackbar.make(
                                 binding.root,
                                 "E-mail ou senha inválidos.",
@@ -96,6 +86,38 @@ class LoginActivity : AppCompatActivity() {
         }
         return msg
     }
+
+    private fun goToAccount() {
+        db.collection("managers").document(auth.uid.toString()).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    // TODO: TROCAR A ACTIVITY ABAIXO PELA TELA INICIAL DO GERENTE
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+
+                else {
+                    val contaVerificada = auth.currentUser?.isEmailVerified
+
+                    if (contaVerificada == true) { // caso a conta do usuario seja verificada, prosseguir
+
+                        Snackbar.make(binding.root, "Entrando...", Snackbar.LENGTH_SHORT).show()
+
+                        startActivity(Intent(this, MapsActivity::class.java))
+                        finish()
+                    }
+
+                    else {
+                        Snackbar.make(
+                            binding.root,
+                            "Sua conta não foi verificada. Cheque seu e-mail.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+    }
+
+
 
     private fun setupViewBinding() { // inicia o viewBinding
         binding = ActivityLoginBinding.inflate(layoutInflater)
