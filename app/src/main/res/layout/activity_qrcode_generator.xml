@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/logoLockngo"
         android:layout_width="123dp"
         android:layout_height="108dp"
         android:layout_marginBottom="24dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toStartOf="@+id/rightQrCodeGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftQrCodeGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/logoLockngo" />
 
     <TextView
         android:id="@+id/textView2"

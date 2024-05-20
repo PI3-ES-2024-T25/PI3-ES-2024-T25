@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore)
+    implementation(libs.play.services.code.scanner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,4 +73,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.1")
     implementation(libs.play.services.location)
     testImplementation("junit:junit:4.12")
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
 }

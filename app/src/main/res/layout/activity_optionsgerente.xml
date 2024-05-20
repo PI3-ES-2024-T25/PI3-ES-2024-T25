@@ -37,7 +37,7 @@
         app:srcCompat="@drawable/baseline_qr_code_scanner_24" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/logoLockngo"
         android:layout_width="123dp"
         android:layout_height="108dp"
         android:layout_marginStart="144dp"
@@ -55,10 +55,10 @@
         android:text="@string/text_qrcode_gerente"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/logoLockngo" />
 
     <Button
-        android:id="@+id/btn_liberarlocacao"
+        android:id="@+id/btn_scan_qrcode"
         android:layout_width="268dp"
         android:layout_height="66dp"
         android:layout_marginStart="71dp"
