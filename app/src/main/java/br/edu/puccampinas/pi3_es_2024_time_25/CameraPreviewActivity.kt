@@ -2,13 +2,9 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -26,18 +22,25 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-
-
 class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
     private lateinit var btnTakePhoto: MaterialButton
     private lateinit var btnSavePhoto: MaterialButton
     private lateinit var photoFile: File
-    private val storage by lazy { FirebaseStorage.getInstance() }
+    private val storage by lazy {
+        FirebaseStorage.getInstance()
+    }
 
+    // controla o ciclo de vida da câmera
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+
+    // seleciona a câmera traseira
     private lateinit var cameraSelector: CameraSelector
+
+    // captura a imagem
     private lateinit var imageCapture: ImageCapture
+
+    // executor para captura de imagem em segundo plano (thread)
     private lateinit var imageCaptureExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +71,10 @@ class CameraPreviewActivity : AppCompatActivity() {
 
     private fun initializeSavePhotoButton() {
         btnSavePhoto = binding.btnSavePhoto
+        btnSavePhoto.isEnabled = false
         btnSavePhoto.setOnClickListener {
             uploadImageToFirebase(photoFile)
+            btnSavePhoto.isEnabled = false
         }
     }
 
@@ -113,8 +118,8 @@ class CameraPreviewActivity : AppCompatActivity() {
                             "CameraPreviewActivity",
                             "Photo capture succeeded: ${photoFile.absolutePath}"
                         )
-                        btnTakePhoto.visibility = View.GONE
-                        btnSavePhoto.visibility = View.VISIBLE
+                        btnTakePhoto.isEnabled = false
+                        btnSavePhoto.isEnabled = true
                     }
 
                     override fun onError(exception: ImageCaptureException) {
@@ -144,12 +149,8 @@ class CameraPreviewActivity : AppCompatActivity() {
         val uploadTask = imageRef.putFile(imageFile.toUri())
         uploadTask.addOnSuccessListener {
             Log.d("CameraPreviewActivity", "Image uploaded successfully")
-            Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
-            btnSavePhoto.visibility = View.GONE
-            btnTakePhoto.visibility = View.VISIBLE
         }.addOnFailureListener {
             Log.e("CameraPreviewActivity", "Image upload failed", it)
-            Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -163,3 +164,4 @@ class CameraPreviewActivity : AppCompatActivity() {
         cameraProviderFuture.get().unbindAll()
     }
 }
+

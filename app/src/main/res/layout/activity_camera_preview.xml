@@ -31,8 +31,8 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTakePhoto"
-        android:layout_width="387dp"
-        android:layout_height="54dp"
+        android:layout_width="341dp"
+        android:layout_height="58dp"
         android:layout_margin="20dp"
         android:background="@drawable/primary_background_btn"
         android:text="@string/photo"
