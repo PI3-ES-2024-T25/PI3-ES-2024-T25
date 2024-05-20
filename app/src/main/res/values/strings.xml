@@ -40,4 +40,7 @@
     <string name="dialog_message_login_required">Faça login ou crie uma conta para alugar um armário.</string>
     <string name="dialog_button_ok">OK</string>
     <string name="select_locker">Selecione um armário</string>
+    <string name="photo">Tirar Foto</string>
+    <string name="open_camera">Abrir Camera</string>
+    <string name="save_photo">Salvar Foto</string>
 </resources>
