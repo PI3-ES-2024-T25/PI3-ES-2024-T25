@@ -6,13 +6,14 @@ import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityCameraBinding
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
-    private lateinit var btnOpenCamera: Button
+    private lateinit var btnOpenCamera: AppCompatButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

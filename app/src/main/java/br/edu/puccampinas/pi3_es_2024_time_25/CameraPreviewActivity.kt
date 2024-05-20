@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -24,8 +25,8 @@ import java.util.concurrent.Executors
 
 class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
-    private lateinit var btnTakePhoto: MaterialButton
-    private lateinit var btnSavePhoto: MaterialButton
+    private lateinit var btnTakePhoto: AppCompatButton
+    private lateinit var btnSavePhoto: AppCompatButton
     private lateinit var photoFile: File
     private val storage by lazy {
         FirebaseStorage.getInstance()

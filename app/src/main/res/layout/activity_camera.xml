@@ -10,7 +10,7 @@
     tools:context=".CameraActivity">
 
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnOpenCamera"
         android:layout_width="400dp"
         android:layout_height="67dp"
