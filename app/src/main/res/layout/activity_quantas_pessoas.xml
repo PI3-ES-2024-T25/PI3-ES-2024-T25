@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <Button
+        android:id="@+id/voltar_qr_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+        android:fontFamily="@font/inter_medium"
+        android:paddingHorizontal="0dp"
+        android:text="@string/voltar_recovery"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#ECF3FF"
+        android:textSize="16sp"
+        app:flow_verticalAlign="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/qr_code"
+        android:layout_width="139dp"
+        android:layout_height="138dp"
+        android:layout_marginBottom="164dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/baseline_qr_code_scanner_24" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="123dp"
+        android:layout_height="108dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginBottom="428dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo4x" />
+
+    <TextView
+        android:layout_width="294dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="Aproxime o smartphone de uma pulseira  ou escaneie um  QR code, basta pressionar “Liberar locação” ."
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/btn_liberarlocacao"
+        android:layout_width="268dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="71dp"
+        android:layout_marginTop="31dp"
+        android:fontFamily="@font/inter_bold"
+        android:shadowRadius="10"
+        android:text="Liberar Locação"
+        android:textAllCaps="false"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qr_code" />
+
+    <LinearLayout
+        android:layout_width="330dp"
+        android:layout_height="223dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_goneMarginTop="10sp">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="Quantas pessoas acessarão o armário ?"
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="297dp"
+            android:layout_height="50dp"
+            android:background="#000000"
+            android:fontFamily="@font/inter_bold"
+            android:text="Uma pessoa"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="297dp"
+            android:layout_height="50dp"
+            android:background="#000000"
+            android:fontFamily="@font/inter_bold"
+            android:text="Duas pessoas"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
