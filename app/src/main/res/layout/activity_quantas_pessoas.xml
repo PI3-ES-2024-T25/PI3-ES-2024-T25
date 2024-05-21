@@ -64,7 +64,7 @@
         android:layout_marginTop="31dp"
         android:fontFamily="@font/inter_bold"
         android:shadowRadius="10"
-        android:text="Liberar Locação"
+        android:text="@string/liberar_locacao"
         android:textAllCaps="false"
         android:textColor="#7D8392"
         android:textSize="16sp"
@@ -89,7 +89,7 @@
             android:layout_height="62dp"
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
-            android:text="Quantas pessoas acessarão o armário ?"
+            android:text="@string/qtd_pessoas"
             android:textAlignment="center"
             android:textSize="17sp" />
 
@@ -99,7 +99,7 @@
             android:layout_height="50dp"
             android:background="#000000"
             android:fontFamily="@font/inter_bold"
-            android:text="Uma pessoa"
+            android:text="@string/uma_pessoa"
             android:textColor="#FFFFFF" />
 
         <View
@@ -113,7 +113,7 @@
             android:layout_height="50dp"
             android:background="#000000"
             android:fontFamily="@font/inter_bold"
-            android:text="Duas pessoas"
+            android:text="@string/duas_pessoas"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

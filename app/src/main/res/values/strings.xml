@@ -34,4 +34,13 @@
     <string name="botao_ok_dialog">Ok</string>
     <string name="aviso_login">Para alugar um armário, é necessário fazer login</string>
     <string name="aviso_login_2">Crie sua conta e faça seu login!</string>
+    <string name="cancelar_foto">Cancelar</string>
+    <string name="tirar_prox_foto">Tire a foto da próxima pessoa</string>
+    <string name="continuar_prox_foto">Continuar</string>
+    <string name="qtd_pessoas">Quantas pessoas acessarão o armário ?</string>
+    <string name="uma_pessoa">Uma pessoa</string>
+    <string name="duas_pessoas">Duas pessoas</string>
+    <string name="liberar_locacao">Liberar locação</string>
+
+
 </resources>
