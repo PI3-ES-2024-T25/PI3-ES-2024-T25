@@ -43,4 +43,6 @@
     <string name="photo">Tirar Foto</string>
     <string name="open_camera">Abrir Camera</string>
     <string name="save_photo">Salvar Foto</string>
+    <string name="release">Liberar Locação</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

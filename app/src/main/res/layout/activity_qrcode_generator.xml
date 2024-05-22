@@ -67,11 +67,11 @@
 
     <ImageView
         android:id="@+id/qr_code"
-        android:layout_width="188dp"
+        android:layout_width="0dp"
         android:layout_height="196dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/baseline_qr_code_scanner_24" />

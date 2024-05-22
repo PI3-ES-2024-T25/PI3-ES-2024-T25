@@ -4,10 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -16,6 +14,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityCameraPreviewBinding
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
@@ -24,8 +24,8 @@ import java.util.concurrent.Executors
 
 class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
-    private lateinit var btnTakePhoto: AppCompatButton
-    private lateinit var btnSavePhoto: AppCompatButton
+    private lateinit var btnTakePhoto: MaterialButton
+    private lateinit var btnSavePhoto: MaterialButton
     private lateinit var photoFile: File
     private val storage by lazy {
         FirebaseStorage.getInstance()
