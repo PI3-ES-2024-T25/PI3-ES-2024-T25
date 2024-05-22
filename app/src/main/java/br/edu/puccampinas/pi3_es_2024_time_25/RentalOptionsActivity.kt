@@ -134,7 +134,7 @@ class RentalOptionsActivity : AppCompatActivity() {
 
         val alertDialog =
             AlertDialog.Builder(this, R.style.CustomAlertDialogTheme).setTitle("Atenção!")
-                .setMessage("Será creditado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
+                .setMessage("Será debitado do seu cartão o caução no valor de uma diária, que será reembolsado. Deseja continuar?")
                 .setPositiveButton("Sim") { _, _ ->
                     val selectedOption =
                         (binding.rvRentalOptions.adapter as RadioButtonAdapter).selectedOption
