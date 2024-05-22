@@ -62,7 +62,7 @@ class SalvarFotoActivity() : AppCompatActivity() {
         uploadTask.addOnSuccessListener {
             Toast.makeText(this, "Foto salva com sucesso!", Toast.LENGTH_SHORT).show()
             if (numPeople == 2) {
-                val intent = Intent(this, ContinuarSegundaFotoActivity::class.java)
+                val intent = Intent(this, CameraPreview2Activity::class.java)
                 startActivity(intent)
             } else {
                 val intent = Intent(this, MainActivity::class.java)

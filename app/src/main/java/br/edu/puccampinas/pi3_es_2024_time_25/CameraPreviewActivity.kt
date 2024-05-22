@@ -1,47 +1,32 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityCameraPreviewBinding
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.google.common.util.concurrent.ListenableFuture
+import androidx.camera.core.Preview
+import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityCameraPreviewBinding
 
 class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
-    private lateinit var btnTakePhoto: MaterialButton
-    private lateinit var btnSavePhoto: MaterialButton
-    private lateinit var photoFile: File
-    private val storage by lazy {
-        FirebaseStorage.getInstance()
-    }
-
-    // controla o ciclo de vida da câmera
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-
-    // seleciona a câmera traseira
     private lateinit var cameraSelector: CameraSelector
 
-    // captura a imagem
-    private lateinit var imageCapture: ImageCapture
-
-    // executor para captura de imagem em segundo plano (thread)
-    private lateinit var imageCaptureExecutor: ExecutorService
+    private var imageCapture: ImageCapture? = null
+    private lateinit var imgCaptureExecutor: ExecutorService
+    private var numPeople: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,119 +34,66 @@ class CameraPreviewActivity : AppCompatActivity() {
         binding = ActivityCameraPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initializeCameraProvider()
-        initializeTakePhotoButton()
-        initializeSavePhotoButton()
-    }
+        numPeople = intent.getIntExtra("NUM_PEOPLE", 1)
 
-    private fun initializeCameraProvider() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        imageCaptureExecutor = Executors.newSingleThreadExecutor()
-    }
+        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
-    private fun initializeTakePhotoButton() {
-        btnTakePhoto = binding.btnTakePhoto
-        btnTakePhoto.isEnabled = false
-        btnTakePhoto.setOnClickListener {
-            takePhoto()
-            blinkPreview()
-        }
-    }
-
-    private fun initializeSavePhotoButton() {
-        btnSavePhoto = binding.btnSavePhoto
-        btnSavePhoto.isEnabled = false
-        btnSavePhoto.setOnClickListener {
-            uploadImageToFirebase(photoFile)
-            btnSavePhoto.isEnabled = false
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
         startCamera()
+
+        binding.btnTakePhoto.setOnClickListener {
+            takePhoto()
+        }
     }
 
     private fun startCamera() {
         cameraProviderFuture.addListener({
+            imageCapture = ImageCapture.Builder().build()
+
+            val cameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
+            }
+
             try {
-                initializeCamera()
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (e: Exception) {
-                Log.e("CameraPreviewActivity", "Error starting camera", e)
+                Log.e("CameraPreview", "Falha ao abrir a câmera")
             }
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun initializeCamera() {
-        imageCapture = ImageCapture.Builder().build()
-        val cameraProvider = cameraProviderFuture.get()
-        val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
-        }
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-        btnTakePhoto.isEnabled = true
+    private fun startImagePreviewActivity(photoUri: String) {
+        val intent = Intent(this, SalvarFotoActivity::class.java)
+        intent.putExtra("IMAGE_URI", photoUri)
+        intent.putExtra("NUM_PEOPLE", numPeople)
+        startActivity(intent)
     }
 
     private fun takePhoto() {
-        imageCapture.let { imageCapture ->
-            photoFile = createImageFile()
-            val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        imageCapture?.let {
+            val fileName = "foto_${System.currentTimeMillis()}.jpg"
+            val file = File(externalMediaDirs[0], fileName)
+            val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
-            imageCapture.takePicture(outputOptions,
-                ContextCompat.getMainExecutor(this),
+            it.takePicture(
+                outputFileOptions,
+                imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
-
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Log.d(
-                            "CameraPreviewActivity",
-                            "Photo capture succeeded: ${photoFile.absolutePath}"
-                        )
-                        btnTakePhoto.isEnabled = false
-                        btnSavePhoto.isEnabled = true
+                        val photoUri = file.toUri()
+                        Log.i("CameraPreview", "Imagem salva em $photoUri")
+                        startImagePreviewActivity(photoUri.toString())
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Log.e("CameraPreviewActivity", "Photo capture failed", exception)
+                        Toast.makeText(binding.root.context, "Erro ao salvar a imagem", Toast.LENGTH_LONG).show()
+                        Log.e("CameraPreview", "Erro ao salvar foto $exception")
                     }
-                })
+                }
+            )
         }
-    }
-
-    private fun createImageFile(): File {
-        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
-        return File(externalMediaDirs.first(), fileName)
-    }
-
-    private fun blinkPreview() {
-        binding.root.postDelayed({
-            binding.root.foreground = ColorDrawable(Color.WHITE)
-            binding.root.postDelayed({
-                binding.root.foreground = null
-            }, 50)
-        }, 100)
-    }
-
-    private fun uploadImageToFirebase(imageFile: File) {
-        val storageRef = storage.getReference("images")
-        val imageRef = storageRef.child(imageFile.name)
-        val uploadTask = imageRef.putFile(imageFile.toUri())
-        uploadTask.addOnSuccessListener {
-            Log.d("CameraPreviewActivity", "Image uploaded successfully")
-        }.addOnFailureListener {
-            Log.e("CameraPreviewActivity", "Image upload failed", it)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        imageCaptureExecutor.shutdown()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        cameraProviderFuture.get().unbindAll()
     }
 }
-
