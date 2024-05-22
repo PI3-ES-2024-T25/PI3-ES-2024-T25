@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import android.content.Intent
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityCameraBinding
-import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityMainBinding
+
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
@@ -34,8 +34,8 @@ class CameraActivity : AppCompatActivity() {
     private fun showChoiceMenu() {
         val options = arrayOf("Uma pessoa", "Duas pessoas")
         android.app.AlertDialog.Builder(this)
-            .setTitle("Escolha uma opção")
-            .setItems(options) { dialog, which ->
+            .setTitle("Quantas pessoas acessarão o armário?")
+            .setItems(options) { _, which ->
                 when (which) {
                     0 -> abrirCameraUmaPessoa()
                     1 -> abrirCameraDuasPessoas()
