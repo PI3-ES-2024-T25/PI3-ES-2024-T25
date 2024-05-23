@@ -41,4 +41,7 @@
     <string name="dialog_button_ok">OK</string>
     <string name="select_locker">Selecione um armário</string>
     <string name="option_text_format">%s - %s</string>
+    <string name="text_qrcode_gerente"> Aproxime o smartphone de uma pulseira  ou escaneie um  QR code, basta pressionar “Liberar locação” .</string>
+    <string name="liberar_locacao"> Liberar locação </string>
+    <string name="cancel">Cancelar</string>
 </resources>
