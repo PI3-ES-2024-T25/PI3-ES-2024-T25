@@ -62,7 +62,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore)
-    implementation(libs.play.services.code.scanner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,6 +72,10 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.1")
     implementation(libs.play.services.location)
     testImplementation("junit:junit:4.12")
+
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("androidx.camera:camera-camera2:1.1.0-beta02")
+    implementation("androidx.camera:camera-lifecycle:1.1.0-beta02")
+    implementation("androidx.camera:camera-view:1.1.0-beta02")
 
 }

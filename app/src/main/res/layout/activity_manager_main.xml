@@ -7,6 +7,27 @@
     android:background="#000000"
     android:fitsSystemWindows="true">
 
+
+    <Button
+        android:id="@+id/btnSignout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/secondary_background_btn"
+        android:backgroundTint="#7C1E25"
+        android:drawableEnd="@drawable/logout"
+        android:drawablePadding="16dp"
+        android:fontFamily="@font/inter_bold"
+        android:paddingLeft="36dp"
+        android:paddingRight="12dp"
+        android:text="Sair"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/qr_code"
         android:layout_width="139dp"
