@@ -137,7 +137,7 @@ class ManagerMainActivity : AppCompatActivity() {
             if (granted) {
                 openQrcodeScannerPreview()
             } else {
-                Snackbar.make(binding.root, "Permission denied", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Permiss", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -146,11 +146,7 @@ class ManagerMainActivity : AppCompatActivity() {
         firestore.collection("rents").document(qrcodeScanResult).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    AlertDialog.Builder(this).setTitle("Sucesso!")
-                        .setMessage("Sua locação foi encontrada!")
-                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                            dialog.dismiss()
-                        }.show()
+                    showChoiceMenu()
                 } else {
                     AlertDialog.Builder(this).setTitle("Erro")
                         .setMessage("QR code inválido, por favor verifique-o e tente novamente.")
@@ -161,5 +157,30 @@ class ManagerMainActivity : AppCompatActivity() {
             }.addOnFailureListener { exception ->
                 Toast.makeText(this, "Erro ao verificar o qr code!", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun showChoiceMenu() {
+        val options = arrayOf("Uma pessoa", "Duas pessoas")
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Quantas pessoas acessarão o armário?")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> abrirCameraUmaPessoa()
+                    1 -> abrirCameraDuasPessoas()
+                }
+            }
+            .show()
+    }
+
+    private fun abrirCameraUmaPessoa() {
+        val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
+        intentCameraPreview.putExtra("NUM_PEOPLE", 1)
+        startActivity(intentCameraPreview)
+    }
+
+    private fun abrirCameraDuasPessoas() {
+        val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
+        intentCameraPreview.putExtra("NUM_PEOPLE", 2)
+        startActivity(intentCameraPreview)
     }
 }

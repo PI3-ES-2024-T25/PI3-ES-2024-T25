@@ -23,7 +23,6 @@ class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraSelector: CameraSelector
-
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
     private var numPeople: Int = 1
@@ -37,7 +36,7 @@ class CameraPreviewActivity : AppCompatActivity() {
         numPeople = intent.getIntExtra("NUM_PEOPLE", 1)
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
         startCamera()
@@ -89,7 +88,11 @@ class CameraPreviewActivity : AppCompatActivity() {
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Toast.makeText(binding.root.context, "Erro ao salvar a imagem", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            binding.root.context,
+                            "Erro ao salvar a imagem",
+                            Toast.LENGTH_LONG
+                        ).show()
                         Log.e("CameraPreview", "Erro ao salvar foto $exception")
                     }
                 }
