@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -20,16 +22,17 @@ class SalvarFotoActivity : AppCompatActivity() {
     private lateinit var btnSavePhoto: AppCompatButton
     private lateinit var imageUri: Uri
     private var numPeople: Int = 1
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_salvar_foto)
 
-
-
         imageView = findViewById(R.id.imageView)
         btnSavePhoto = findViewById(R.id.btnSavePhoto)
+        progressBar = findViewById(R.id.progressBar)
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,10 +49,9 @@ class SalvarFotoActivity : AppCompatActivity() {
         }
 
         btnSavePhoto.setOnClickListener {
+            progressBar.visibility = View.VISIBLE // Mostrar o ProgressBar
             uploadPhotoToFirebase(imageUri)
         }
-
-
     }
 
     private fun uploadPhotoToFirebase(fileUri: Uri) {
@@ -57,6 +59,7 @@ class SalvarFotoActivity : AppCompatActivity() {
 
         val uploadTask = storageReference.putFile(fileUri)
         uploadTask.addOnSuccessListener {
+            progressBar.visibility = View.GONE // Esconder o ProgressBar
             Toast.makeText(this, "Foto salva com sucesso!", Toast.LENGTH_SHORT).show()
             if (numPeople == 2) {
                 val intent = Intent(this, CameraPreview2Activity::class.java)
@@ -67,7 +70,9 @@ class SalvarFotoActivity : AppCompatActivity() {
                 finish()
             }
         }.addOnFailureListener {
+            progressBar.visibility = View.GONE // Esconder o ProgressBar
             Toast.makeText(this, "Erro ao salvar a foto", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

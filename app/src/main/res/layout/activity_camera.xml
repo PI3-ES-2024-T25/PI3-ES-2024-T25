@@ -30,15 +30,15 @@
         android:id="@+id/btnOpenCamera"
         android:layout_width="318dp"
         android:layout_height="53dp"
-        android:layout_margin="20dp"
-        android:layout_marginBottom="164dp"
+        android:layout_margin="70dp"
+        android:layout_marginBottom="84dp"
         android:background="@drawable/primary_background_btn"
         android:text="@string/release"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent" />
 
 
