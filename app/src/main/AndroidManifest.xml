@@ -46,11 +46,6 @@
         <activity
             android:name=".CameraActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RentalOptionsActivity"
@@ -72,11 +67,11 @@
                  
             android:name=".LoginActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ManagerMainActivity"
@@ -90,9 +85,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".QrcodeScannerPreviewActivity" />
-        <activity android:name=".RentalOptionsActivity" />
-        <activity android:name=".QRCodeGeneratorActivity" />
-        <activity android:name=".MapsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Register1Activity" />
         <activity android:name=".Register2Activity" />
