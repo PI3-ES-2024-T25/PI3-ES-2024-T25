@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:fitsSystemWindows="true">
+
+
+    <Button
+        android:id="@+id/btnSignout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/secondary_background_btn"
+        android:backgroundTint="#7C1E25"
+        android:drawableEnd="@drawable/logout"
+        android:drawablePadding="16dp"
+        android:fontFamily="@font/inter_bold"
+        android:paddingLeft="36dp"
+        android:paddingRight="12dp"
+        android:text="Sair"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/qr_code"
+        android:layout_width="139dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_scan_qrcode"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:srcCompat="@drawable/scan_qr_code" />
+
+    <ImageView
+        android:id="@+id/logoLockngo"
+        android:layout_width="123dp"
+        android:layout_height="108dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="l"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/logo4x" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:text="@string/text_qrcode_gerente"
+        android:textColor="#D9D9D9"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/qr_code"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toBottomOf="@+id/logoLockngo" />
+
+    <Button
+        android:id="@+id/btn_scan_qrcode"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
+        android:text="@string/liberar_locacao"
+        android:textAllCaps="false"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideLineManagerMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuidelineManagerMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
+    <TextView
+        android:id="@+id/textNFC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conteúdo da tag NFC é exibido aqui"
+        android:textColor="#D9D9D9"
+        app:layout_constraintBottom_toTopOf="@+id/btn_scan_qrcode"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toBottomOf="@+id/qr_code" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

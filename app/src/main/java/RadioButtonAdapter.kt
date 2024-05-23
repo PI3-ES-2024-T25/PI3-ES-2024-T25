@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.Unit
-import java.time.Duration
-import java.util.Date
 
 //Adaptador para um RecyclerView que exibe uma lista de opções com RadioButtons
 class RadioButtonAdapter(
@@ -47,6 +45,9 @@ class RadioButtonAdapter(
 
     //Converte um número de minutos para um texto que representa uma quantidade de tempo em horas e minutos
     private fun formatMinutesToText(minutes: Int): String {
+
+        if (minutes == 600) return "Até às 18:00"
+
         val hours = minutes / 60
         val remainingMinutes = minutes % 60
 

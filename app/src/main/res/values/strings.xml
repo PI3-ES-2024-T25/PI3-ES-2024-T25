@@ -40,10 +40,17 @@
     <string name="dialog_message_login_required">Faça login ou crie uma conta para alugar um armário.</string>
     <string name="dialog_button_ok">OK</string>
     <string name="select_locker">Selecione um armário</string>
+
     <string name="photo">Tirar Foto</string>
     <string name="open_camera">Abrir Camera</string>
     <string name="save_photo">Salvar Foto</string>
     <string name="release">Liberar Locação</string>
     <string name="cancelar">Cancelar</string>
     <string name="prox_person">Tire a foto da próxima pessoa.</string>
+
+    <string name="option_text_format">%s - %s</string>
+    <string name="text_qrcode_gerente"> Aproxime o smartphone de uma pulseira  ou escaneie um  QR code, basta pressionar “Liberar locação” .</string>
+    <string name="liberar_locacao"> Liberar locação </string>
+    <string name="cancel">Cancelar</string>
+
 </resources>
