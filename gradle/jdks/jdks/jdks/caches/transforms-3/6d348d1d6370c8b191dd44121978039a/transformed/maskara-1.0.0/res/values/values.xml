@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaskEditText">
+        <attr format="string" name="mask"/>
+        <attr format="string" name="maskCharacter"/>
+        <attr format="enum" name="maskStyle">
+            <enum name="normal" value="0"/>
+            <enum name="completable" value="1"/>
+            <enum name="persistent" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>
