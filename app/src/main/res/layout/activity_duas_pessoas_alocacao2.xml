@@ -1,32 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".DuasPessoasAlocacao2Activity">
 
     <ImageView
+        android:id="@+id/logo_login"
+        android:layout_width="76dp"
+        android:layout_height="127dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:contentDescription="@string/logo_lock_n_go"
+        app:srcCompat="@drawable/logo4x" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_login"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:text="Confira se a pessoa em sua frente é a que está na imagem abaixo:"
+        android:textSize="14sp"
+        tools:textColor="#7D8392" />
+
+    <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter" />
+        android:layout_width="236dp"
+        android:layout_height="268dp"
+        android:layout_below="@id/textView4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:background="#191919"
+        android:scaleType="center" />
+
+
 
     <Button
         android:id="@+id/openMomentarilyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Abrir Momentaneamente"
-        android:layout_centerHorizontal="true"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
+        android:text="Abrir Momentaneamente"
+        android:textColor="#7D8392"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/closeAllocationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Encerrar Locação"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:layout_above="@id/openMomentarilyButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
+        android:text="Encerrar Locação"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        tools:layout_marginBottom="16sp" />
 
 </RelativeLayout>
+
