@@ -61,7 +61,6 @@ class ConfirmPhotoActivity : AppCompatActivity() {
                 intent.putExtra("IMAGE_URI", imageUri.toString())
                 intent.putExtra("SECOND_IMAGE_URI", secondUriString.toString())
             }
-            Toast.makeText(this, "Salvando foto...$numberOfCustomers", Toast.LENGTH_SHORT).show()
             intent.putExtra("COUNTER", numberOfCustomers)
             intent.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
             startActivity(intent)
