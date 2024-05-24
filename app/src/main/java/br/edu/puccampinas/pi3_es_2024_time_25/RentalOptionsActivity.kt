@@ -103,6 +103,7 @@ class RentalOptionsActivity : AppCompatActivity() {
         val rentalOption: RentalOption,
         val uid: String,
         val startDate: String,
+        val lockerId: String
     )
 
     //Método para alugar um armário
@@ -112,6 +113,19 @@ class RentalOptionsActivity : AppCompatActivity() {
             val intent = Intent(this, QRCodeGeneratorActivity::class.java)
 
             data class QrCodeData(val rentId: String, val managerName: String)
+
+            val listOfAvailableLockers: MutableList<String> = unit.lockersAvailable.toMutableList()
+
+            if (listOfAvailableLockers.isNotEmpty()) {
+                listOfAvailableLockers.removeAt(0)
+
+                bd.collection("rental_units").document(unit.id)
+                    .update("lockersAvailable", listOfAvailableLockers).addOnSuccessListener {
+                        println("DocumentSnapshot successfully updated!")
+                    }.addOnFailureListener { e ->
+                        println("Error updating document: $e")
+                    }
+            }
 
             val qrCodeData = QrCodeData(rentId, unit.manager.name)
             val gson = Gson()
@@ -142,7 +156,7 @@ class RentalOptionsActivity : AppCompatActivity() {
                         unit,
                         selectedOption!!,
                         FirebaseAuth.getInstance().currentUser!!.uid,
-                        currentDate
+                        currentDate, unit.lockersAvailable[0]
                     )
                     rentLocker(rentInfo)
                 }.setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }.create()

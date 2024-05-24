@@ -1,8 +1,10 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,10 +25,11 @@ class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBinding
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraSelector: CameraSelector
-
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
-    private var numPeople: Int = 1
+    private lateinit var numberOfCustomers: String
+    private lateinit var rentDocumentId: String
+    private lateinit var imageUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,16 +37,23 @@ class CameraPreviewActivity : AppCompatActivity() {
         binding = ActivityCameraPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        numPeople = intent.getIntExtra("NUM_PEOPLE", 1)
-
+        numberOfCustomers = intent.getStringExtra("COUNTER").toString()
+        rentDocumentId = intent.getStringExtra("RENT_DOCUMENT_ID").toString()
+        imageUri = Uri.parse(intent.getStringExtra("IMAGE_URI").toString())
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
         startCamera()
 
         binding.btnTakePhoto.setOnClickListener {
             takePhoto()
+        }
+        if (numberOfCustomers == "twoOfTwo") {
+            binding.btnReturn.visibility = View.GONE
+        }
+        binding.btnReturn.setOnClickListener {
+            finish()
         }
     }
 
@@ -65,17 +75,24 @@ class CameraPreviewActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun startImagePreviewActivity(photoUri: String) {
-        val intent = Intent(this, SalvarFotoActivity::class.java)
-        intent.putExtra("IMAGE_URI", photoUri)
-        intent.putExtra("NUM_PEOPLE", numPeople)
+    private fun startImagePreviewActivity(photoUri: Uri) {
+        val intent = Intent(this, ConfirmPhotoActivity::class.java)
+        if (numberOfCustomers == "twoOfTwo") {
+            intent.putExtra("SECOND_IMAGE_URI", photoUri.toString())
+            intent.putExtra("IMAGE_URI", imageUri.toString())
+        } else {
+            intent.putExtra("IMAGE_URI", photoUri.toString())
+        }
+        intent.putExtra("COUNTER", numberOfCustomers)
+        intent.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
         startActivity(intent)
+        finish()
     }
 
     private fun takePhoto() {
         imageCapture?.let {
-            val fileName = "foto_${System.currentTimeMillis()}.jpg"
-            val file = File(externalMediaDirs[0], fileName)
+            val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+            val file = File(externalMediaDirs.first(), fileName)
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
             it.takePicture(
@@ -84,12 +101,15 @@ class CameraPreviewActivity : AppCompatActivity() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         val photoUri = file.toUri()
-                        Log.i("CameraPreview", "Imagem salva em $photoUri")
-                        startImagePreviewActivity(photoUri.toString())
+                        startImagePreviewActivity(photoUri)
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Toast.makeText(binding.root.context, "Erro ao salvar a imagem", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            binding.root.context,
+                            "Erro ao salvar a imagem",
+                            Toast.LENGTH_LONG
+                        ).show()
                         Log.e("CameraPreview", "Erro ao salvar foto $exception")
                     }
                 }

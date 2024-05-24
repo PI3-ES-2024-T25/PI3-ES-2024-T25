@@ -47,12 +47,21 @@
         </activity>
         <activity
             android:name=".CameraPreview2Activity"
+
+            android:name=".ShowLockerNameActivity"
+
             android:exported="false" />
         <activity
-            android:name=".ContinuarSegundaFotoActivity"
-            android:exported="false" />
+            android:name=".WriteTagActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".SalvarFotoActivity"
+            android:name=".ConfirmPhotoActivity"
             android:exported="false" />
         <activity
             android:name=".CameraPreviewActivity"
@@ -104,4 +113,7 @@
             android:resource="@array/preloaded_fonts" />
     </application>
 
+
+</manifest>
+=======
 </manifest>

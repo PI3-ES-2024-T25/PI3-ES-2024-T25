@@ -52,5 +52,12 @@
     <string name="text_qrcode_gerente"> Aproxime o smartphone de uma pulseira  ou escaneie um  QR code, basta pressionar “Liberar locação” .</string>
     <string name="liberar_locacao"> Liberar locação </string>
     <string name="cancel">Cancelar</string>
+    <string name="label_write_tag">Aproxime o smartphone de uma pulseira e aperte o botão “Escrever Tag”.</string>
+    <string name="finish_write_tag">Finalizar</string>
+    <string name="nfc_message">Conteúdo da tag NFC é exibido aqui</string>
+    <string name="finished_rent_process">Locação concluída!</string>
+    <string name="locker_name">Armário:</string>
+    <string name="return_home">Retornar para o início</string>
+    <string name="write_tag">Escrever Tag</string>
 
 </resources>

@@ -26,6 +26,7 @@ class ManagerMainActivity : AppCompatActivity() {
     private lateinit var scanActivityResultLauncher: ActivityResultLauncher<Intent>
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private val auth by lazy { FirebaseAuth.getInstance() }
+    private lateinit var rentDocumentId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,6 @@ class ManagerMainActivity : AppCompatActivity() {
         }
 
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -137,7 +137,7 @@ class ManagerMainActivity : AppCompatActivity() {
             if (granted) {
                 openQrcodeScannerPreview()
             } else {
-                Snackbar.make(binding.root, "Permission denied", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Permiss", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -146,11 +146,8 @@ class ManagerMainActivity : AppCompatActivity() {
         firestore.collection("rents").document(qrcodeScanResult).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    AlertDialog.Builder(this).setTitle("Sucesso!")
-                        .setMessage("Sua locação foi encontrada!")
-                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                            dialog.dismiss()
-                        }.show()
+                    rentDocumentId = qrcodeScanResult
+                    showChoiceMenu()
                 } else {
                     AlertDialog.Builder(this).setTitle("Erro")
                         .setMessage("QR code inválido, por favor verifique-o e tente novamente.")
@@ -161,5 +158,25 @@ class ManagerMainActivity : AppCompatActivity() {
             }.addOnFailureListener { exception ->
                 Toast.makeText(this, "Erro ao verificar o qr code!", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun showChoiceMenu() {
+        val options = arrayOf("Uma pessoa", "Duas pessoas")
+        AlertDialog.Builder(this)
+            .setTitle("Quantas pessoas acessarão o armário?")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> startCustomerIdentification("oneOfOne")
+                    1 -> startCustomerIdentification("oneOfTwo")
+                }
+            }
+            .show()
+    }
+
+    private fun startCustomerIdentification(numberOfCustomers: String) {
+        val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
+        intentCameraPreview.putExtra("COUNTER", numberOfCustomers)
+        intentCameraPreview.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
+        startActivity(intentCameraPreview)
     }
 }
