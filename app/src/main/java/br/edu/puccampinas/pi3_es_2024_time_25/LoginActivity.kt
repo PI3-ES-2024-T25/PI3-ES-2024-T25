@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityLoginBinding
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+
 
 class LoginActivity : AppCompatActivity() {
   
@@ -23,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         if (auth.currentUser!=null) {
             goToAccount()
+
         }
     }
 
@@ -91,8 +91,8 @@ class LoginActivity : AppCompatActivity() {
         db.collection("managers").document(auth.uid.toString()).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
-                    // TODO: TROCAR A ACTIVITY ABAIXO PELA TELA INICIAL DO GERENTE
-                    startActivity(Intent(this, MainActivity::class.java))
+
+                    startActivity(Intent(this, ManagerMainActivity::class.java))
                 }
 
                 else {
