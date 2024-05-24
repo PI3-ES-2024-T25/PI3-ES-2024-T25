@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -55,7 +54,10 @@ class WriteTagActivity : AppCompatActivity() {
         if (secondUriString != null) {
             secondCustomerPhoto = secondUriString
         }
-
+        // TODO("Apagar isto foi somente para teste de trava do botão")
+        binding.logoLockngo.setOnClickListener {
+            activateButtonFinishAfterWriteOnTag()
+        }
         initializeFinishButton()
     }
 
@@ -63,9 +65,9 @@ class WriteTagActivity : AppCompatActivity() {
         binding.btnFinishOrNextPerson.setOnClickListener {
             when (numberOfCustomers) {
                 "oneOfOne" -> {
-                    Toast.makeText(this, "Foto de uma pessoa", Toast.LENGTH_SHORT).show()
                     saveImageOnStorage(firstCustomerPhoto)
                     updateRentWithCustomerImages(1)
+                    Log.d("WriteTagActivity", "uma pessoa ${firstCustomerPhoto}")
                 }
 
                 "twoOfTwo" -> {
@@ -103,25 +105,24 @@ class WriteTagActivity : AppCompatActivity() {
     }
 
     private fun updateRentWithCustomerImages(customers: Int) {
-        firestore.collection("rents").document(rentDocumentId).update(
-            "images",
-            if (customers == 1) arrayOf(firstCustomerPhoto.toUri().lastPathSegment) else arrayOf(
-                firstCustomerPhoto.toUri().lastPathSegment,
-                secondCustomerPhoto.toUri().lastPathSegment
-            )
-        ).addOnSuccessListener {
-            Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
-        }.addOnFailureListener {
-            Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
-        }
+        val imagesList = if (customers == 1) listOf(firstCustomerPhoto.toUri().lastPathSegment)
+        else listOf(
+            firstCustomerPhoto.toUri().lastPathSegment, secondCustomerPhoto.toUri().lastPathSegment
+        )
 
-        firestore.collection("rents").document(rentDocumentId).update(
-            "customers", customers
-        ).addOnSuccessListener {
-            Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
-        }.addOnFailureListener {
-            Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
-        }
+        firestore.collection("rents").document(rentDocumentId).update("images", imagesList)
+            .addOnSuccessListener {
+                Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
+            }.addOnFailureListener {
+                Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
+            }
+
+        firestore.collection("rents").document(rentDocumentId).update("customers", customers)
+            .addOnSuccessListener {
+                Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
+            }.addOnFailureListener {
+                Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
+            }
         finishProcess()
     }
 
@@ -139,8 +140,11 @@ class WriteTagActivity : AppCompatActivity() {
                                 val lockerInfo = it.data
                                 if (lockerInfo != null) {
                                     lockerName = lockerInfo["name"].toString()
+                                    val intent = Intent(this, ShowLockerNameActivity::class.java)
+                                    intent.putExtra("LOCKER_NAME", lockerName)
+                                    startActivity(intent)
+                                    finish()
                                 }
-
                             }
                     }
                 }
@@ -148,10 +152,11 @@ class WriteTagActivity : AppCompatActivity() {
                 Log.e("WriteTagActivity", "Erro ao buscar informações da locação")
             }
 
-        val intent = Intent(this, ShowLockerNameActivity::class.java)
-        intent.putExtra("LOCKER_NAME", lockerName)
-        startActivity(intent)
-        finish()
+
+    }
+
+    private fun activateButtonFinishAfterWriteOnTag() {
+        binding.btnFinishOrNextPerson.isEnabled = true
     }
 
 }

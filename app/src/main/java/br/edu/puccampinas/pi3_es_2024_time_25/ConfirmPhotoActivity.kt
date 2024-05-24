@@ -4,13 +4,12 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatButton
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityConfirmPhotoBinding
 
@@ -41,10 +40,17 @@ class ConfirmPhotoActivity : AppCompatActivity() {
         numberOfCustomers = intent.getStringExtra("COUNTER").toString()
         rentDocumentId = intent.getStringExtra("RENT_DOCUMENT_ID").toString()
 
+
+
         if (uriString != null) {
             imageUri = Uri.parse(uriString)
-            imageView.setImageURI(imageUri)
         }
+        if (secondUriString != null) {
+            imageUri2 = Uri.parse(secondUriString)
+        }
+        if (numberOfCustomers == "twoOfTwo") {
+            binding.imageView.setImageURI(imageUri2)
+        } else binding.imageView.setImageURI(imageUri)
 
         btnSavePhoto.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -55,6 +61,7 @@ class ConfirmPhotoActivity : AppCompatActivity() {
                 intent.putExtra("IMAGE_URI", imageUri.toString())
                 intent.putExtra("SECOND_IMAGE_URI", secondUriString.toString())
             }
+            Toast.makeText(this, "Salvando foto...$numberOfCustomers", Toast.LENGTH_SHORT).show()
             intent.putExtra("COUNTER", numberOfCustomers)
             intent.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
             startActivity(intent)
