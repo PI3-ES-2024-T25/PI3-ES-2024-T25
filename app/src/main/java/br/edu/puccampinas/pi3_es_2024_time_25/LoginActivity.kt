@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     // TODO: TROCAR A ACTIVITY ABAIXO PELA TELA INICIAL DO GERENTE
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, ManagerMainActivity::class.java))
                 }
 
                 else {

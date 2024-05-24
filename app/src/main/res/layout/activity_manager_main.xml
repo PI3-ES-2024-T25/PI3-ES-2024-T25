@@ -110,4 +110,15 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
         app:layout_constraintTop_toBottomOf="@+id/qr_code" />
 
+    <Button
+        android:id="@+id/btnWriteNFC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gravar nfc"
+        app:layout_constraintBottom_toTopOf="@+id/logoLockngo"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineManagerMain"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineManagerMain"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
