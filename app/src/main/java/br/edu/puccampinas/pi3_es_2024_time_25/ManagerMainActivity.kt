@@ -26,6 +26,7 @@ class ManagerMainActivity : AppCompatActivity() {
     private lateinit var scanActivityResultLauncher: ActivityResultLauncher<Intent>
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private val auth by lazy { FirebaseAuth.getInstance() }
+    private lateinit var rentDocumentId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,6 +147,7 @@ class ManagerMainActivity : AppCompatActivity() {
         firestore.collection("rents").document(qrcodeScanResult).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
+                    rentDocumentId = qrcodeScanResult
                     showChoiceMenu()
                 } else {
                     AlertDialog.Builder(this).setTitle("Erro")
@@ -161,26 +163,20 @@ class ManagerMainActivity : AppCompatActivity() {
 
     private fun showChoiceMenu() {
         val options = arrayOf("Uma pessoa", "Duas pessoas")
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle("Quantas pessoas acessarão o armário?")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> abrirCameraUmaPessoa()
-                    1 -> abrirCameraDuasPessoas()
+                    0 -> startCustomerIdentification(1)
+                    1 -> startCustomerIdentification(2)
                 }
             }
             .show()
     }
 
-    private fun abrirCameraUmaPessoa() {
+    private fun startCustomerIdentification(numberOfCustomers: Int) {
         val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
-        intentCameraPreview.putExtra("NUM_PEOPLE", 1)
-        startActivity(intentCameraPreview)
-    }
-
-    private fun abrirCameraDuasPessoas() {
-        val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
-        intentCameraPreview.putExtra("NUM_PEOPLE", 2)
+        intentCameraPreview.putExtra("COUNTER", numberOfCustomers)
         startActivity(intentCameraPreview)
     }
 }

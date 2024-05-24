@@ -1,6 +1,7 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -25,7 +26,7 @@ class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
-    private var numPeople: Int = 1
+    private var numberOfCustomers: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,7 @@ class CameraPreviewActivity : AppCompatActivity() {
         binding = ActivityCameraPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        numPeople = intent.getIntExtra("NUM_PEOPLE", 1)
+        numberOfCustomers = intent.getIntExtra("COUNTER", 1)
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -64,17 +65,17 @@ class CameraPreviewActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun startImagePreviewActivity(photoUri: String) {
+    private fun startImagePreviewActivity(photoUri: Uri) {
         val intent = Intent(this, SalvarFotoActivity::class.java)
-        intent.putExtra("IMAGE_URI", photoUri)
-        intent.putExtra("NUM_PEOPLE", numPeople)
+        intent.putExtra("IMAGE_URI", photoUri.toString())
+        intent.putExtra("NUM_PEOPLE", numberOfCustomers)
         startActivity(intent)
     }
 
     private fun takePhoto() {
         imageCapture?.let {
-            val fileName = "foto_${System.currentTimeMillis()}.jpg"
-            val file = File(externalMediaDirs[0], fileName)
+            val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+            val file = File(externalMediaDirs.first(), fileName)
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
             it.takePicture(
@@ -83,8 +84,7 @@ class CameraPreviewActivity : AppCompatActivity() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         val photoUri = file.toUri()
-                        Log.i("CameraPreview", "Imagem salva em $photoUri")
-                        startImagePreviewActivity(photoUri.toString())
+                        startImagePreviewActivity(photoUri)
                     }
 
                     override fun onError(exception: ImageCaptureException) {
