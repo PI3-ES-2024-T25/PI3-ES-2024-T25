@@ -30,7 +30,6 @@ class QRCodeGeneratorActivity : AppCompatActivity() {
         val rentData = Gson().fromJson(gsonData, QrCodeData::class.java)
         // Verifica se os dados de aluguel não são nulos
         if (rentData != null) {
-            println("rentData: $rentData")
             // Chama a função de gerar QRCode, passando como parâmetro o ID do aluguel
             generateQRCode(rentData.rentId)
             // Atualiza o texto na TextView com o nome do gerente
