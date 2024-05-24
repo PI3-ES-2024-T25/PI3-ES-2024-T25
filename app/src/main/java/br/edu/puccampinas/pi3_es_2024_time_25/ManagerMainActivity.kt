@@ -167,16 +167,17 @@ class ManagerMainActivity : AppCompatActivity() {
             .setTitle("Quantas pessoas acessarão o armário?")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> startCustomerIdentification(1)
-                    1 -> startCustomerIdentification(2)
+                    0 -> startCustomerIdentification("oneOfOne")
+                    1 -> startCustomerIdentification("oneOfTwo")
                 }
             }
             .show()
     }
 
-    private fun startCustomerIdentification(numberOfCustomers: Int) {
+    private fun startCustomerIdentification(numberOfCustomers: String) {
         val intentCameraPreview = Intent(this, CameraPreviewActivity::class.java)
         intentCameraPreview.putExtra("COUNTER", numberOfCustomers)
+        intentCameraPreview.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
         startActivity(intentCameraPreview)
     }
 }

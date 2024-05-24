@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,9 @@ class CameraPreviewActivity : AppCompatActivity() {
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
     private lateinit var imgCaptureExecutor: ExecutorService
-    private var numberOfCustomers: Int = 1
+    private lateinit var numberOfCustomers: String
+    private lateinit var rentDocumentId: String
+    private lateinit var imageUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +37,9 @@ class CameraPreviewActivity : AppCompatActivity() {
         binding = ActivityCameraPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        numberOfCustomers = intent.getIntExtra("COUNTER", 1)
-
+        numberOfCustomers = intent.getStringExtra("COUNTER").toString()
+        rentDocumentId = intent.getStringExtra("RENT_DOCUMENT_ID").toString()
+        imageUri = Uri.parse(intent.getStringExtra("IMAGE_URI").toString())
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
@@ -44,6 +48,12 @@ class CameraPreviewActivity : AppCompatActivity() {
 
         binding.btnTakePhoto.setOnClickListener {
             takePhoto()
+        }
+        if (numberOfCustomers == "twoOfTwo") {
+            binding.btnReturn.visibility = View.GONE
+        }
+        binding.btnReturn.setOnClickListener {
+            finish()
         }
     }
 
@@ -66,10 +76,17 @@ class CameraPreviewActivity : AppCompatActivity() {
     }
 
     private fun startImagePreviewActivity(photoUri: Uri) {
-        val intent = Intent(this, SalvarFotoActivity::class.java)
-        intent.putExtra("IMAGE_URI", photoUri.toString())
-        intent.putExtra("NUM_PEOPLE", numberOfCustomers)
+        val intent = Intent(this, ConfirmPhotoActivity::class.java)
+        if (numberOfCustomers == "twoOfTwo") {
+            intent.putExtra("SECOND_IMAGE_URI", photoUri.toString())
+            intent.putExtra("IMAGE_URI", imageUri.toString())
+        } else {
+            intent.putExtra("IMAGE_URI", photoUri.toString())
+        }
+        intent.putExtra("COUNTER", numberOfCustomers)
+        intent.putExtra("RENT_DOCUMENT_ID", rentDocumentId)
         startActivity(intent)
+        finish()
     }
 
     private fun takePhoto() {
