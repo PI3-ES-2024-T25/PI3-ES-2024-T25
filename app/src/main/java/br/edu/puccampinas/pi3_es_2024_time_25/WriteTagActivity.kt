@@ -10,6 +10,15 @@ import androidx.core.net.toUri
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityWriteTagBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import android.nfc.NdefRecord
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.nfc.tech.Ndef
+import android.nfc.FormatException
+import android.os.Build
+import android.widget.Toast
+import java.io.IOException
 
 class WriteTagActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteTagBinding
@@ -18,6 +27,9 @@ class WriteTagActivity : AppCompatActivity() {
     private var hasManagerWriteOnTag: Boolean = false
     private lateinit var rentDocumentId: String
     private lateinit var numberOfCustomers: String
+    private var nfcAdapter: NfcAdapter? = null
+    private var tag: Tag? = null
+
 
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private val storage by lazy { FirebaseStorage.getInstance() }
@@ -27,11 +39,44 @@ class WriteTagActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityWriteTagBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (nfcAdapter == null) {
+            Toast.makeText(this, "NFC não está disponível", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
     }
 
     override fun onStart() {
         super.onStart()
         getIntentInfo()
+        writeNFCButton()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
+    private fun writeNFCButton() {
+        val btnWriteTag = binding.btnWriteTag
+        btnWriteTag.setOnClickListener {
+            val message = ""
+            writeNFC(message)
+        }
     }
 
     private fun getIntentInfo() {
@@ -157,6 +202,60 @@ class WriteTagActivity : AppCompatActivity() {
 
     private fun activateButtonFinishAfterWriteOnTag() {
         binding.btnFinishOrNextPerson.isEnabled = true
+    }
+
+    private fun writeNFC(message:String){
+        try{
+            if(message.isEmpty()){
+                write(message, tag)
+                Toast.makeText(this, "Dados da pulseira apagados com sucesso!", Toast.LENGTH_LONG).show()
+            } else if (tag == null){
+                Toast.makeText(this, "Erro ao escanear a pulseira, tente novamente", Toast.LENGTH_LONG).show()
+            } else{
+                write(message, tag)
+                Toast.makeText(this, "Dados da pulseira escritos com sucesso!", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: IOException){
+            e.printStackTrace()
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
+        } catch (e: FormatException){
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun write(text: String, tag: Tag?){
+        val records = arrayOf(createRecord(text))
+        val message = NdefMessage(records)
+
+        val ndef = Ndef.get(tag)
+        try{
+            ndef.connect()
+            ndef.writeNdefMessage(message)
+            Toast.makeText(this, "NFC Escrita com sucesso", Toast.LENGTH_LONG).show()
+        } catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
+        } finally {
+            try {
+                ndef.close()
+            } catch (e: IOException){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun createRecord(text:String): NdefRecord{
+        val lang = "en"
+        val textBytes = text.toByteArray()
+        val langBytes = lang.toByteArray(charset("US-ASCII"))
+        val langLength = langBytes.size
+        val textLength = textBytes.size
+        val payload = ByteArray(1 + langLength + textLength)
+
+        payload[0] = langLength.toByte()
+        System.arraycopy(langBytes, 0, payload, 1, langLength)
+        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength)
+        return  NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), payload)
     }
 
 }

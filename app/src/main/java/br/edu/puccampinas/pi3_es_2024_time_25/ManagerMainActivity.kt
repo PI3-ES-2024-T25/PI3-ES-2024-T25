@@ -44,7 +44,6 @@ class ManagerMainActivity : AppCompatActivity() {
 
     }
 
-
     override fun onStart() {
         super.onStart()
         initializeScanQrCodeButton()

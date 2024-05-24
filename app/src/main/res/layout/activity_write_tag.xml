@@ -65,6 +65,21 @@
         app:layout_constraintEnd_toStartOf="@+id/rightGuidelineWriteTag"
         app:layout_constraintStart_toStartOf="@+id/leftGuideLineWriteTag" />
 
+    <Button
+        android:id="@+id/btnWriteTag"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/primary_background_btn"
+        android:fontFamily="@font/inter_bold"
+        android:text="@string/write_tag"
+        android:textAllCaps="false"
+        android:textColor="#7D8392"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnFinishOrNextPerson"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelineWriteTag"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideLineWriteTag" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideLineWriteTag"
         android:layout_width="wrap_content"
