@@ -55,5 +55,8 @@
     <string name="label_write_tag">Aproxime o smartphone de uma pulseira.</string>
     <string name="finish_write_tag">Finalizar</string>
     <string name="nfc_message">Conteúdo da tag NFC é exibido aqui</string>
+    <string name="finished_rent_process">Locação concluída!</string>
+    <string name="locker_name">Armário:</string>
+    <string name="return_home">Retornar para o início</string>
 
 </resources>

@@ -100,7 +100,7 @@
         app:layout_constraintGuide_end="20dp" />
 
     <TextView
-        android:id="@+id/textNFC"
+        android:id="@+id/txt_locker_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Conteúdo da tag NFC é exibido aqui"

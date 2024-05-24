@@ -41,6 +41,14 @@ class WriteTagActivity : AppCompatActivity() {
         numberOfCustomers = intent.getStringExtra("COUNTER").toString()
         rentDocumentId = intent.getStringExtra("RENT_DOCUMENT_ID").toString()
 
+        if (numberOfCustomers == "oneOfTwo") {
+            binding.btnFinishOrNextPerson.text = "Próxima pessoa"
+            binding.btnFinishOrNextPerson.isEnabled = false
+        } else {
+            binding.btnFinishOrNextPerson.text = "Finalizar"
+            binding.btnFinishOrNextPerson.isEnabled = false
+        }
+
         if (uriString != null) {
             firstCustomerPhoto = uriString
         }
@@ -57,12 +65,11 @@ class WriteTagActivity : AppCompatActivity() {
                 "oneOfOne" -> {
                     Toast.makeText(this, "Foto de uma pessoa", Toast.LENGTH_SHORT).show()
                     saveImageOnStorage(firstCustomerPhoto)
+                    updateRentWithCustomerImages(1)
                 }
 
                 "twoOfTwo" -> {
-                    Toast.makeText(
-                        this, "2 ${firstCustomerPhoto} ${secondCustomerPhoto}", Toast.LENGTH_SHORT
-                    ).show()
+                    updateRentWithCustomerImages(2)
                     Log.d(
                         "WriteTagActivity",
                         " duas pessoas${firstCustomerPhoto} ${secondCustomerPhoto}"
@@ -93,6 +100,58 @@ class WriteTagActivity : AppCompatActivity() {
                 Log.d("WriteTagActivity", "IMG salva ${downloadUri}")
             }
         }
+    }
+
+    private fun updateRentWithCustomerImages(customers: Int) {
+        firestore.collection("rents").document(rentDocumentId).update(
+            "images",
+            if (customers == 1) arrayOf(firstCustomerPhoto.toUri().lastPathSegment) else arrayOf(
+                firstCustomerPhoto.toUri().lastPathSegment,
+                secondCustomerPhoto.toUri().lastPathSegment
+            )
+        ).addOnSuccessListener {
+            Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
+        }.addOnFailureListener {
+            Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
+        }
+
+        firestore.collection("rents").document(rentDocumentId).update(
+            "customers", customers
+        ).addOnSuccessListener {
+            Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
+        }.addOnFailureListener {
+            Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
+        }
+        finishProcess()
+    }
+
+    private fun finishProcess() {
+        var lockerName = ""
+
+        firestore.collection("rents").document(rentDocumentId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val rentInfo = document.data
+                    if (rentInfo != null) {
+                        val lockerId = rentInfo["lockerId"].toString()
+                        firestore.collection("lockers").document(lockerId).get()
+                            .addOnSuccessListener {
+                                val lockerInfo = it.data
+                                if (lockerInfo != null) {
+                                    lockerName = lockerInfo["name"].toString()
+                                }
+
+                            }
+                    }
+                }
+            }.addOnFailureListener {
+                Log.e("WriteTagActivity", "Erro ao buscar informações da locação")
+            }
+
+        val intent = Intent(this, ShowLockerNameActivity::class.java)
+        intent.putExtra("LOCKER_NAME", lockerName)
+        startActivity(intent)
+        finish()
     }
 
 }
