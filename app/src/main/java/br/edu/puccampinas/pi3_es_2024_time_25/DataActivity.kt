@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import br.edu.puccampinas.pi3_es_2024_time_25.databinding.ActivityDataBinding
+import com.google.gson.Gson
 
 
 class DataActivity : AppCompatActivity() {

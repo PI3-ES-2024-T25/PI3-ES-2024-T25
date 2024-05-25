@@ -2,7 +2,9 @@ package br.edu.puccampinas.pi3_es_2024_time_25
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentFilter
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
@@ -28,6 +30,7 @@ class ManagerMainActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private lateinit var rentDocumentId: String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,9 +55,26 @@ class ManagerMainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
-            readNFC(intent)
-        }
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE
+        )
+        val intentFiltersArray = arrayOf(
+            IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply { addCategory(Intent.CATEGORY_DEFAULT) },
+        )
+
+        val techListArray = arrayOf(
+            arrayOf(android.nfc.tech.Ndef::class.java.name)
+        )
+
+        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListArray)
+
+        readNFC(intent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter?.disableForegroundDispatch(this)
     }
 
     override fun onNewIntent(intent: Intent) {

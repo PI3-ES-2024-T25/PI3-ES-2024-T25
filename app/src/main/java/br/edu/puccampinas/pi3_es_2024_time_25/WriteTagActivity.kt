@@ -1,6 +1,8 @@
 package br.edu.puccampinas.pi3_es_2024_time_25
 
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +31,7 @@ class WriteTagActivity : AppCompatActivity() {
     private lateinit var numberOfCustomers: String
     private var nfcAdapter: NfcAdapter? = null
     private var tag: Tag? = null
+    private var intentFiltersArray: Array<IntentFilter>? = null
 
 
     private val firestore by lazy { FirebaseFirestore.getInstance() }
@@ -46,37 +49,56 @@ class WriteTagActivity : AppCompatActivity() {
             finish()
             return
         }
+        val intent = Intent(this, javaClass).apply {
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+        var pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_MUTABLE)
+
+        val ndef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
+            try {
+                addDataType("text/plain")
+            } catch (e: IntentFilter.MalformedMimeTypeException) {
+                throw RuntimeException("fail", e)
+            }
+        }
+        intentFiltersArray = arrayOf(ndef)
+
     }
 
     override fun onStart() {
         super.onStart()
         getIntentInfo()
-        writeNFCButton()
     }
 
     override fun onResume() {
         super.onResume()
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-            }
-        }
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE
+        )
+        val intentFiltersArray = arrayOf(
+            IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply { addCategory(Intent.CATEGORY_DEFAULT) },
+        )
+
+        val techListArray = arrayOf(
+            arrayOf(android.nfc.tech.Ndef::class.java.name)
+        )
+
+        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListArray)
+        writeNFC(rentDocumentId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter?.disableForegroundDispatch(this)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-    }
-
-    private fun writeNFCButton() {
-        val btnWriteTag = binding.btnWriteTag
-        btnWriteTag.setOnClickListener {
-            val message = ""
-            writeNFC(message)
-        }
+        tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        //writeNFC(rentDocumentId)
     }
 
     private fun getIntentInfo() {
@@ -210,10 +232,10 @@ class WriteTagActivity : AppCompatActivity() {
                 write(message, tag)
                 Toast.makeText(this, "Dados da pulseira apagados com sucesso!", Toast.LENGTH_LONG).show()
             } else if (tag == null){
-                Toast.makeText(this, "Erro ao escanear a pulseira, tente novamente", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Aproxime a tag NFC", Toast.LENGTH_LONG).show()
             } else{
                 write(message, tag)
-                Toast.makeText(this, "Dados da pulseira escritos com sucesso!", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, "Dados da pulseira escritos com sucesso!", Toast.LENGTH_LONG).show()
             }
         } catch (e: IOException){
             e.printStackTrace()
@@ -232,6 +254,7 @@ class WriteTagActivity : AppCompatActivity() {
             ndef.connect()
             ndef.writeNdefMessage(message)
             Toast.makeText(this, "NFC Escrita com sucesso", Toast.LENGTH_LONG).show()
+            activateButtonFinishAfterWriteOnTag()
         } catch (e: Exception){
             e.printStackTrace()
             Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
