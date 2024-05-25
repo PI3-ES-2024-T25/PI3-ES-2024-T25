@@ -113,7 +113,6 @@ class ManagerMainActivity : AppCompatActivity() {
             // o conteúdo que está escrito na tag NFC fica armazenado nessa variável text
             // coloquei um text view para demonstrar que o conteúdo da tag foi lido corretamente.
 
-            binding.textNFC.text = text
             getRentInfo(text)
         }
 
