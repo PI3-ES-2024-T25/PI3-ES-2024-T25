@@ -184,7 +184,8 @@ class WriteTagActivity : AppCompatActivity() {
                 Log.e("WriteTagActivity", "Erro ao salvar imagens no banco de dados")
             }
 
-        firestore.collection("rents").document(rentDocumentId).update("customers", customers)
+        firestore.collection("rents").document(rentDocumentId)
+            .update("customers", customers.toString())
             .addOnSuccessListener {
                 Log.d("WriteTagActivity", "Imagens salvas no banco de dados")
             }.addOnFailureListener {
@@ -226,9 +227,9 @@ class WriteTagActivity : AppCompatActivity() {
         binding.btnFinishOrNextPerson.isEnabled = true
     }
 
-    private fun writeNFC(message:String){
-        try{
-            if(message.isEmpty()){
+    private fun writeNFC(message: String) {
+        try {
+            if (message.isEmpty()) {
                 write(message, tag)
                 Toast.makeText(this, "Dados da pulseira apagados com sucesso!", Toast.LENGTH_LONG).show()
             } else if (tag == null){
@@ -237,37 +238,40 @@ class WriteTagActivity : AppCompatActivity() {
                 write(message, tag)
                 //Toast.makeText(this, "Dados da pulseira escritos com sucesso!", Toast.LENGTH_LONG).show()
             }
-        } catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
-        } catch (e: FormatException){
-            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG)
+                .show()
+        } catch (e: FormatException) {
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
-    private fun write(text: String, tag: Tag?){
+    private fun write(text: String, tag: Tag?) {
         val records = arrayOf(createRecord(text))
         val message = NdefMessage(records)
 
         val ndef = Ndef.get(tag)
-        try{
+        try {
             ndef.connect()
             ndef.writeNdefMessage(message)
             Toast.makeText(this, "NFC Escrita com sucesso", Toast.LENGTH_LONG).show()
             activateButtonFinishAfterWriteOnTag()
         } catch (e: Exception){
             e.printStackTrace()
-            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG)
+                .show()
         } finally {
             try {
                 ndef.close()
-            } catch (e: IOException){
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
 
-    private fun createRecord(text:String): NdefRecord{
+    private fun createRecord(text: String): NdefRecord {
         val lang = "en"
         val textBytes = text.toByteArray()
         val langBytes = lang.toByteArray(charset("US-ASCII"))
@@ -278,7 +282,7 @@ class WriteTagActivity : AppCompatActivity() {
         payload[0] = langLength.toByte()
         System.arraycopy(langBytes, 0, payload, 1, langLength)
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength)
-        return  NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), payload)
+        return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), payload)
     }
 
 }
