@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -113,13 +114,33 @@ class ManagerMainActivity : AppCompatActivity() {
             // coloquei um text view para demonstrar que o conteúdo da tag foi lido corretamente.
 
             binding.textNFC.text = text
-
-            val intent = Intent(this, DataActivity::class.java)
-            intent.putExtra("RENT_ID", text)
-            startActivity(intent)
-            finish()
+            getRentInfo(text)
         }
 
+    }
+
+    private fun getRentInfo(rentId: String) {
+        firestore.collection("rents").document(rentId).get().addOnSuccessListener { result ->
+            val data = result.data
+            if (data != null) {
+                chooseActivityPeople(rentId, data["customers"].toString())
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("Firestore", "Error getting documents", exception)
+        }
+    }
+
+    private fun chooseActivityPeople(id: String, people: String?) {
+        when (people) {
+            "1" -> startActivity(
+                Intent(this, UmaPessoaAlocacaoActivity::class.java).putExtra("documentId", id)
+            )
+
+            "2" -> startActivity(
+                Intent(this, DuasPessoasAlocacao1Activity::class.java).putExtra("documentId", id)
+            )
+        }
+        finish()
     }
 
     private fun initializeSignoutButton() {
