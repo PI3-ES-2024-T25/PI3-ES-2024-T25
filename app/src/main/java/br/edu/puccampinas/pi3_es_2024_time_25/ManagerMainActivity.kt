@@ -56,8 +56,10 @@ class ManagerMainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val pendingIntent = PendingIntent.getActivity(
-            this, 0,
-            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE
+            this,
+            0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            PendingIntent.FLAG_MUTABLE
         )
         val intentFiltersArray = arrayOf(
             IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply { addCategory(Intent.CATEGORY_DEFAULT) },
@@ -111,6 +113,11 @@ class ManagerMainActivity : AppCompatActivity() {
             // coloquei um text view para demonstrar que o conteúdo da tag foi lido corretamente.
 
             binding.textNFC.text = text
+
+            val intent = Intent(this, DataActivity::class.java)
+            intent.putExtra("RENT_ID", text)
+            startActivity(intent)
+            finish()
         }
 
     }
