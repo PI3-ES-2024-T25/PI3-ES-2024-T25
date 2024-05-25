@@ -39,7 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".DataActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".WriteTagActivity"
             android:exported="true">
@@ -95,6 +95,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".ShowLockerNameActivity" />
         <activity android:name=".QrcodeScannerPreviewActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Register1Activity" />

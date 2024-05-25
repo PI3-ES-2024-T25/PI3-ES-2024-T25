@@ -52,8 +52,10 @@ class WriteTagActivity : AppCompatActivity() {
         val intent = Intent(this, javaClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
-        var pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent,
-            PendingIntent.FLAG_MUTABLE)
+        var pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_MUTABLE
+        )
 
         val ndef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
             try {
@@ -74,8 +76,10 @@ class WriteTagActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val pendingIntent = PendingIntent.getActivity(
-            this, 0,
-            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE
+            this,
+            0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            PendingIntent.FLAG_MUTABLE
         )
         val intentFiltersArray = arrayOf(
             IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply { addCategory(Intent.CATEGORY_DEFAULT) },
@@ -98,7 +102,6 @@ class WriteTagActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-        //writeNFC(rentDocumentId)
     }
 
     private fun getIntentInfo() {
@@ -121,10 +124,9 @@ class WriteTagActivity : AppCompatActivity() {
         if (secondUriString != null) {
             secondCustomerPhoto = secondUriString
         }
-        // TODO("Apagar isto foi somente para teste de trava do botão")
-        binding.logoLockngo.setOnClickListener {
-            activateButtonFinishAfterWriteOnTag()
-        }
+//        binding.logoLockngo.setOnClickListener {
+//            activateButtonFinishAfterWriteOnTag()
+//        }
         initializeFinishButton()
     }
 
@@ -219,8 +221,6 @@ class WriteTagActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.e("WriteTagActivity", "Erro ao buscar informações da locação")
             }
-
-
     }
 
     private fun activateButtonFinishAfterWriteOnTag() {
@@ -231,10 +231,11 @@ class WriteTagActivity : AppCompatActivity() {
         try {
             if (message.isEmpty()) {
                 write(message, tag)
-                Toast.makeText(this, "Dados da pulseira apagados com sucesso!", Toast.LENGTH_LONG).show()
-            } else if (tag == null){
+                Toast.makeText(this, "Dados da pulseira apagados com sucesso!", Toast.LENGTH_LONG)
+                    .show()
+            } else if (tag == null) {
                 Toast.makeText(this, "Aproxime a tag NFC", Toast.LENGTH_LONG).show()
-            } else{
+            } else {
                 write(message, tag)
                 //Toast.makeText(this, "Dados da pulseira escritos com sucesso!", Toast.LENGTH_LONG).show()
             }
@@ -258,7 +259,7 @@ class WriteTagActivity : AppCompatActivity() {
             ndef.writeNdefMessage(message)
             Toast.makeText(this, "NFC Escrita com sucesso", Toast.LENGTH_LONG).show()
             activateButtonFinishAfterWriteOnTag()
-        } catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Falha ao escrever o NFC, tente novamente", Toast.LENGTH_LONG)
                 .show()
